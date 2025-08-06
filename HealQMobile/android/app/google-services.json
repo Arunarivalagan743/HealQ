@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "645725265516",
+    "project_id": "healq-8b0b0",
+    "storage_bucket": "healq-8b0b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:645725265516:android:839c6e51fd04b06ddf8249",
+        "android_client_info": {
+          "package_name": "com.healqmobileapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "645725265516-tss0h1mo9stmnmjo3dkbgcoqo8ph0t2r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBswVnOzPcMUlyrREr9re5f_6SNntuVeGc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "645725265516-tss0h1mo9stmnmjo3dkbgcoqo8ph0t2r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
