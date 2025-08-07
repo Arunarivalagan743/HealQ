@@ -6,6 +6,12 @@ const initializeFirebase = () => {
     if (!admin.apps.length) {
       const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
       
+      // Check if required Firebase env vars are present
+      if (!process.env.FIREBASE_PROJECT_ID || !process.env.FIREBASE_CLIENT_EMAIL || !privateKey) {
+        console.warn('⚠️ Firebase credentials not found, running without Firebase');
+        return null;
+      }
+      
       admin.initializeApp({
         credential: admin.credential.cert({
           projectId: process.env.FIREBASE_PROJECT_ID,
@@ -21,7 +27,8 @@ const initializeFirebase = () => {
     return admin;
   } catch (error) {
     console.error('Error initializing Firebase Admin SDK:', error);
-    throw error;
+    console.warn('⚠️ Continuing without Firebase - using backend-only mode');
+    return null;
   }
 };
 

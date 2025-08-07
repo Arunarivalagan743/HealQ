@@ -27,9 +27,6 @@ const validateRegistration = [
     .normalizeEmail()
     .withMessage('Please provide a valid email address'),
   
-  // Remove password validation since we use Firebase Auth
-  // Password validation happens on the frontend/Firebase side
-  
   body('name')
     .trim()
     .isLength({ min: 2, max: 50 })
@@ -37,16 +34,12 @@ const validateRegistration = [
     .matches(/^[a-zA-Z\s]+$/)
     .withMessage('Name can only contain letters and spaces'),
   
-  body('role')
-    .isIn(['Patient', 'Doctor', 'Admin'])
-    .withMessage('Role must be Patient, Doctor, or Admin'),
-  
-  // Conditional validation for Doctor role
+  // Conditional validation for Doctor role (checked server-side)
   body('specialization')
-    .if(body('role').equals('Doctor'))
+    .optional({ values: 'falsy' }) // This will treat empty strings as optional
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage('Specialization is required for doctors and must be between 2 and 100 characters'),
+    .withMessage('Specialization must be between 2 and 100 characters'),
 
   body('idToken')
     .notEmpty()
@@ -75,16 +68,12 @@ const validateBackendRegistration = [
     .matches(/^[a-zA-Z\s]+$/)
     .withMessage('Name can only contain letters and spaces'),
   
-  body('role')
-    .isIn(['Patient', 'Doctor', 'Admin'])
-    .withMessage('Role must be Patient, Doctor, or Admin'),
-  
-  // Conditional validation for Doctor role
+  // Conditional validation for Doctor role (checked server-side)
   body('specialization')
-    .if(body('role').equals('Doctor'))
+    .optional({ values: 'falsy' }) // This will treat empty strings as optional
     .trim()
     .isLength({ min: 2, max: 100 })
-    .withMessage('Specialization is required for doctors and must be between 2 and 100 characters'),
+    .withMessage('Specialization must be between 2 and 100 characters'),
 
   handleValidationErrors,
 ];
@@ -229,7 +218,18 @@ const validateUpdateProfile = [
   handleValidationErrors,
 ];
 
+// Validation rules for checking email role
+const validateCheckEmailRole = [
+  body('email')
+    .isEmail()
+    .normalizeEmail()
+    .withMessage('Please provide a valid email address'),
+
+  handleValidationErrors,
+];
+
 module.exports = {
+  validateCheckEmailRole,
   validateRegistration,
   validateBackendRegistration,
   validateLogin,

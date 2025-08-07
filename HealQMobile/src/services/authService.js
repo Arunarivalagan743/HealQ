@@ -8,6 +8,19 @@ class AuthService {
     this.isInitialized = false;
   }
 
+  // Check email role (security feature)
+  async checkEmailRole(email) {
+    try {
+      const response = await authAPI.checkEmailRole(email);
+      return response.data;
+    } catch (error) {
+      throw {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Email not authorized',
+      };
+    }
+  }
+
   // Initialize Firebase Auth listener
   initialize() {
     return new Promise((resolve) => {
@@ -23,15 +36,14 @@ class AuthService {
   }
 
   // Backend-only registration (fallback for network issues)
-  async registerBackendOnly(email, password, name, role, specialization) {
+  async registerBackendOnly(email, password, name, specialization) {
     try {
       console.log('📡 Calling backend-only registration API...');
-      // Direct backend registration without Firebase
+      // Direct backend registration without Firebase (role determined server-side)
       const response = await authAPI.registerBackendOnly({
         email,
         password,
         name,
-        role,
         specialization,
       });
 
@@ -39,7 +51,7 @@ class AuthService {
 
       // Store auth token and user role
       await AsyncStorage.setItem('authToken', response.data.token);
-      await AsyncStorage.setItem('userRole', role);
+      await AsyncStorage.setItem('userRole', response.data.user.role);
       await AsyncStorage.setItem('userData', JSON.stringify(response.data.user));
 
       console.log('💾 Data stored in AsyncStorage');
@@ -62,11 +74,11 @@ class AuthService {
   }
 
   // Register new user (with Firebase fallback)
-  async register(email, password, name, role, specialization) {
+  async register(email, password, name, specialization) {
     try {
       console.log('🔥 Attempting Firebase registration first...');
       // Try Firebase registration first
-      const result = await this.registerWithFirebase(email, password, name, role, specialization);
+      const result = await this.registerWithFirebase(email, password, name, specialization);
       console.log('✅ Firebase registration successful!', result);
       return result;
     } catch (error) {
@@ -82,7 +94,7 @@ class AuthService {
       if (error.message && (error.message.includes('network-request-failed') || error.message.includes('network error'))) {
         try {
           console.log('🔄 Attempting backend-only registration...');
-          const backendResult = await this.registerBackendOnly(email, password, name, role, specialization);
+          const backendResult = await this.registerBackendOnly(email, password, name, specialization);
           console.log('✅ Backend-only registration successful!', backendResult);
           return backendResult;
         } catch (backendError) {
@@ -98,7 +110,7 @@ class AuthService {
   }
 
   // Original Firebase registration method
-  async registerWithFirebase(email, password, name, role, specialization) {
+  async registerWithFirebase(email, password, name, specialization) {
     try {
       // Create user with Firebase
       const userCredential = await auth().createUserWithEmailAndPassword(email, password);
@@ -112,17 +124,16 @@ class AuthService {
       // Get Firebase ID token
       const idToken = await user.getIdToken();
 
-      // Register with backend
+      // Register with backend (role is determined server-side)
       const response = await authAPI.register({
         email,
         name,
-        role,
         specialization,
       }, idToken);
 
       // Store auth token and user role
       await AsyncStorage.setItem('authToken', response.data.token);
-      await AsyncStorage.setItem('userRole', role);
+      await AsyncStorage.setItem('userRole', response.data.user.role);
       await AsyncStorage.setItem('userData', JSON.stringify(response.data.user));
 
       return {

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const {
+  checkEmailRole,
   register,
   registerBackendOnly,
   login,
@@ -15,6 +16,7 @@ const {
 
 const { verifyToken } = require('../middleware/auth');
 const {
+  validateCheckEmailRole,
   validateRegistration,
   validateBackendRegistration,
   validateLogin,
@@ -26,6 +28,7 @@ const {
 } = require('../middleware/validation');
 
 // Public routes
+router.post('/check-email-role', validateCheckEmailRole, checkEmailRole);
 router.post('/register', validateRegistration, register);
 router.post('/register-backend-only', validateBackendRegistration, registerBackendOnly);
 router.post('/login', validateLogin, login);

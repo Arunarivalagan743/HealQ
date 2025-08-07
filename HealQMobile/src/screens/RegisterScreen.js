@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
 import authService from '../services/authService';
 
 const RegisterScreen = ({ navigation }) => {
@@ -19,11 +18,49 @@ const RegisterScreen = ({ navigation }) => {
     password: '',
     confirmPassword: '',
     name: '',
-    role: 'Patient',
     specialization: '',
   });
+  const [userRole, setUserRole] = useState(null);
+  const [roleLoading, setRoleLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+
+  // Check user role when email changes
+  const checkUserRole = async (email) => {
+    if (!email || !email.includes('@')) {
+      setUserRole(null);
+      return;
+    }
+
+    setRoleLoading(true);
+    try {
+      // Call backend to check if email exists and get role
+      const response = await authService.checkEmailRole(email.trim().toLowerCase());
+      setUserRole(response.role);
+      setErrors(prev => ({ ...prev, email: '' })); // Clear email error if role found
+    } catch (error) {
+      setUserRole(null);
+      if (error.message && error.message.includes('not authorized')) {
+        setErrors(prev => ({ 
+          ...prev, 
+          email: 'Email not authorized. Please contact admin to add your email first.' 
+        }));
+      }
+    } finally {
+      setRoleLoading(false);
+    }
+  };
+
+  // Debounced email role check
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (formData.email) {
+        checkUserRole(formData.email);
+      }
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [formData.email]);
 
   const validateForm = () => {
     const newErrors = {};
@@ -54,7 +91,11 @@ const RegisterScreen = ({ navigation }) => {
       newErrors.name = 'Name is required';
     }
 
-    if (formData.role === 'Doctor' && !formData.specialization.trim()) {
+    if (!userRole) {
+      newErrors.email = 'Please enter a valid authorized email address';
+    }
+
+    if (userRole === 'Doctor' && !formData.specialization.trim()) {
       newErrors.specialization = 'Specialization is required for doctors';
     }
 
@@ -76,7 +117,6 @@ const RegisterScreen = ({ navigation }) => {
         cleanEmail,
         formData.password,
         formData.name,
-        formData.role,
         formData.specialization
       );
 
@@ -106,21 +146,28 @@ const RegisterScreen = ({ navigation }) => {
         ]
       );
     } catch (error) {
-      Alert.alert('Registration Failed', error.message);
+      console.error('Registration error:', error);
+      Alert.alert(
+        'Registration Failed',
+        error.message || 'An error occurred during registration. Please try again.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
   const updateFormData = (field, value) => {
-    // Clean and format email properly
-    if (field === 'email') {
-      value = value.trim().toLowerCase();
-    }
-    
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors(prev => ({
+        ...prev,
+        [field]: '',
+      }));
     }
   };
 
@@ -130,23 +177,27 @@ const RegisterScreen = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.header}>
-          <Text style={styles.title}>🏥 HealQ</Text>
-          <Text style={styles.subtitle}>Create Your Account</Text>
+        <View style={styles.headerContainer}>
+          <Text style={styles.title}>Create Account</Text>
+          <Text style={styles.subtitle}>Register with your authorized email</Text>
         </View>
 
-        <View style={styles.form}>
+        <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email Address</Text>
             <TextInput
               style={[styles.input, errors.email && styles.inputError]}
-              placeholder="Enter your email"
+              placeholder="Enter your email address"
               value={formData.email}
               onChangeText={(text) => updateFormData('email', text)}
               keyboardType="email-address"
               autoCapitalize="none"
               autoCorrect={false}
             />
+            {roleLoading && <Text style={styles.infoText}>Checking email authorization...</Text>}
+            {userRole && !roleLoading && (
+              <Text style={styles.successText}>✅ Authorized as: {userRole}</Text>
+            )}
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
           </View>
 
@@ -162,22 +213,7 @@ const RegisterScreen = ({ navigation }) => {
             {errors.name && <Text style={styles.errorText}>{errors.name}</Text>}
           </View>
 
-          <View style={styles.inputContainer}>
-            <Text style={styles.label}>Role</Text>
-            <View style={styles.pickerContainer}>
-              <Picker
-                selectedValue={formData.role}
-                onValueChange={(value) => updateFormData('role', value)}
-                style={styles.picker}
-              >
-                <Picker.Item label="Patient" value="Patient" />
-                <Picker.Item label="Doctor" value="Doctor" />
-                <Picker.Item label="Admin" value="Admin" />
-              </Picker>
-            </View>
-          </View>
-
-          {formData.role === 'Doctor' && (
+          {userRole === 'Doctor' && (
             <View style={styles.inputContainer}>
               <Text style={styles.label}>Specialization</Text>
               <TextInput
@@ -201,11 +237,7 @@ const RegisterScreen = ({ navigation }) => {
               value={formData.password}
               onChangeText={(text) => updateFormData('password', text)}
               secureTextEntry
-              autoCapitalize="none"
             />
-            <Text style={styles.helpText}>
-              Password must be at least 6 characters with uppercase, lowercase, and number
-            </Text>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
           </View>
 
@@ -217,7 +249,6 @@ const RegisterScreen = ({ navigation }) => {
               value={formData.confirmPassword}
               onChangeText={(text) => updateFormData('confirmPassword', text)}
               secureTextEntry
-              autoCapitalize="none"
             />
             {errors.confirmPassword && (
               <Text style={styles.errorText}>{errors.confirmPassword}</Text>
@@ -225,19 +256,19 @@ const RegisterScreen = ({ navigation }) => {
           </View>
 
           <TouchableOpacity
-            style={[styles.button, loading && styles.buttonDisabled]}
+            style={[styles.registerButton, loading && styles.disabledButton]}
             onPress={handleRegister}
-            disabled={loading}
+            disabled={loading || !userRole}
           >
-            <Text style={styles.buttonText}>
-              {loading ? 'Creating Account...' : 'Create Account'}
+            <Text style={styles.registerButtonText}>
+              {loading ? 'Creating Account...' : 'Register'}
             </Text>
           </TouchableOpacity>
 
-          <View style={styles.footer}>
-            <Text style={styles.footerText}>Already have an account? </Text>
+          <View style={styles.loginContainer}>
+            <Text style={styles.loginText}>Already have an account? </Text>
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-              <Text style={styles.linkText}>Sign In</Text>
+              <Text style={styles.loginLink}>Login</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -256,32 +287,32 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 20,
   },
-  header: {
+  headerContainer: {
     alignItems: 'center',
-    marginBottom: 40,
+    marginBottom: 30,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     fontWeight: 'bold',
-    color: '#667eea',
+    color: '#2c3e50',
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 18,
-    color: '#6c757d',
+    fontSize: 16,
+    color: '#7f8c8d',
     textAlign: 'center',
   },
-  form: {
+  formContainer: {
     backgroundColor: '#ffffff',
-    padding: 24,
-    borderRadius: 16,
+    borderRadius: 12,
+    padding: 20,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
     },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
+    shadowRadius: 3.84,
     elevation: 5,
   },
   inputContainer: {
@@ -290,69 +321,65 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#333',
+    color: '#2c3e50',
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#e0e6ed',
+    borderColor: '#ddd',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
     backgroundColor: '#f8f9fa',
   },
   inputError: {
-    borderColor: '#dc3545',
+    borderColor: '#e74c3c',
   },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#e0e6ed',
+  errorText: {
+    color: '#e74c3c',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  infoText: {
+    color: '#3498db',
+    fontSize: 14,
+    marginTop: 5,
+    fontStyle: 'italic',
+  },
+  successText: {
+    color: '#27ae60',
+    fontSize: 14,
+    marginTop: 5,
+    fontWeight: '600',
+  },
+  registerButton: {
+    backgroundColor: '#3498db',
     borderRadius: 8,
-    backgroundColor: '#f8f9fa',
-  },
-  picker: {
-    height: 50,
-  },
-  button: {
-    backgroundColor: '#667eea',
-    padding: 16,
-    borderRadius: 8,
+    padding: 15,
     alignItems: 'center',
     marginTop: 10,
   },
-  buttonDisabled: {
-    backgroundColor: '#adb5bd',
+  disabledButton: {
+    backgroundColor: '#bdc3c7',
   },
-  buttonText: {
+  registerButtonText: {
     color: '#ffffff',
     fontSize: 18,
     fontWeight: '600',
   },
-  footer: {
+  loginContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 24,
+    marginTop: 20,
   },
-  footerText: {
+  loginText: {
     fontSize: 16,
-    color: '#6c757d',
+    color: '#7f8c8d',
   },
-  linkText: {
+  loginLink: {
     fontSize: 16,
-    color: '#667eea',
+    color: '#3498db',
     fontWeight: '600',
-  },
-  errorText: {
-    color: '#dc3545',
-    fontSize: 14,
-    marginTop: 4,
-  },
-  helpText: {
-    color: '#6c757d',
-    fontSize: 12,
-    marginTop: 4,
-    fontStyle: 'italic',
   },
 });
 

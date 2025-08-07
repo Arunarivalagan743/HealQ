@@ -62,6 +62,16 @@ api.interceptors.response.use(
 
 // Auth API functions
 export const authAPI = {
+  // Check email role before registration (security feature)
+  checkEmailRole: async (email) => {
+    try {
+      const response = await api.post('/auth/check-email-role', { email });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
   // Register user with Firebase
   register: async (userData, idToken) => {
     try {

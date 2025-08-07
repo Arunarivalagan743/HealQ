@@ -10,10 +10,50 @@ const generateToken = (payload) => {
   });
 };
 
+// Check email role (security endpoint)
+const checkEmailRole = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Check if email is pre-approved
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    
+    if (!existingUser) {
+      return res.status(403).json({
+        success: false,
+        message: 'Email not authorized. Please contact admin to add your email first.',
+      });
+    }
+
+    if (existingUser.firebaseUid) {
+      return res.status(400).json({
+        success: false,
+        message: 'User already registered with this email.',
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        role: existingUser.role,
+        email: existingUser.email,
+        requiresSpecialization: existingUser.role === 'Doctor',
+      },
+    });
+  } catch (error) {
+    console.error('Check email role error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to check email authorization',
+      error: error.message,
+    });
+  }
+};
+
 // Register user (only pre-approved emails)
 const register = async (req, res) => {
   try {
-    const { email, password, name, role, specialization, idToken } = req.body;
+    const { email, name, specialization, idToken } = req.body;
 
     // Verify Firebase ID token
     const firebaseUser = await verifyFirebaseToken(idToken);
@@ -42,19 +82,11 @@ const register = async (req, res) => {
       });
     }
 
-    // Verify role matches
-    if (existingUser.role !== role) {
-      return res.status(400).json({
-        success: false,
-        message: `Role mismatch. This email is registered as ${existingUser.role}.`,
-      });
-    }
-
     // Update user with Firebase UID and additional info
     existingUser.firebaseUid = firebaseUser.uid;
     existingUser.name = name;
     
-    if (role === 'Doctor' && specialization) {
+    if (existingUser.role === 'Doctor' && specialization) {
       existingUser.specialization = specialization;
     }
     
@@ -71,7 +103,7 @@ const register = async (req, res) => {
 
     // Send welcome email
     try {
-      await emailService.sendWelcomeEmail(email, name, role);
+      await emailService.sendWelcomeEmail(email, name, existingUser.role);
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError);
       // Don't fail registration if email fails
@@ -104,7 +136,7 @@ const register = async (req, res) => {
 // Backend-only registration (fallback for Firebase network issues)
 const registerBackendOnly = async (req, res) => {
   try {
-    const { email, password, name, role, specialization } = req.body;
+    const { email, password, name, specialization } = req.body;
 
     // Check if email is pre-approved
     const existingUser = await User.findOne({ email: email.toLowerCase() });
@@ -123,19 +155,11 @@ const registerBackendOnly = async (req, res) => {
       });
     }
 
-    // Verify role matches
-    if (existingUser.role !== role) {
-      return res.status(400).json({
-        success: false,
-        message: `Role mismatch. This email is registered as ${existingUser.role}.`,
-      });
-    }
-
     // Update user with backend-only registration (no Firebase UID)
     existingUser.name = name;
     existingUser.password = password; // Store password hash in a real app
     
-    if (role === 'Doctor' && specialization) {
+    if (existingUser.role === 'Doctor' && specialization) {
       existingUser.specialization = specialization;
     }
     
@@ -152,7 +176,7 @@ const registerBackendOnly = async (req, res) => {
 
     // Send welcome email
     try {
-      await emailService.sendWelcomeEmail(email, name, role);
+      await emailService.sendWelcomeEmail(email, name, existingUser.role);
     } catch (emailError) {
       console.error('Failed to send welcome email:', emailError);
       // Don't fail registration if email fails
@@ -640,6 +664,7 @@ const updateProfile = async (req, res) => {
 };
 
 module.exports = {
+  checkEmailRole,
   register,
   registerBackendOnly,
   login,
