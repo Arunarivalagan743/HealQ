@@ -5,17 +5,26 @@ import {
   View,
   Text,
   StyleSheet,
+  Platform,
 } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+// Import theme
+import theme from './src/config/theme';
+
 // Import screens
+import LandingScreen from './src/screens/LandingScreen';
+import OnboardingChoiceScreen from './src/screens/OnboardingChoiceScreen';
+import NewUserRequestScreen from './src/screens/NewUserRequestScreen';
+import ExistingUserVerificationScreen from './src/screens/ExistingUserVerificationScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import RegisterScreen from './src/screens/RegisterScreen';
 import ForgotPasswordScreen from './src/screens/ForgotPasswordScreen';
 import PatientDashboard from './src/screens/PatientDashboard';
 import DoctorDashboard from './src/screens/DoctorDashboard';
 import AdminDashboard from './src/screens/AdminDashboard';
+import UserRequestsScreen from './src/screens/UserRequestsScreen';
 
 // Import services
 import authService from './src/services/authService';
@@ -56,7 +65,7 @@ const App = () => {
             setInitialRoute('Login');
         }
       } else {
-        setInitialRoute('Login');
+        setInitialRoute('Landing');
       }
     } catch (error) {
       console.error('App initialization error:', error);
@@ -65,7 +74,7 @@ const App = () => {
         'Failed to initialize the app. Please restart the application.',
         [{ text: 'OK' }]
       );
-      setInitialRoute('Login');
+      setInitialRoute('Landing');
     } finally {
       setIsLoading(false);
     }
@@ -82,14 +91,38 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
+      <StatusBar 
+        barStyle="light-content" 
+        backgroundColor={theme.colors.primary} 
+        translucent={false}
+      />
       <Stack.Navigator
         initialRouteName={initialRoute}
         screenOptions={{
           headerShown: false,
-          gestureEnabled: false,
+          gestureEnabled: true,
+          cardStyleInterpolator: ({ current, layouts }) => {
+            return {
+              cardStyle: {
+                transform: [
+                  {
+                    translateX: current.progress.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: [layouts.screen.width, 0],
+                    }),
+                  },
+                ],
+              },
+            };
+          },
         }}
       >
+        {/* Onboarding Screens */}
+        <Stack.Screen name="Landing" component={LandingScreen} />
+        <Stack.Screen name="OnboardingChoice" component={OnboardingChoiceScreen} />
+        <Stack.Screen name="NewUserRequest" component={NewUserRequestScreen} />
+        <Stack.Screen name="ExistingUserVerification" component={ExistingUserVerificationScreen} />
+        
         {/* Auth Screens */}
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
@@ -99,6 +132,9 @@ const App = () => {
         <Stack.Screen name="PatientDashboard" component={PatientDashboard} />
         <Stack.Screen name="DoctorDashboard" component={DoctorDashboard} />
         <Stack.Screen name="AdminDashboard" component={AdminDashboard} />
+        
+        {/* Admin Management Screens */}
+        <Stack.Screen name="UserRequests" component={UserRequestsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -109,17 +145,21 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: theme.colors.background.primary,
   },
   loadingTitle: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#667eea',
-    marginBottom: 16,
+    ...theme.typography.h1,
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.lg,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    letterSpacing: 1,
+    fontWeight: '800',
   },
   loadingText: {
-    fontSize: 18,
-    color: '#6c757d',
+    ...theme.typography.h4,
+    color: theme.colors.text.secondary,
+    fontFamily: Platform.OS === 'ios' ? 'System' : 'Roboto',
+    fontWeight: '300',
   },
 });
 

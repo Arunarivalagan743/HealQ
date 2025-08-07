@@ -13,6 +13,7 @@ import {
 import { Picker } from '@react-native-picker/picker';
 import authService from '../services/authService';
 import { adminAPI } from '../services/api';
+import theme from '../config/theme';
 
 const AdminDashboard = ({ navigation }) => {
   const [user, setUser] = useState(null);
@@ -47,7 +48,30 @@ const AdminDashboard = ({ navigation }) => {
   const loadStats = async () => {
     try {
       const response = await adminAPI.getDashboardStats();
-      setStats(response.data);
+      console.log('📊 Dashboard API Response:', response);
+      
+      if (response.success && response.data) {
+        // Flatten the nested data structure for easier access
+        const flattenedStats = {
+          // User stats
+          totalUsers: response.data.users?.totalUsers || 0,
+          totalPatients: response.data.users?.totalPatients || 0,
+          totalDoctors: response.data.users?.totalDoctors || 0,
+          totalAdmins: response.data.users?.totalAdmins || 0,
+          activeUsers: response.data.users?.activeUsers || 0,
+          registeredUsers: response.data.users?.registeredUsers || 0,
+          pendingUsers: response.data.users?.pendingUsers || 0,
+          
+          // Request stats
+          pendingRequests: response.data.requests?.pendingRequests || 0,
+          totalRequests: response.data.requests?.totalRequests || 0,
+          doctorRequests: response.data.requests?.doctorRequests || 0,
+          patientRequests: response.data.requests?.patientRequests || 0,
+        };
+        
+        console.log('📊 Flattened Stats:', flattenedStats);
+        setStats(flattenedStats);
+      }
     } catch (error) {
       console.error('Error loading stats:', error);
     }
@@ -197,6 +221,15 @@ const AdminDashboard = ({ navigation }) => {
             <Text style={styles.actionArrow}>→</Text>
           </TouchableOpacity>
 
+          <TouchableOpacity style={styles.actionCard} onPress={() => navigation.navigate('UserRequests')}>
+            <Text style={styles.actionIcon}>📋</Text>
+            <View style={styles.actionContent}>
+              <Text style={styles.actionTitle}>User Requests</Text>
+              <Text style={styles.actionDescription}>Approve/reject pending requests ({stats.pendingRequests || 0})</Text>
+            </View>
+            <Text style={styles.actionArrow}>→</Text>
+          </TouchableOpacity>
+
           <TouchableOpacity style={styles.actionCard}>
             <Text style={styles.actionIcon}>📊</Text>
             <View style={styles.actionContent}>
@@ -327,172 +360,173 @@ const AdminDashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: theme.colors.background.primary,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f8f9fa',
+    backgroundColor: theme.colors.background.primary,
   },
   loadingText: {
-    fontSize: 18,
-    color: '#6c757d',
+    ...theme.typography.h4,
+    color: theme.colors.text.secondary,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 20,
-    paddingTop: 50,
-    backgroundColor: '#dc3545',
+    padding: theme.spacing.xl,
+    paddingTop: theme.spacing.massive,
+    backgroundColor: theme.colors.primary,
+    ...theme.shadows.medium,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#ffffff',
+    ...theme.typography.h2,
+    color: theme.colors.text.white,
+    fontWeight: '700',
   },
   logoutButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 6,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.medium,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   logoutText: {
-    color: '#ffffff',
+    color: theme.colors.text.white,
     fontWeight: '600',
+    fontSize: 14,
   },
   welcomeCard: {
-    backgroundColor: '#ffffff',
-    margin: 20,
-    padding: 24,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 5,
+    backgroundColor: theme.colors.card.background,
+    margin: theme.spacing.xl,
+    padding: theme.spacing.xxl,
+    borderRadius: theme.borderRadius.xlarge,
+    ...theme.shadows.large,
+    borderLeftWidth: 4,
+    borderLeftColor: theme.colors.secondary,
   },
   welcomeTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 4,
+    ...theme.typography.h3,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
   welcomeSubtitle: {
-    fontSize: 16,
-    color: '#6c757d',
+    ...theme.typography.subtitle,
+    color: theme.colors.text.secondary,
   },
   statsContainer: {
     flexDirection: 'row',
-    marginHorizontal: 20,
-    marginBottom: 12,
-    gap: 12,
+    marginHorizontal: theme.spacing.xl,
+    marginBottom: theme.spacing.md,
+    gap: theme.spacing.md,
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: theme.colors.card.background,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.large,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    ...theme.shadows.medium,
+    borderTopWidth: 3,
+    borderTopColor: theme.colors.secondary,
   },
   statNumber: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#dc3545',
-    marginBottom: 4,
+    ...theme.typography.h2,
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.xs,
+    fontWeight: '700',
   },
   statLabel: {
-    fontSize: 12,
-    color: '#6c757d',
+    ...theme.typography.caption,
+    color: theme.colors.text.secondary,
     textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   additionalStats: {
     flexDirection: 'row',
-    marginHorizontal: 20,
-    marginBottom: 20,
-    gap: 12,
+    marginHorizontal: theme.spacing.xl,
+    marginBottom: theme.spacing.xl,
+    gap: theme.spacing.md,
   },
   additionalStatCard: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 12,
-    borderRadius: 8,
+    backgroundColor: theme.colors.card.background,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.medium,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    ...theme.shadows.small,
+    borderWidth: 1,
+    borderColor: theme.colors.card.border,
   },
   additionalStatNumber: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#667eea',
-    marginBottom: 2,
+    ...theme.typography.h4,
+    color: theme.colors.secondary,
+    marginBottom: theme.spacing.xs,
+    fontWeight: '600',
   },
   additionalStatLabel: {
-    fontSize: 10,
-    color: '#6c757d',
+    ...theme.typography.caption,
+    color: theme.colors.text.muted,
     textAlign: 'center',
   },
   quickActions: {
-    margin: 20,
+    margin: theme.spacing.xl,
     marginTop: 0,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 16,
+    ...theme.typography.h4,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.lg,
+    paddingLeft: theme.spacing.xs,
   },
   actionCard: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.card.background,
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.large,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.medium,
+    borderWidth: 1,
+    borderColor: theme.colors.card.border,
   },
   actionIcon: {
-    fontSize: 24,
-    marginRight: 16,
+    fontSize: 28,
+    marginRight: theme.spacing.lg,
+    width: 40,
+    textAlign: 'center',
   },
   actionContent: {
     flex: 1,
   },
   actionTitle: {
-    fontSize: 16,
+    ...theme.typography.body1,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 2,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xs,
   },
   actionDescription: {
-    fontSize: 14,
-    color: '#6c757d',
+    ...theme.typography.body2,
+    color: theme.colors.text.secondary,
   },
   actionArrow: {
-    fontSize: 18,
-    color: '#dc3545',
+    fontSize: 20,
+    color: theme.colors.primary,
     fontWeight: 'bold',
+    marginLeft: theme.spacing.sm,
   },
   footer: {
-    padding: 20,
+    padding: theme.spacing.xl,
     alignItems: 'center',
+    marginTop: theme.spacing.lg,
   },
   footerText: {
-    fontSize: 12,
-    color: '#adb5bd',
+    ...theme.typography.caption,
+    color: theme.colors.text.light,
     textAlign: 'center',
   },
   modalOverlay: {
@@ -502,76 +536,71 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#ffffff',
+    backgroundColor: theme.colors.card.background,
     width: '90%',
-    padding: 24,
-    borderRadius: 16,
+    padding: theme.spacing.xxl,
+    borderRadius: theme.borderRadius.xlarge,
     maxHeight: '80%',
+    ...theme.shadows.large,
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#333',
-    marginBottom: 20,
+    ...theme.typography.h3,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.xl,
     textAlign: 'center',
   },
   inputContainer: {
-    marginBottom: 16,
+    marginBottom: theme.spacing.lg,
   },
   label: {
-    fontSize: 16,
+    ...theme.typography.body1,
     fontWeight: '600',
-    color: '#333',
-    marginBottom: 8,
+    color: theme.colors.text.primary,
+    marginBottom: theme.spacing.sm,
   },
   input: {
-    borderWidth: 1,
-    borderColor: '#e0e6ed',
-    borderRadius: 8,
-    padding: 12,
-    fontSize: 16,
-    backgroundColor: '#f8f9fa',
+    ...theme.components.input,
+    ...theme.typography.body1,
+    color: theme.colors.input.text,
   },
   pickerContainer: {
-    borderWidth: 1,
-    borderColor: '#e0e6ed',
-    borderRadius: 8,
-    backgroundColor: '#f8f9fa',
+    ...theme.components.input,
+    paddingVertical: 0,
   },
   picker: {
     height: 50,
+    color: theme.colors.input.text,
   },
   modalButtons: {
     flexDirection: 'row',
-    gap: 12,
-    marginTop: 20,
+    gap: theme.spacing.md,
+    marginTop: theme.spacing.xl,
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: '#6c757d',
-    padding: 14,
-    borderRadius: 8,
+    backgroundColor: theme.colors.gray400,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.medium,
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    ...theme.typography.button,
+    color: theme.colors.text.white,
   },
   addButton: {
     flex: 1,
-    backgroundColor: '#dc3545',
-    padding: 14,
-    borderRadius: 8,
+    backgroundColor: theme.colors.primary,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.medium,
     alignItems: 'center',
+    ...theme.shadows.small,
   },
   addButtonText: {
-    color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    ...theme.typography.button,
+    color: theme.colors.button.primaryText,
   },
   buttonDisabled: {
-    backgroundColor: '#adb5bd',
+    backgroundColor: theme.colors.button.disabled,
   },
 });
 

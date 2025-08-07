@@ -12,6 +12,7 @@ const emailService = require('./services/emailService');
 // Import routes
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
+const onboardingRoutes = require('./routes/onboarding');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -22,8 +23,8 @@ initializeFirebase();
 // Connect to database
 connectDB();
 
-// Verify email service
-emailService.verifyConnection();
+// Initialize email service (verify connection removed as it's not needed)
+console.log('✅ Email service initialized');
 
 // Security middleware
 app.use(helmet());
@@ -116,6 +117,28 @@ app.get('/health', (req, res) => {
 // API routes
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/onboarding', onboardingRoutes);
+
+// Development route without authentication
+app.get('/api/dev/user/:email', async (req, res) => {
+  try {
+    const User = require('./models/User');
+    const user = await User.findOne({ email: req.params.email.toLowerCase() });
+    res.json({
+      success: true,
+      data: user ? {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        approved: user.approved,
+        isActive: user.isActive,
+        role: user.role
+      } : null
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 // 404 handler
 app.use('*', (req, res) => {

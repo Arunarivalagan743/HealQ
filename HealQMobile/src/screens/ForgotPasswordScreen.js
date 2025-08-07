@@ -11,6 +11,7 @@ import {
   Platform,
 } from 'react-native';
 import authService from '../services/authService';
+import theme from '../config/theme';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [currentStep, setCurrentStep] = useState(1); // 1: Email, 2: OTP, 3: New Password

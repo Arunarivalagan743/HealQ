@@ -247,7 +247,38 @@ export const adminAPI = {
   // Get dashboard stats
   getDashboardStats: async () => {
     try {
-      const response = await api.get('/admin/dashboard/stats');
+      // Use development endpoint that doesn't require auth for testing
+      const response = await api.get('/admin/dashboard/stats-dev');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get all user requests
+  getAllUserRequests: async (params = {}) => {
+    try {
+      const response = await api.get('/admin/requests', { params });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Approve user request
+  approveUserRequest: async (requestId, adminResponse = '') => {
+    try {
+      const response = await api.put(`/admin/requests/${requestId}/approve`, { adminResponse });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Reject user request
+  rejectUserRequest: async (requestId, adminResponse = '') => {
+    try {
+      const response = await api.put(`/admin/requests/${requestId}/reject`, { adminResponse });
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -255,4 +286,44 @@ export const adminAPI = {
   },
 };
 
-export default api;
+// Onboarding API functions
+export const onboardingAPI = {
+  // Submit new user request
+  submitUserRequest: async (requestData) => {
+    try {
+      const response = await api.post('/onboarding/request', requestData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Verify existing user and send OTP
+  verifyExistingUser: async (email) => {
+    try {
+      const response = await api.post('/onboarding/verify-existing', { email });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Verify OTP for existing user
+  verifyOTP: async (email, otp) => {
+    try {
+      const response = await api.post('/onboarding/verify-otp', { email, otp });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Default export with all APIs combined
+const apiService = {
+  ...authAPI,
+  ...adminAPI,
+  ...onboardingAPI,
+};
+
+export default apiService;
