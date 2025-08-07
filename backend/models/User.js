@@ -15,9 +15,11 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    // Only required for backend-only users (no Firebase UID)
+    // Only required for backend-only users when explicitly setting firebaseUid to null
+    // This prevents validation errors when updating existing users
     required: function() {
-      return !this.firebaseUid;
+      // Only required when firebaseUid is explicitly set to null in this operation
+      return this.isNew && this.firebaseUid === null;
     },
   },
   name: {
