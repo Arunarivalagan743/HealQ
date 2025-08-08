@@ -218,12 +218,7 @@ const ExistingUserVerificationScreen = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <TouchableOpacity 
-            onPress={() => navigation.goBack()} 
-            style={styles.backButton}
-          >
-            <Text style={styles.backButtonText}>← Back</Text>
-          </TouchableOpacity>
+          <View style={styles.placeholder} />
           <Text style={styles.headerTitle}>Existing User</Text>
           <View style={styles.placeholder} />
         </View>
@@ -248,6 +243,24 @@ const ExistingUserVerificationScreen = () => {
             {step === 1 ? renderEmailStep() : renderOtpStep()}
           </View>
         </ScrollView>
+        
+        {/* Fixed Bottom Back Button */}
+        <View style={styles.bottomButtonContainer}>
+          <TouchableOpacity 
+            onPress={() => {
+              if (step === 2) {
+                setStep(1); // Go back to email step if on OTP step
+              } else {
+                navigation.goBack(); // Go back to previous screen if on email step
+              }
+            }} 
+            style={styles.bottomBackButton}
+          >
+            <Text style={styles.bottomBackButtonText}>
+              {step === 2 ? '← Back to Email' : '← Go Back'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
@@ -271,14 +284,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E9ECEF',
-  },
-  backButton: {
-    padding: 5,
-  },
-  backButtonText: {
-    color: '#4A90E2',
-    fontSize: 16,
-    fontWeight: '500',
   },
   headerTitle: {
     fontSize: 18,
@@ -478,6 +483,36 @@ const styles = StyleSheet.create({
   infoTextBold: {
     fontWeight: 'bold',
   },
+  bottomButtonContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E9ECEF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  bottomBackButton: {
+    backgroundColor: '#6C757D',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomBackButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
 export default ExistingUserVerificationScreen;
+

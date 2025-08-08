@@ -195,7 +195,7 @@ const LandingScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.secondary,
+    backgroundColor: theme.colors.surface,
   },
   header: {
     flexDirection: 'row',
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
   },
   logoSubtext: {
     ...theme.typography.caption,
-    color: theme.colors.text.muted,
+    color: theme.colors.textMuted,
     marginTop: theme.spacing.xs,
   },
   skipButton: {
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.accent,
   },
   skipText: {
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     ...theme.typography.body2,
     fontWeight: '600',
   },
@@ -272,14 +272,14 @@ const styles = StyleSheet.create({
   },
   stepSubtitle: {
     ...theme.typography.h4,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
     fontWeight: '500',
   },
   stepDescription: {
     ...theme.typography.body1,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: theme.spacing.md,
@@ -301,7 +301,7 @@ const styles = StyleSheet.create({
   },
   featureText: {
     ...theme.typography.caption,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     fontWeight: '600',
     textTransform: 'uppercase',
@@ -323,20 +323,21 @@ const styles = StyleSheet.create({
     ...theme.shadows.large,
   },
   nextButtonText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
     ...theme.typography.button,
     marginRight: theme.spacing.sm,
     fontSize: 18,
   },
   nextButtonIcon: {
     fontSize: 18,
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   stepCounter: {
     ...theme.typography.body2,
-    color: theme.colors.text.light,
+    color: theme.colors.textLight,
     fontWeight: '500',
   },
 });
 
 export default LandingScreen;
+

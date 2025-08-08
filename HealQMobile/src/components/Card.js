@@ -97,24 +97,24 @@ const Card = ({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: theme.borderRadius.large,
+    borderRadius: theme.borderRadius.lg,
     marginBottom: theme.spacing.md,
     borderWidth: 1,
   },
   
   // Variants
   default: {
-    backgroundColor: theme.colors.card.background,
-    borderColor: theme.colors.card.border,
+    backgroundColor: theme.colors.surface,
+    borderColor: theme.colors.border,
   },
   elevated: {
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     borderColor: 'transparent',
     elevation: 8,
   },
   outlined: {
     backgroundColor: 'transparent',
-    borderColor: theme.colors.card.border,
+    borderColor: theme.colors.border,
     borderWidth: 2,
   },
   filled: {
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     borderColor: 'transparent',
   },
   medical: {
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     borderColor: 'transparent',
     borderLeftWidth: 4,
     borderLeftColor: theme.colors.secondary,
@@ -147,12 +147,12 @@ const styles = StyleSheet.create({
   },
   title: {
     ...theme.typography.h4,
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.xs,
   },
   subtitle: {
     ...theme.typography.body2,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
   },
   content: {
     flex: 1,
@@ -160,3 +160,4 @@ const styles = StyleSheet.create({
 });
 
 export default Card;
+

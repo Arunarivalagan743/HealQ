@@ -3,12 +3,25 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 
 // Base URL for your backend API
-// Use 10.0.2.2 for Android emulator, localhost for iOS simulator
-const BASE_URL = __DEV__ 
-  ? Platform.OS === 'android' 
-    ? 'http://10.0.2.2:5000/api' 
-    : 'http://localhost:5000/api'
-  : 'https://your-production-api-url.com/api';
+// Use 10.0.2.2 for Android emulator, localhost for iOS simulator, your actual server IP for real device
+const getBaseURL = () => {
+  if (__DEV__) {
+    // Development mode
+    if (Platform.OS === 'android') {
+      // For Android emulator use 10.0.2.2
+      // For real Android device, use your computer's IP address
+      // You can find your IP with: ipconfig (Windows) or ifconfig (Mac/Linux)
+      return 'http://10.0.2.2:5000/api'; // Change this to your actual IP for real device testing
+    } else {
+      return 'http://localhost:5000/api'; // iOS simulator
+    }
+  } else {
+    // Production mode - replace with your actual production server URL
+    return 'https://your-production-server.com/api'; // ⚠️ REPLACE WITH YOUR ACTUAL PRODUCTION URL
+  }
+};
+
+const BASE_URL = getBaseURL();
 
 // Create axios instance
 const api = axios.create({
@@ -190,6 +203,115 @@ export const authAPI = {
       throw error.response?.data || error.message;
     }
   },
+
+  // Profile Management shortcuts (for backward compatibility)
+  getPatientPreFilledData: async () => {
+    try {
+      const response = await api.get('/patient/prefill-data');
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createPatientProfile: async (profileData) => {
+    try {
+      const response = await api.post('/patient/create', profileData);
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getPatientProfile: async (patientId = null) => {
+    try {
+      const url = patientId ? `/patient/profile/${patientId}` : '/patient/profile';
+      const response = await api.get(url);
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createDoctorProfile: async (profileData) => {
+    try {
+      const response = await api.post('/doctor/create', profileData);
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateDoctorProfile: async (profileId, profileData) => {
+    try {
+      const response = await api.put(`/doctor/update`, profileData);
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getDoctorProfile: async (doctorId = null) => {
+    try {
+      const url = doctorId ? `/doctor/profile/${doctorId}` : '/doctor/profile';
+      const response = await api.get(url);
+      return response;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getAllDoctors: async (filters = {}) => {
+    try {
+      // Use the verified doctors endpoint that doesn't require authentication for public access
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/doctor/verified?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getDoctorAvailability: async (doctorId, date) => {
+    try {
+      const response = await api.get(`/doctor/availability/${doctorId}?date=${date}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createOrUpdatePatientProfile: async (profileData) => {
+    try {
+      // Try to update first, if that fails, create
+      let response;
+      try {
+        response = await api.put('/patient/update', profileData);
+      } catch (updateError) {
+        // If update fails, try create
+        response = await api.post('/patient/create', profileData);
+      }
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createOrUpdateDoctorProfile: async (profileData) => {
+    try {
+      // Try to update first, if that fails, create
+      let response;
+      try {
+        response = await api.put('/doctor/update', profileData);
+      } catch (updateError) {
+        // If update fails, try create
+        response = await api.post('/doctor/create', profileData);
+      }
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
 };
 
 // Admin API functions
@@ -247,8 +369,8 @@ export const adminAPI = {
   // Get dashboard stats
   getDashboardStats: async () => {
     try {
-      // Use development endpoint that doesn't require auth for testing
-      const response = await api.get('/admin/dashboard/stats-dev');
+      // Use proper authenticated route instead of development route
+      const response = await api.get('/admin/dashboard/stats');
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -279,6 +401,380 @@ export const adminAPI = {
   rejectUserRequest: async (requestId, adminResponse = '') => {
     try {
       const response = await api.put(`/admin/requests/${requestId}/reject`, { adminResponse });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get all doctor profiles
+  getAllDoctorProfiles: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/admin/doctors?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get doctors in queue
+  getDoctorsInQueue: async (page = 1, limit = 20) => {
+    try {
+      const response = await api.get(`/admin/doctors/queue?page=${page}&limit=${limit}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get all patient profiles
+  getAllPatientProfiles: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/admin/patients?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Update doctor verification
+  updateDoctorVerification: async (doctorId, verificationData) => {
+    try {
+      const response = await api.put(`/admin/doctors/${doctorId}/verification`, verificationData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Update patient status
+  updatePatientStatus: async (patientId, statusData) => {
+    try {
+      const response = await api.put(`/admin/patients/${patientId}/status`, statusData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get comprehensive dashboard stats
+  getComprehensiveDashboardStats: async () => {
+    try {
+      // Use development endpoint for now
+      const response = await api.get('/admin/dashboard/comprehensive-dev');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get detailed doctor profile
+  getDoctorProfile: async (doctorId) => {
+    try {
+      if (!doctorId) {
+        throw new Error('Doctor ID is required');
+      }
+      const response = await api.get(`/admin/doctors/${doctorId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get doctor's appointments
+  getDoctorAppointments: async (doctorId) => {
+    try {
+      if (!doctorId) {
+        throw new Error('Doctor ID is required');
+      }
+      const response = await api.get(`/admin/doctors/${doctorId}/appointments`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get doctor's patient history
+  getDoctorPatientHistory: async (doctorId) => {
+    try {
+      if (!doctorId) {
+        throw new Error('Doctor ID is required');
+      }
+      const response = await api.get(`/admin/doctors/${doctorId}/patients`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Profile Management API functions
+export const profileAPI = {
+  // Patient Profile APIs
+  getPatientPreFilledData: async () => {
+    try {
+      const response = await api.get('/patient/prefill-data');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  createPatientProfile: async (profileData) => {
+    try {
+      const response = await api.post('/patient/create', profileData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getPatientProfile: async (patientId = null) => {
+    try {
+      const url = patientId ? `/patient/profile/${patientId}` : '/patient/profile';
+      const response = await api.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updatePatientProfile: async (profileData) => {
+    try {
+      const response = await api.put('/patient/update', profileData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getPatientMedicalSummary: async () => {
+    try {
+      const response = await api.get('/patient/medical-summary');
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  uploadPatientProfilePicture: async (imageData) => {
+    try {
+      const formData = new FormData();
+      formData.append('profilePicture', {
+        uri: imageData.uri,
+        type: imageData.type,
+        name: imageData.fileName || 'profile.jpg',
+      });
+      
+      const response = await api.post('/patient/upload-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Doctor Profile APIs
+  createDoctorProfile: async (profileData) => {
+    try {
+      const response = await api.post('/doctor/create', profileData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getDoctorProfile: async (doctorId = null) => {
+    try {
+      const url = doctorId ? `/doctor/profile/${doctorId}` : '/doctor/profile';
+      const response = await api.get(url);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateDoctorProfile: async (profileData) => {
+    try {
+      const response = await api.put('/doctor/update', profileData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getAllDoctors: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/doctor/all?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getDoctorAvailability: async (doctorId, date) => {
+    try {
+      const response = await api.get(`/doctor/availability/${doctorId}?date=${date}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  uploadDoctorProfilePicture: async (imageData) => {
+    try {
+      const formData = new FormData();
+      formData.append('profilePicture', {
+        uri: imageData.uri,
+        type: imageData.type,
+        name: imageData.fileName || 'profile.jpg',
+      });
+      
+      const response = await api.post('/doctor/upload-picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Appointment API functions
+export const appointmentAPI = {
+  // Book appointment
+  bookAppointment: async (appointmentData) => {
+    try {
+      const response = await api.post('/appointments/book', appointmentData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get patient appointments
+  getPatientAppointments: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/appointments/patient?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get doctor appointments
+  getDoctorAppointments: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/appointments/doctor?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get appointment details
+  getAppointmentDetails: async (appointmentId) => {
+    try {
+      const response = await api.get(`/appointments/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Cancel appointment
+  cancelAppointment: async (appointmentId, reason) => {
+    try {
+      const response = await api.put(`/appointments/cancel/${appointmentId}`, { reason });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Update appointment status (for doctors)
+  updateAppointmentStatus: async (appointmentId, status, medicalRecord = null) => {
+    try {
+      const response = await api.put(`/appointments/status/${appointmentId}`, {
+        status,
+        medicalRecord
+      });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get all appointments (admin only)
+  getAllAppointments: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/appointments/admin/all?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Enhanced Admin API functions
+export const enhancedAdminAPI = {
+  // Get all doctor profiles
+  getAllDoctorProfiles: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/admin/doctors?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get all patient profiles
+  getAllPatientProfiles: async (filters = {}) => {
+    try {
+      const params = new URLSearchParams(filters).toString();
+      const response = await api.get(`/admin/patients?${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Update doctor verification status
+  updateDoctorVerification: async (doctorId, verificationData) => {
+    try {
+      const response = await api.put(`/admin/doctors/${doctorId}/verification`, verificationData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Update patient status
+  updatePatientStatus: async (patientId, statusData) => {
+    try {
+      const response = await api.put(`/admin/patients/${patientId}/status`, statusData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get comprehensive dashboard stats
+  getComprehensiveDashboardStats: async () => {
+    try {
+      const response = await api.get('/admin/dashboard/comprehensive');
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -324,6 +820,10 @@ const apiService = {
   ...authAPI,
   ...adminAPI,
   ...onboardingAPI,
+  ...profileAPI,
+  ...appointmentAPI,
+  ...enhancedAdminAPI,
 };
 
 export default apiService;
+

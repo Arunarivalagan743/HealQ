@@ -13,6 +13,9 @@ const emailService = require('./services/emailService');
 const authRoutes = require('./routes/auth');
 const adminRoutes = require('./routes/admin');
 const onboardingRoutes = require('./routes/onboarding');
+const doctorProfileRoutes = require('./routes/doctorProfile');
+const patientProfileRoutes = require('./routes/patientProfile');
+const appointmentRoutes = require('./routes/appointments');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -118,6 +121,9 @@ app.get('/health', (req, res) => {
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/onboarding', onboardingRoutes);
+app.use('/api/doctor', doctorProfileRoutes);
+app.use('/api/patient', patientProfileRoutes);
+app.use('/api/appointments', appointmentRoutes);
 
 // Development route without authentication
 app.get('/api/dev/user/:email', async (req, res) => {

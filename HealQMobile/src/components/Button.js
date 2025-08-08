@@ -114,7 +114,7 @@ const Button = ({
     >
       {loading ? (
         <ActivityIndicator 
-          color={variant === 'primary' ? theme.colors.text.white : theme.colors.primary} 
+          color={variant === 'primary' ? theme.colors.white : theme.colors.primary} 
           size="small" 
         />
       ) : (
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
     borderColor: 'transparent',
   },
@@ -186,8 +186,8 @@ const styles = StyleSheet.create({
   
   // States
   disabled: {
-    backgroundColor: theme.colors.button.disabled,
-    borderColor: theme.colors.button.disabled,
+    backgroundColor: theme.colors.gray300,
+    borderColor: theme.colors.gray300,
     opacity: 0.6,
   },
   
@@ -197,10 +197,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   primaryText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   secondaryText: {
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
   },
   outlineText: {
     color: theme.colors.primary,
@@ -209,13 +209,13 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
   },
   successText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   warningText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   errorText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   
   icon: {
@@ -225,3 +225,4 @@ const styles = StyleSheet.create({
 });
 
 export default Button;
+

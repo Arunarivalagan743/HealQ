@@ -38,9 +38,7 @@ const OnboardingChoiceScreen = () => {
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         {/* Header with Back Button */}
         <View style={styles.header}>
-          <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
-            <Text style={styles.backButtonText}>← Back</Text>
-          </TouchableOpacity>
+          <View style={styles.placeholder} />
           <Text style={styles.logo}>🩺 HealQ</Text>
           <View style={styles.placeholder} />
         </View>
@@ -131,6 +129,17 @@ const OnboardingChoiceScreen = () => {
           </View>
         </View>
       </ScrollView>
+      
+      {/* Fixed Bottom Back Button */}
+      <View style={styles.bottomButtonContainer}>
+        <TouchableOpacity 
+          onPress={handleGoBack} 
+          style={styles.bottomBackButton}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.bottomBackButtonText}>← Go Back</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -153,18 +162,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
     borderBottomColor: '#E9ECEF',
-  },
-  backButton: {
-    padding: 10,
-    borderRadius: 20,
-    backgroundColor: '#F8F9FA',
-    minWidth: 60,
-  },
-  backButtonText: {
-    color: '#4A90E2',
-    fontSize: 16,
-    fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
   },
   logo: {
     fontSize: 28,
@@ -355,6 +352,36 @@ const styles = StyleSheet.create({
   infoTextBold: {
     fontWeight: 'bold',
   },
+  bottomButtonContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E9ECEF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  bottomBackButton: {
+    backgroundColor: '#6C757D',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomBackButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
 export default OnboardingChoiceScreen;
+

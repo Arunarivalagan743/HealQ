@@ -9,7 +9,9 @@ import {
   RefreshControl,
   ActivityIndicator,
   Platform,
+  SafeAreaView,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { adminAPI } from '../services/api';
 import theme from '../config/theme';
@@ -32,20 +34,38 @@ const UserRequestsScreen = () => {
     loadRequests();
   }, []);
 
+  const handleGoBack = () => {
+    try {
+      navigation.goBack();
+    } catch (error) {
+      console.log('Navigation error:', error);
+      // Fallback navigation
+      navigation.navigate('AdminDashboard');
+    }
+  };
+
   const loadRequests = async () => {
     try {
-      // Use development endpoint for now (bypasses auth)
-      const response = await fetch(`${BASE_URL}/admin/requests-dev`);
+      // Use proper authenticated route with auth token
+      const token = await AsyncStorage.getItem('authToken');
+      const response = await fetch(`${BASE_URL}/admin/requests`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
       const data = await response.json();
       
       console.log('📋 User Requests Response:', data);
       
       if (data.success) {
         setRequests(data.data.requests || []);
+      } else {
+        throw new Error(data.message || 'Failed to load requests');
       }
     } catch (error) {
       console.error('Error loading requests:', error);
-      Alert.alert('Error', 'Failed to load user requests');
+      Alert.alert('Error', 'Failed to load user requests. Please ensure you are logged in as an admin.');
     } finally {
       setLoading(false);
     }
@@ -90,13 +110,15 @@ const UserRequestsScreen = () => {
   const processRequest = async (requestId, action) => {
     setProcessingId(requestId);
     try {
+      const token = await AsyncStorage.getItem('authToken');
       const endpoint = action === 'approve' 
-        ? `${BASE_URL}/admin/requests-dev/${requestId}/approve`
-        : `${BASE_URL}/admin/requests-dev/${requestId}/reject`;
+        ? `${BASE_URL}/admin/requests/${requestId}/approve`
+        : `${BASE_URL}/admin/requests/${requestId}/reject`;
       
       const response = await fetch(endpoint, {
         method: 'PUT',
         headers: {
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
@@ -210,11 +232,9 @@ const UserRequestsScreen = () => {
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>← Back</Text>
-        </TouchableOpacity>
+        <View style={styles.placeholder} />
         <Text style={styles.title}>User Requests</Text>
         <View style={styles.placeholder} />
       </View>
@@ -250,7 +270,18 @@ const UserRequestsScreen = () => {
           </View>
         )}
       </ScrollView>
-    </View>
+      
+      {/* Fixed Bottom Back Button */}
+      <View style={styles.bottomButtonContainer}>
+        <TouchableOpacity 
+          onPress={handleGoBack} 
+          style={styles.bottomBackButton}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.bottomBackButtonText}>← Go Back</Text>
+        </TouchableOpacity>
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -267,14 +298,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#e9ecef',
-  },
-  backButton: {
-    padding: 8,
-  },
-  backButtonText: {
-    color: '#667eea',
-    fontSize: 16,
-    fontWeight: '600',
   },
   title: {
     fontSize: 20,
@@ -403,6 +426,36 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  bottomButtonContainer: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
+    borderTopWidth: 1,
+    borderTopColor: '#E9ECEF',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.1,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  bottomBackButton: {
+    backgroundColor: '#6C757D',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  bottomBackButtonText: {
+    color: '#FFFFFF',
+    fontSize: 16,
+    fontWeight: '600',
+  },
 });
 
 export default UserRequestsScreen;
+

@@ -360,17 +360,17 @@ const AdminDashboard = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.primary,
+    backgroundColor: theme.colors.background,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: theme.colors.background.primary,
+    backgroundColor: theme.colors.background,
   },
   loadingText: {
     ...theme.typography.h4,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
   },
   header: {
     flexDirection: 'row',
@@ -383,39 +383,39 @@ const styles = StyleSheet.create({
   },
   title: {
     ...theme.typography.h2,
-    color: theme.colors.text.white,
+    color: theme.colors.white,
     fontWeight: '700',
   },
   logoutButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     paddingHorizontal: theme.spacing.lg,
     paddingVertical: theme.spacing.sm,
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   logoutText: {
-    color: theme.colors.text.white,
+    color: theme.colors.white,
     fontWeight: '600',
     fontSize: 14,
   },
   welcomeCard: {
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     margin: theme.spacing.xl,
     padding: theme.spacing.xxl,
-    borderRadius: theme.borderRadius.xlarge,
+    borderRadius: theme.borderRadius.xl,
     ...theme.shadows.large,
     borderLeftWidth: 4,
     borderLeftColor: theme.colors.secondary,
   },
   welcomeTitle: {
     ...theme.typography.h3,
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.xs,
   },
   welcomeSubtitle: {
     ...theme.typography.subtitle,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -425,9 +425,9 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.large,
+    borderRadius: theme.borderRadius.lg,
     alignItems: 'center',
     ...theme.shadows.medium,
     borderTopWidth: 3,
@@ -441,7 +441,7 @@ const styles = StyleSheet.create({
   },
   statLabel: {
     ...theme.typography.caption,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -454,13 +454,13 @@ const styles = StyleSheet.create({
   },
   additionalStatCard: {
     flex: 1,
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
     ...theme.shadows.small,
     borderWidth: 1,
-    borderColor: theme.colors.card.border,
+    borderColor: theme.colors.border,
   },
   additionalStatNumber: {
     ...theme.typography.h4,
@@ -470,7 +470,7 @@ const styles = StyleSheet.create({
   },
   additionalStatLabel: {
     ...theme.typography.caption,
-    color: theme.colors.text.muted,
+    color: theme.colors.textMuted,
     textAlign: 'center',
   },
   quickActions: {
@@ -479,20 +479,20 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     ...theme.typography.h4,
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.lg,
     paddingLeft: theme.spacing.xs,
   },
   actionCard: {
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     flexDirection: 'row',
     alignItems: 'center',
     padding: theme.spacing.lg,
-    borderRadius: theme.borderRadius.large,
+    borderRadius: theme.borderRadius.lg,
     marginBottom: theme.spacing.md,
     ...theme.shadows.medium,
     borderWidth: 1,
-    borderColor: theme.colors.card.border,
+    borderColor: theme.colors.border,
   },
   actionIcon: {
     fontSize: 28,
@@ -506,12 +506,12 @@ const styles = StyleSheet.create({
   actionTitle: {
     ...theme.typography.body1,
     fontWeight: '600',
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.xs,
   },
   actionDescription: {
     ...theme.typography.body2,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
   },
   actionArrow: {
     fontSize: 20,
@@ -526,7 +526,7 @@ const styles = StyleSheet.create({
   },
   footerText: {
     ...theme.typography.caption,
-    color: theme.colors.text.light,
+    color: theme.colors.textLight,
     textAlign: 'center',
   },
   modalOverlay: {
@@ -536,16 +536,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: theme.colors.card.background,
+    backgroundColor: theme.colors.surface,
     width: '90%',
     padding: theme.spacing.xxl,
-    borderRadius: theme.borderRadius.xlarge,
+    borderRadius: theme.borderRadius.xl,
     maxHeight: '80%',
     ...theme.shadows.large,
   },
   modalTitle: {
     ...theme.typography.h3,
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.xl,
     textAlign: 'center',
   },
@@ -555,13 +555,13 @@ const styles = StyleSheet.create({
   label: {
     ...theme.typography.body1,
     fontWeight: '600',
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.sm,
   },
   input: {
     ...theme.components.input,
     ...theme.typography.body1,
-    color: theme.colors.input.text,
+    color: theme.colors.text,
   },
   pickerContainer: {
     ...theme.components.input,
@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
   },
   picker: {
     height: 50,
-    color: theme.colors.input.text,
+    color: theme.colors.text,
   },
   modalButtons: {
     flexDirection: 'row',
@@ -580,28 +580,29 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.gray400,
     padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
   },
   cancelButtonText: {
     ...theme.typography.button,
-    color: theme.colors.text.white,
+    color: theme.colors.white,
   },
   addButton: {
     flex: 1,
     backgroundColor: theme.colors.primary,
     padding: theme.spacing.md,
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     alignItems: 'center',
     ...theme.shadows.small,
   },
   addButtonText: {
     ...theme.typography.button,
-    color: theme.colors.button.primaryText,
+    color: theme.colors.primaryText,
   },
   buttonDisabled: {
-    backgroundColor: theme.colors.button.disabled,
+    backgroundColor: theme.colors.gray300,
   },
 });
 
 export default AdminDashboard;
+

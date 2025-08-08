@@ -1,84 +1,43 @@
-// Healthcare Theme Configuration - Calm & Clinical Palette
-export const colors = {
-  // Primary Colors - Calm & Clinical (Healthcare Standard)
-  primary: '#2C7A7B',        // Deep Green Blue - trustworthy, professional
-  secondary: '#81E6D9',       // Soft Teal - calming, fresh
-  accent: '#EDF2F7',          // Muted Gray - clean, neutral
+// Healthcare Theme Configuration - Simplified Structure
+const colors = {
+  // Primary Colors
+  primary: '#2C7A7B',
+  secondary: '#81E6D9', 
+  accent: '#EDF2F7',
   
   // Status Colors
-  success: '#38A169',         // Healthcare green for success states
-  warning: '#D69E2E',         // Warm amber for warnings
-  error: '#E53E3E',           // Medical red for errors
-  info: '#3182CE',            // Trustworthy blue for information
+  success: '#38A169',
+  warning: '#D69E2E',
+  error: '#E53E3E',
+  info: '#3182CE',
   
-  // Neutral Colors
+  // Basic Colors
   white: '#FFFFFF',
   black: '#000000',
+  background: '#F7FAFC',
+  surface: '#FFFFFF',
+  border: '#E2E8F0',
   
-  // Gray Scale (matching healthcare aesthetic)
-  gray50: '#F7FAFC',          // Lightest background
-  gray100: '#EDF2F7',         // Light background
-  gray200: '#E2E8F0',         // Border color
-  gray300: '#CBD5E0',         // Disabled elements
-  gray400: '#A0AEC0',         // Placeholder text
-  gray500: '#718096',         // Secondary text
-  gray600: '#4A5568',         // Primary text
-  gray700: '#2D3748',         // Dark text
-  gray800: '#1A202C',         // Darker text
-  gray900: '#171923',         // Darkest text
+  // Text Colors (flat structure)
+  text: '#2D3748',
+  textSecondary: '#4A5568',
+  textMuted: '#718096',
+  textLight: '#A0AEC0',
   
-  // Background Colors
-  background: {
-    primary: '#F7FAFC',       // Main app background
-    secondary: '#FFFFFF',     // Card backgrounds
-    accent: '#EDF2F7',        // Section backgrounds
-  },
-  
-  // Text Colors
-  text: {
-    primary: '#2D3748',       // Main text
-    secondary: '#4A5568',     // Secondary text
-    muted: '#718096',         // Muted text
-    light: '#A0AEC0',         // Light text
-    white: '#FFFFFF',         // White text on dark backgrounds
-  },
-  
-  // Button Colors
-  button: {
-    primary: '#2C7A7B',       // Primary button background
-    primaryText: '#FFFFFF',   // Primary button text
-    secondary: '#81E6D9',     // Secondary button background
-    secondaryText: '#2D3748', // Secondary button text
-    disabled: '#CBD5E0',      // Disabled button background
-    disabledText: '#A0AEC0',  // Disabled button text
-  },
-  
-  // Input Colors
-  input: {
-    background: '#F7FAFC',    // Input background
-    border: '#E2E8F0',        // Input border
-    borderFocus: '#2C7A7B',   // Focused input border
-    placeholder: '#A0AEC0',   // Placeholder text
-    text: '#2D3748',          // Input text
-  },
-  
-  // Card Colors
-  card: {
-    background: '#FFFFFF',    // Card background
-    border: '#E2E8F0',        // Card border
-    shadow: '#000000',        // Shadow color
-  },
-  
-  // Medical/Healthcare specific colors
-  medical: {
-    pulse: '#E53E3E',         // Heart rate, vital signs
-    oxygen: '#3182CE',        // Oxygen levels
-    temperature: '#D69E2E',   // Temperature
-    pressure: '#2C7A7B',      // Blood pressure
-  },
+  // Gray Scale
+  gray50: '#F7FAFC',
+  gray100: '#EDF2F7',
+  gray200: '#E2E8F0',
+  gray300: '#CBD5E0',
+  gray400: '#A0AEC0',
+  gray500: '#718096',
+  gray600: '#4A5568',
+  gray700: '#2D3748',
+  gray800: '#1A202C',
+  gray900: '#171923',
 };
 
-export const spacing = {
+const spacing = {
   xs: 4,
   sm: 8,
   md: 12,
@@ -90,39 +49,35 @@ export const spacing = {
   massive: 48,
 };
 
-export const borderRadius = {
-  small: 6,
-  medium: 8,
-  large: 12,
-  xlarge: 16,
+const borderRadius = {
+  sm: 6,
+  md: 8,
+  lg: 12,
+  xl: 16,
   round: 50,
 };
 
-export const typography = {
+const typography = {
   // Headers
   h1: {
     fontSize: 32,
     fontWeight: '700',
     lineHeight: 40,
-    color: colors.text.primary,
   },
   h2: {
     fontSize: 24,
     fontWeight: '600',
     lineHeight: 32,
-    color: colors.text.primary,
   },
   h3: {
     fontSize: 20,
     fontWeight: '600',
     lineHeight: 28,
-    color: colors.text.primary,
   },
   h4: {
     fontSize: 18,
     fontWeight: '600',
     lineHeight: 24,
-    color: colors.text.primary,
   },
   
   // Body text
@@ -130,13 +85,11 @@ export const typography = {
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
-    color: colors.text.primary,
   },
   body2: {
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 20,
-    color: colors.text.secondary,
   },
   
   // Special text
@@ -144,7 +97,6 @@ export const typography = {
     fontSize: 12,
     fontWeight: '400',
     lineHeight: 16,
-    color: colors.text.muted,
   },
   button: {
     fontSize: 16,
@@ -155,88 +107,78 @@ export const typography = {
     fontSize: 16,
     fontWeight: '500',
     lineHeight: 24,
-    color: colors.text.secondary,
   },
 };
 
-export const shadows = {
+const shadows = {
   small: {
-    shadowColor: colors.card.shadow,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 1,
+    elevation: 2,
   },
   medium: {
-    shadowColor: colors.card.shadow,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 4,
-    elevation: 3,
+    elevation: 4,
   },
   large: {
-    shadowColor: colors.card.shadow,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
     elevation: 6,
   },
 };
 
-// Component-specific themes
-export const components = {
-  header: {
-    backgroundColor: colors.primary,
-    height: 80,
-    paddingTop: 30,
-  },
-  
-  card: {
-    backgroundColor: colors.card.background,
-    borderRadius: borderRadius.large,
-    padding: spacing.lg,
-    marginBottom: spacing.md,
-    ...shadows.medium,
-  },
-  
+const components = {
   button: {
     primary: {
-      backgroundColor: colors.button.primary,
-      borderRadius: borderRadius.medium,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.xl,
-      ...shadows.small,
+      backgroundColor: '#2C7A7B',
+      borderRadius: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 20,
     },
     secondary: {
-      backgroundColor: colors.button.secondary,
-      borderRadius: borderRadius.medium,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.xl,
+      backgroundColor: '#81E6D9',
+      borderRadius: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 20,
       borderWidth: 1,
-      borderColor: colors.primary,
+      borderColor: '#2C7A7B',
     },
     outline: {
       backgroundColor: 'transparent',
-      borderRadius: borderRadius.medium,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.xl,
+      borderRadius: 8,
+      paddingVertical: 12,
+      paddingHorizontal: 20,
       borderWidth: 1,
-      borderColor: colors.primary,
+      borderColor: '#2C7A7B',
     },
   },
-  
   input: {
-    backgroundColor: colors.input.background,
-    borderColor: colors.input.border,
-    borderRadius: borderRadius.medium,
+    backgroundColor: '#FFFFFF',
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
     borderWidth: 1,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     fontSize: 16,
+  },
+  card: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginVertical: 8,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
 };
 
-export default {
+const theme = {
   colors,
   spacing,
   borderRadius,
@@ -244,3 +186,6 @@ export default {
   shadows,
   components,
 };
+
+export default theme;
+

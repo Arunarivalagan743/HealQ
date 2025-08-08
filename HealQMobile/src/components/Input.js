@@ -124,7 +124,7 @@ const Input = ({
         <TextInput
           style={getInputStyle()}
           placeholder={placeholder}
-          placeholderTextColor={theme.colors.input.placeholder}
+          placeholderTextColor={theme.colors.textMuted}
           value={value}
           onChangeText={onChangeText}
           onFocus={() => setIsFocused(true)}
@@ -171,25 +171,25 @@ const styles = StyleSheet.create({
   label: {
     ...theme.typography.body1,
     fontWeight: '600',
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.sm,
   },
   
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: theme.borderRadius.medium,
+    borderRadius: theme.borderRadius.md,
     borderWidth: 1,
   },
   
   // Variants
   default: {
-    backgroundColor: theme.colors.input.background,
-    borderColor: theme.colors.input.border,
+    backgroundColor: theme.colors.background,
+    borderColor: theme.colors.border,
   },
   outlined: {
     backgroundColor: 'transparent',
-    borderColor: theme.colors.input.border,
+    borderColor: theme.colors.border,
     borderWidth: 2,
   },
   filled: {
@@ -203,7 +203,7 @@ const styles = StyleSheet.create({
     borderRightWidth: 0,
     borderBottomWidth: 2,
     borderRadius: 0,
-    borderColor: theme.colors.input.border,
+    borderColor: theme.colors.border,
   },
   
   // Sizes
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   
   // States
   focused: {
-    borderColor: theme.colors.input.borderFocus,
+    borderColor: theme.colors.borderFocus,
     borderWidth: 2,
   },
   error: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     ...theme.typography.body1,
-    color: theme.colors.input.text,
+    color: theme.colors.text,
     paddingVertical: theme.spacing.md,
     paddingHorizontal: theme.spacing.lg,
     minHeight: 20,
@@ -264,12 +264,12 @@ const styles = StyleSheet.create({
   
   icon: {
     fontSize: 20,
-    color: theme.colors.text.muted,
+    color: theme.colors.textMuted,
   },
   
   helperText: {
     ...theme.typography.body2,
-    color: theme.colors.text.muted,
+    color: theme.colors.textMuted,
     marginTop: theme.spacing.xs,
     paddingLeft: theme.spacing.md,
   },
@@ -285,3 +285,4 @@ const styles = StyleSheet.create({
 });
 
 export default Input;
+

@@ -281,7 +281,7 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: theme.colors.background.primary,
+    backgroundColor: theme.colors.background,
   },
   scrollContainer: {
     flexGrow: 1,
@@ -300,16 +300,16 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     ...theme.typography.subtitle,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   formContainer: {
-    backgroundColor: theme.colors.card.background,
-    borderRadius: theme.borderRadius.xlarge,
+    backgroundColor: theme.colors.surface,
+    borderRadius: theme.borderRadius.xl,
     padding: theme.spacing.xxl,
     ...theme.shadows.large,
     borderWidth: 1,
-    borderColor: theme.colors.card.border,
+    borderColor: theme.colors.border,
   },
   inputContainer: {
     marginBottom: theme.spacing.xl,
@@ -317,13 +317,13 @@ const styles = StyleSheet.create({
   label: {
     ...theme.typography.body1,
     fontWeight: '600',
-    color: theme.colors.text.primary,
+    color: theme.colors.text,
     marginBottom: theme.spacing.sm,
   },
   input: {
     ...theme.components.input,
     ...theme.typography.body1,
-    color: theme.colors.input.text,
+    color: theme.colors.text,
   },
   inputError: {
     borderColor: theme.colors.error,
@@ -353,11 +353,11 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
   },
   disabledButton: {
-    backgroundColor: theme.colors.button.disabled,
+    backgroundColor: theme.colors.gray300,
   },
   registerButtonText: {
     ...theme.typography.button,
-    color: theme.colors.button.primaryText,
+    color: theme.colors.primaryText,
   },
   loginContainer: {
     flexDirection: 'row',
@@ -366,7 +366,7 @@ const styles = StyleSheet.create({
   },
   loginText: {
     ...theme.typography.body1,
-    color: theme.colors.text.secondary,
+    color: theme.colors.textSecondary,
   },
   loginLink: {
     ...theme.typography.body1,
@@ -376,3 +376,4 @@ const styles = StyleSheet.create({
 });
 
 export default RegisterScreen;
+
