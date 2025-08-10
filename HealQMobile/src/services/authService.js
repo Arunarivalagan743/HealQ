@@ -358,7 +358,20 @@ class AuthService {
   async isAuthenticated() {
     try {
       const token = await AsyncStorage.getItem('authToken');
-      return !!token && !!this.currentUser;
+      if (!token) {
+        return false;
+      }
+
+      // Try to verify token with a simple API call
+      try {
+        const response = await authAPI.getProfile();
+        return !!response.data;
+      } catch (error) {
+        // Token is invalid/expired, clear it
+        console.log('🚨 Token validation failed, clearing storage...');
+        await AsyncStorage.multiRemove(['authToken', 'userRole', 'userData']);
+        return false;
+      }
     } catch (error) {
       console.error('Error checking authentication:', error);
       return false;

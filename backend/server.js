@@ -16,6 +16,11 @@ const onboardingRoutes = require('./routes/onboarding');
 const doctorProfileRoutes = require('./routes/doctorProfile');
 const patientProfileRoutes = require('./routes/patientProfile');
 const appointmentRoutes = require('./routes/appointments');
+const queueRoutes = require('./routes/queue');
+const notificationRoutes = require('./routes/notifications');
+
+// Import services
+const appointmentScheduler = require('./services/appointmentScheduler');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -124,6 +129,8 @@ app.use('/api/onboarding', onboardingRoutes);
 app.use('/api/doctor', doctorProfileRoutes);
 app.use('/api/patient', patientProfileRoutes);
 app.use('/api/appointments', appointmentRoutes);
+app.use('/api/queue', queueRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Development route without authentication
 app.get('/api/dev/user/:email', async (req, res) => {
@@ -217,4 +224,12 @@ app.listen(PORT, () => {
 🔥 Firebase: Admin SDK initialized
 ⏰ Started at: ${new Date().toISOString()}
   `);
+
+  // Start appointment scheduler
+  try {
+    appointmentScheduler.start();
+    console.log('⏱️  Appointment scheduler started successfully');
+  } catch (error) {
+    console.error('❌ Failed to start appointment scheduler:', error);
+  }
 });

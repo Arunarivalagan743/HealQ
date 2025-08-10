@@ -105,13 +105,7 @@ const DoctorFinderScreen = ({ navigation }) => {
       );
     }
 
-    // Consultation mode filter
-    if (filters.consultationMode) {
-      filtered = filtered.filter(doctor => 
-        doctor.consultationMode === filters.consultationMode || 
-        doctor.consultationMode === 'Both'
-      );
-    }
+    // All doctors are offline only, no need to filter consultation mode
 
     setFilteredDoctors(filtered);
   };
@@ -207,7 +201,7 @@ const DoctorFinderScreen = ({ navigation }) => {
         </Text>
         
         <Text style={styles.detailLabel}>Consultation Mode:</Text>
-        <Text style={styles.detailText}>{doctor.consultationMode || 'In-person'}</Text>
+        <Text style={styles.detailText}>In-person (Offline Consultation)</Text>
         
         <Text style={styles.detailLabel}>Clinic Address:</Text>
         <Text style={styles.detailText} numberOfLines={2}>
@@ -314,28 +308,7 @@ const DoctorFinderScreen = ({ navigation }) => {
         </View>
       </View>
 
-      <Text style={styles.filterLabel}>Consultation Mode</Text>
-      <View style={styles.consultationModeContainer}>
-        {['In-person', 'Online', 'Both'].map((mode) => (
-          <TouchableOpacity
-            key={mode}
-            style={[
-              styles.filterOption,
-              filters.consultationMode === mode && styles.selectedFilterOption
-            ]}
-            onPress={() => handleFilterChange('consultationMode', 
-              filters.consultationMode === mode ? '' : mode
-            )}
-          >
-            <Text style={[
-              styles.filterOptionText,
-              filters.consultationMode === mode && styles.selectedFilterOptionText
-            ]}>
-              {mode}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      {/* Removed consultation mode filter - all doctors are offline only */}
     </Card>
   );
 

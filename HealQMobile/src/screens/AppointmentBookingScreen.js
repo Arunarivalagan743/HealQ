@@ -126,18 +126,20 @@ const AppointmentBookingScreen = ({ route, navigation }) => {
         doctorId,
         appointmentDate: formData.appointmentDate.toISOString().split('T')[0],
         appointmentTime: formData.appointmentTime,
-        appointmentType: formData.appointmentType,
+        consultationType: 'In-person', // Always offline
+        appointmentType: 'consultation',
+        reasonForVisit: formData.symptoms,
         symptoms: formData.symptoms,
         notes: formData.notes,
-        preferredCommunication: formData.preferredCommunication,
+        preferredCommunication: formData.preferredCommunication || 'phone',
       };
 
       const response = await api.bookAppointment(appointmentData);
       
       if (response.success) {
         Alert.alert(
-          'Success',
-          'Appointment booked successfully!',
+          'Request Submitted!',
+          'Your appointment request has been submitted successfully. The doctor will review and approve your request. You will be notified once approved.',
           [
             {
               text: 'OK',

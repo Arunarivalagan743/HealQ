@@ -46,7 +46,7 @@ const PatientDashboard = ({ navigation }) => {
       // Load patient appointments
       const appointmentsResponse = await api.getPatientAppointments();
       if (appointmentsResponse.success) {
-        const appointments = appointmentsResponse.data || [];
+        const appointments = appointmentsResponse.data?.appointments || appointmentsResponse.data || [];
         const now = new Date();
         
         const upcoming = appointments.filter(apt => {

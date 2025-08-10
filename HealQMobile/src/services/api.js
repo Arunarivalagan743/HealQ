@@ -50,6 +50,13 @@ api.interceptors.request.use(
   }
 );
 
+// Import React Navigation for navigation handling
+let navigationRef = null;
+
+export const setNavigationRef = (ref) => {
+  navigationRef = ref;
+};
+
 // Response interceptor to handle errors
 api.interceptors.response.use(
   (response) => {
@@ -61,12 +68,22 @@ api.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       
-      // Clear stored token and redirect to login
-      await AsyncStorage.removeItem('authToken');
-      await AsyncStorage.removeItem('userRole');
+      console.log('🚨 Token expired, logging out user...');
       
-      // You can emit an event here to redirect to login screen
-      // or handle authentication failure globally
+      // Clear stored token and user data
+      await AsyncStorage.multiRemove(['authToken', 'userRole', 'userData']);
+      
+      // Navigate to login screen if navigation ref is available
+      if (navigationRef) {
+        navigationRef.reset({
+          index: 0,
+          routes: [{ name: 'Login' }],
+        });
+      }
+      
+      // Emit a custom event for components to handle token expiration
+      // You can listen to this event in your screens if needed
+      console.log('📢 User session expired, redirecting to login');
     }
 
     return Promise.reject(error);
@@ -667,27 +684,66 @@ export const appointmentAPI = {
       const response = await api.get(`/appointments/patient?${params}`);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      console.error('getPatientAppointments error:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Failed to fetch patient appointments'
+      };
     }
   },
 
   // Get doctor appointments
   getDoctorAppointments: async (filters = {}) => {
     try {
+      console.log('getDoctorAppointments called with filters:', filters);
       const params = new URLSearchParams(filters).toString();
-      const response = await api.get(`/appointments/doctor?${params}`);
+      const url = `/appointments/doctor?${params}`;
+      console.log('Making API call to:', url);
+      
+      const response = await api.get(url);
+      console.log('getDoctorAppointments raw response:', response);
+      console.log('getDoctorAppointments response.data:', response.data);
+      
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      console.error('getDoctorAppointments error:', error);
+      console.error('Error response:', error.response);
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Failed to fetch doctor appointments'
+      };
+    }
+  },
+
+  // Get patient history (for doctors)
+  getPatientHistory: async (patientId, filters = {}) => {
+    try {
+      console.log('📋 API: Getting patient history for ID:', patientId, 'with filters:', filters);
+      const params = new URLSearchParams(filters).toString();
+      const url = `/appointments/patient-history/${patientId}?${params}`;
+      console.log('Making patient history API call to:', url);
+      
+      const response = await api.get(url);
+      console.log('✅ API: Patient history response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ API: Get patient history error:', error.response?.data || error.message);
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Failed to fetch patient history'
+      };
     }
   },
 
   // Get appointment details
   getAppointmentDetails: async (appointmentId) => {
     try {
+      console.log('📋 API: Getting appointment details for ID:', appointmentId);
       const response = await api.get(`/appointments/${appointmentId}`);
+      console.log('✅ API: Appointment details response:', response.data);
       return response.data;
     } catch (error) {
+      console.error('❌ API: Get appointment details error:', error.response?.data || error.message);
       throw error.response?.data || error.message;
     }
   },
@@ -720,6 +776,173 @@ export const appointmentAPI = {
     try {
       const params = new URLSearchParams(filters).toString();
       const response = await api.get(`/appointments/admin/all?${params}`);
+      return response.data;
+    } catch (error) {
+      console.error('getAllAppointments error:', error);
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message || 'Failed to fetch all appointments'
+      };
+    }
+  },
+
+  // Approve appointment (doctor only)
+  approveAppointment: async (appointmentId) => {
+    try {
+      const response = await api.put(`/appointments/approve/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Reject appointment (doctor only)
+  rejectAppointment: async (appointmentId, reason = {}) => {
+    try {
+      const response = await api.put(`/appointments/reject/${appointmentId}`, reason);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Complete appointment (doctor only)
+  completeAppointment: async (appointmentId, medicalRecord = {}) => {
+    try {
+      const response = await api.put(`/appointments/complete/${appointmentId}`, { medicalRecord });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Move appointment to queue
+  moveToQueue: async (appointmentId) => {
+    try {
+      const response = await api.put(`/appointments/queue/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Start processing appointment (doctor only)
+  startProcessing: async (appointmentId) => {
+    try {
+      const response = await api.put(`/appointments/start/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Finish appointment (doctor only)
+  finishAppointment: async (appointmentId) => {
+    try {
+      const response = await api.put(`/appointments/finish/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Add prescription to finished appointment (doctor only)
+  addPrescription: async (appointmentId, prescriptionData) => {
+    try {
+      const response = await api.put(`/appointments/prescription/${appointmentId}`, prescriptionData);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Queue API functions
+export const queueAPI = {
+  // Get doctor's queue
+  getDoctorQueue: async (doctorId, date = null) => {
+    try {
+      const params = date ? `?date=${date}` : '';
+      const response = await api.get(`/queue/doctor/${doctorId}${params}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get patient's queue position
+  getPatientQueuePosition: async (appointmentId) => {
+    try {
+      const response = await api.get(`/queue/patient/${appointmentId}`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Call next patient
+  callNextPatient: async (doctorId) => {
+    try {
+      const response = await api.post(`/queue/doctor/${doctorId}/call-next`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Mark patient as completed
+  markPatientCompleted: async (appointmentId) => {
+    try {
+      const response = await api.put(`/queue/appointment/${appointmentId}/complete`);
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+};
+
+// Notification API functions
+export const notificationAPI = {
+  // Connect to notification stream
+  connectToNotifications: (onMessage, onError) => {
+    const token = AsyncStorage.getItem('authToken');
+    const eventSource = new EventSource(`${BASE_URL}/notifications/stream`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    eventSource.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        onMessage(data);
+      } catch (error) {
+        console.error('Error parsing notification data:', error);
+      }
+    };
+
+    eventSource.onerror = (error) => {
+      console.error('Notification stream error:', error);
+      if (onError) onError(error);
+    };
+
+    return eventSource;
+  },
+
+  // Send test notification (admin only)
+  sendTestNotification: async (userId, message) => {
+    try {
+      const response = await api.post('/notifications/test', { userId, message });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
+    }
+  },
+
+  // Get notification stats (admin only)
+  getNotificationStats: async () => {
+    try {
+      const response = await api.get('/notifications/stats');
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -823,6 +1046,8 @@ const apiService = {
   ...profileAPI,
   ...appointmentAPI,
   ...enhancedAdminAPI,
+  ...queueAPI,
+  ...notificationAPI,
 };
 
 export default apiService;

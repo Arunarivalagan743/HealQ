@@ -63,7 +63,8 @@ const appointmentSchema = new mongoose.Schema({
   },
   consultationType: {
     type: String,
-    enum: ['In-person', 'Online'],
+    enum: ['In-person'],
+    default: 'In-person',
     required: true,
   },
   consultationFee: {
@@ -71,11 +72,37 @@ const appointmentSchema = new mongoose.Schema({
     required: true,
     min: 0,
   },
-  // Appointment Status
+  // Appointment Status - Updated for new workflow
   status: {
     type: String,
-    enum: ['Scheduled', 'Confirmed', 'In-Progress', 'Completed', 'Cancelled', 'No-Show'],
-    default: 'Scheduled',
+    enum: ['queued', 'approved', 'rejected', 'cancelled', 'completed'],
+    default: 'queued',
+  },
+  // Token Management for same-day appointments
+  tokenNumber: {
+    type: Number,
+    default: null,
+  },
+  // Queue Management
+  queueToken: {
+    type: Number,
+    required: true,
+  },
+  queuePosition: {
+    type: Number,
+    required: true,
+  },
+  queueStatus: {
+    type: String,
+    enum: ['waiting', 'called', 'in_progress', 'completed', 'skipped'],
+    default: 'waiting',
+  },
+  estimatedWaitTime: {
+    type: Number, // in minutes
+    default: 0,
+  },
+  calledAt: {
+    type: Date,
   },
   // Reason for Visit
   reasonForVisit: {
@@ -91,12 +118,12 @@ const appointmentSchema = new mongoose.Schema({
   // Payment Information
   paymentStatus: {
     type: String,
-    enum: ['Pending', 'Paid', 'Refunded'],
-    default: 'Pending',
+    enum: ['pending', 'paid', 'refunded'],
+    default: 'pending',
   },
   paymentMethod: {
     type: String,
-    enum: ['Cash', 'Card', 'UPI', 'Insurance'],
+    enum: ['cash', 'card', 'upi', 'insurance'],
   },
   transactionId: {
     type: String,
@@ -158,6 +185,21 @@ const appointmentSchema = new mongoose.Schema({
       type: String,
       trim: true,
     },
+    treatmentDuration: {
+      type: Number, // days
+      min: 1,
+    },
+    treatmentDescription: {
+      type: String,
+      trim: true,
+    },
+    prescriptionSentToPatient: {
+      type: Boolean,
+      default: false,
+    },
+    prescriptionSentAt: {
+      type: Date,
+    },
   },
   // Cancellation Information
   cancellationReason: {
@@ -166,7 +208,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   cancelledBy: {
     type: String,
-    enum: ['Patient', 'Doctor', 'Admin'],
+    enum: ['patient', 'doctor', 'admin'],
   },
   cancelledAt: {
     type: Date,
@@ -177,7 +219,7 @@ const appointmentSchema = new mongoose.Schema({
   },
   rescheduledBy: {
     type: String,
-    enum: ['Patient', 'Doctor', 'Admin'],
+    enum: ['patient', 'doctor', 'admin'],
   },
   rescheduledAt: {
     type: Date,
@@ -188,6 +230,10 @@ const appointmentSchema = new mongoose.Schema({
     default: 0,
   },
   lastReminderSent: {
+    type: Date,
+  },
+  // Completion timestamp
+  completedAt: {
     type: Date,
   },
   // Rating and Feedback (after completion)
@@ -228,6 +274,8 @@ appointmentSchema.index({ paymentStatus: 1 });
 appointmentSchema.index({ doctorId: 1, appointmentDate: 1, 'timeSlot.start': 1 });
 appointmentSchema.index({ patientId: 1, appointmentDate: 1 });
 appointmentSchema.index({ status: 1, appointmentDate: 1 });
+appointmentSchema.index({ doctorId: 1, appointmentDate: 1, queuePosition: 1 });
+appointmentSchema.index({ queueStatus: 1, appointmentDate: 1 });
 
 // Auto-generate appointment ID
 appointmentSchema.pre('save', function(next) {

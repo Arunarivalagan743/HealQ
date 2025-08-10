@@ -31,7 +31,7 @@ if curl -s "http://localhost:5000/health" > /dev/null; then
     echo "✅ Backend is running on localhost:5000"
 else
     echo "❌ Backend is not running. Please start it with:"
-    echo "   cd backend && npm start"
+    echo "   cd backend ; npm start"
     echo ""
 fi
 

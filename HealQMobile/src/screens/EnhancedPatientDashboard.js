@@ -233,7 +233,13 @@ const PatientDashboard = ({ navigation }) => {
           <TouchableOpacity
             key={appointment._id || index}
             style={styles.appointmentItem}
-            onPress={() => navigation.navigate('AppointmentDetails', { appointmentId: appointment._id })}
+            onPress={() => {
+              if (appointment.queueToken) {
+                navigation.navigate('PatientQueuePosition', { appointmentId: appointment._id });
+              } else {
+                navigation.navigate('AppointmentDetails', { appointmentId: appointment._id });
+              }
+            }}
           >
             <View style={styles.appointmentInfo}>
               <Text style={styles.doctorName}>Dr. {appointment.doctorName}</Text>
@@ -241,11 +247,26 @@ const PatientDashboard = ({ navigation }) => {
                 {formatDate(appointment.appointmentDate)} at {appointment.appointmentTime}
               </Text>
               <Text style={styles.appointmentType}>{appointment.appointmentType}</Text>
+              {appointment.queueToken && (
+                <Text style={styles.queueTokenText}>
+                  🎫 Token: #{appointment.queueToken}
+                </Text>
+              )}
             </View>
-            <View style={[styles.statusBadge, { 
-              backgroundColor: appointment.status === 'confirmed' ? theme.colors.success : theme.colors.warning 
-            }]}>
-              <Text style={styles.statusText}>{appointment.status}</Text>
+            <View style={styles.appointmentActions}>
+              <View style={[styles.statusBadge, { 
+                backgroundColor: appointment.status === 'confirmed' ? theme.colors.success : theme.colors.warning 
+              }]}>
+                <Text style={styles.statusText}>{appointment.status}</Text>
+              </View>
+              {appointment.queueToken && (
+                <TouchableOpacity 
+                  style={styles.queueButton}
+                  onPress={() => navigation.navigate('PatientQueuePosition', { appointmentId: appointment._id })}
+                >
+                  <Text style={styles.queueButtonText}>Queue</Text>
+                </TouchableOpacity>
+              )}
             </View>
           </TouchableOpacity>
         ))
@@ -488,11 +509,32 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
   },
+  queueTokenText: {
+    fontSize: 12,
+    color: theme.colors.primary,
+    fontWeight: 'bold',
+    marginTop: theme.spacing.xs,
+  },
+  appointmentActions: {
+    flexDirection: 'column',
+    alignItems: 'flex-end',
+    gap: theme.spacing.xs,
+  },
+  queueButton: {
+    backgroundColor: theme.colors.info,
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.sm,
+  },
+  queueButtonText: {
+    fontSize: 10,
+    color: theme.colors.white,
+    fontWeight: 'bold',
+  },
   statusBadge: {
     paddingHorizontal: theme.spacing.sm,
     paddingVertical: theme.spacing.xs,
     borderRadius: theme.borderRadius.sm,
-    marginLeft: theme.spacing.sm,
   },
   statusText: {
     fontSize: 12,

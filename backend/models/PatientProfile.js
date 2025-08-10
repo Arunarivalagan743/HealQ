@@ -204,6 +204,10 @@ const patientProfileSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  completedAppointments: {
+    type: Number,
+    default: 0,
+  },
   lastVisit: {
     type: Date,
   },

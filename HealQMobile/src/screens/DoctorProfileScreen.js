@@ -67,8 +67,8 @@ const DoctorProfileScreen = ({ navigation }) => {
     'Friday', 'Saturday', 'Sunday'
   ];
 
-  // Consultation modes
-  const consultationModes = ['In-person', 'Online', 'Both'];
+  // Consultation modes - Offline only
+  const consultationModes = ['In-person'];
 
   // Slot durations
   const slotDurations = [

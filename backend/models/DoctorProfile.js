@@ -110,7 +110,7 @@ const doctorProfileSchema = new mongoose.Schema({
   },
   consultationMode: {
     type: String,
-    enum: ['In-person', 'Online', 'Both'],
+    enum: ['In-person'],
     default: 'In-person',
   },
   // Profile

@@ -7,17 +7,26 @@ import {
   TouchableOpacity,
   Alert,
   RefreshControl,
+  FlatList,
 } from 'react-native';
 import authService from '../services/authService';
+import api from '../services/api';
 import theme from '../config/theme';
 
 const DoctorDashboard = ({ navigation }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [appointments, setAppointments] = useState([]);
+  const [stats, setStats] = useState({
+    todaysPatients: 0,
+    pendingApprovals: 0,
+    completedToday: 0
+  });
 
   useEffect(() => {
     loadUserData();
+    loadAppointments();
   }, []);
 
   const loadUserData = async () => {
@@ -31,9 +40,34 @@ const DoctorDashboard = ({ navigation }) => {
     }
   };
 
+  const loadAppointments = async () => {
+    try {
+      // Get today's date
+      const today = new Date().toISOString().split('T')[0];
+      
+      // Get all appointments for today
+      const response = await api.getDoctorAppointments({ date: today });
+      if (response.success) {
+        const todayAppointments = response.data.appointments;
+        setAppointments(todayAppointments);
+        
+        // Calculate stats
+        const stats = {
+          todaysPatients: todayAppointments.length,
+          pendingApprovals: todayAppointments.filter(apt => apt.status === 'requested').length,
+          completedToday: todayAppointments.filter(apt => apt.status === 'finished').length
+        };
+        setStats(stats);
+      }
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+    }
+  };
+
   const onRefresh = async () => {
     setRefreshing(true);
     await loadUserData();
+    await loadAppointments();
     setRefreshing(false);
   };
 
@@ -61,6 +95,18 @@ const DoctorDashboard = ({ navigation }) => {
 
   const handleProfile = () => {
     navigation.navigate('DoctorProfile');
+  };
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'requested': return '#ff9800';
+      case 'approved': return '#2196f3';
+      case 'in_queue': return '#9c27b0';
+      case 'processing': return '#4caf50';
+      case 'finished': return '#008000';
+      case 'rejected': return '#f44336';
+      default: return '#757575';
+    }
   };
 
   if (loading) {
@@ -94,23 +140,26 @@ const DoctorDashboard = ({ navigation }) => {
 
       <View style={styles.statsContainer}>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>0</Text>
-          <Text style={styles.statLabel}>Today's Patients</Text>
+          <Text style={styles.statNumber}>{stats.todaysPatients}</Text>
+          <Text style={styles.statLabel}>TODAY'S PATIENTS</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>0</Text>
-          <Text style={styles.statLabel}>Pending Tokens</Text>
+          <Text style={styles.statNumber}>{stats.pendingApprovals}</Text>
+          <Text style={styles.statLabel}>PENDING APPROVALS</Text>
         </View>
         <View style={styles.statCard}>
-          <Text style={styles.statNumber}>0</Text>
-          <Text style={styles.statLabel}>Completed</Text>
+          <Text style={styles.statNumber}>{stats.completedToday}</Text>
+          <Text style={styles.statLabel}>COMPLETED</Text>
         </View>
       </View>
 
       <View style={styles.quickActions}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         
-        <TouchableOpacity style={styles.actionCard}>
+        <TouchableOpacity 
+          style={styles.actionCard}
+          onPress={() => navigation.navigate('DoctorQueueManagement')}
+        >
           <Text style={styles.actionIcon}>👥</Text>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Patient Queue</Text>
@@ -157,12 +206,52 @@ const DoctorDashboard = ({ navigation }) => {
       </View>
 
       <View style={styles.recentActivity}>
-        <Text style={styles.sectionTitle}>Today's Schedule</Text>
+        <Text style={styles.sectionTitle}>Today's Appointments</Text>
         
-        <View style={styles.activityCard}>
-          <Text style={styles.activityDate}>Coming Soon</Text>
-          <Text style={styles.activityTitle}>Your appointments and patient interactions will appear here</Text>
-        </View>
+        {appointments.length > 0 ? (
+          <FlatList
+            data={appointments.slice(0, 5)} // Show only first 5
+            keyExtractor={(item) => item._id}
+            renderItem={({ item }) => (
+              <View style={styles.appointmentCard}>
+                <View style={styles.appointmentHeader}>
+                  <Text style={styles.patientName}>{item.patientName}</Text>
+                  <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+                    <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
+                  </View>
+                </View>
+                <Text style={styles.appointmentTime}>
+                  {item.timeSlot?.start} - Token #{item.queueToken}
+                </Text>
+                <Text style={styles.reasonText}>{item.reasonForVisit}</Text>
+                
+                {item.status === 'requested' && (
+                  <View style={styles.actionButtons}>
+                    <TouchableOpacity 
+                      style={[styles.actionBtn, styles.approveBtn]}
+                      onPress={() => navigation.navigate('AppointmentList')}
+                    >
+                      <Text style={styles.actionBtnText}>Review</Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </View>
+            )}
+            scrollEnabled={false}
+          />
+        ) : (
+          <View style={styles.activityCard}>
+            <Text style={styles.activityDate}>No appointments for today</Text>
+            <Text style={styles.activityTitle}>You're all caught up! Enjoy your day.</Text>
+          </View>
+        )}
+        
+        <TouchableOpacity 
+          style={styles.viewAllButton}
+          onPress={() => navigation.navigate('AppointmentList')}
+        >
+          <Text style={styles.viewAllText}>View All Appointments →</Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.footer}>
@@ -343,6 +432,76 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textLight,
     textAlign: 'center',
+  },
+  // New appointment styles
+  appointmentCard: {
+    backgroundColor: theme.colors.surface,
+    padding: theme.spacing.lg,
+    borderRadius: theme.borderRadius.lg,
+    marginBottom: theme.spacing.md,
+    ...theme.shadows.medium,
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+  },
+  appointmentHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
+  patientName: {
+    ...theme.typography.body1,
+    fontWeight: '600',
+    color: theme.colors.text,
+    flex: 1,
+  },
+  statusBadge: {
+    paddingHorizontal: theme.spacing.sm,
+    paddingVertical: theme.spacing.xs,
+    borderRadius: theme.borderRadius.sm,
+  },
+  statusText: {
+    ...theme.typography.caption,
+    color: 'white',
+    fontWeight: '600',
+  },
+  appointmentTime: {
+    ...theme.typography.body2,
+    color: theme.colors.textSecondary,
+    marginBottom: theme.spacing.xs,
+  },
+  reasonText: {
+    ...theme.typography.body2,
+    color: theme.colors.textSecondary,
+    fontStyle: 'italic',
+    marginBottom: theme.spacing.sm,
+  },
+  actionButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  actionBtn: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    borderRadius: theme.borderRadius.sm,
+    marginLeft: theme.spacing.sm,
+  },
+  approveBtn: {
+    backgroundColor: theme.colors.primary,
+  },
+  actionBtnText: {
+    ...theme.typography.body2,
+    color: 'white',
+    fontWeight: '600',
+  },
+  viewAllButton: {
+    marginTop: theme.spacing.md,
+    alignItems: 'center',
+  },
+  viewAllText: {
+    ...theme.typography.body2,
+    color: theme.colors.primary,
+    fontWeight: '600',
   },
 });
 

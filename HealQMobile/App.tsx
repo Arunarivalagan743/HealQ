@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   StatusBar,
   Alert,
@@ -12,6 +12,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // Import theme
 import theme from './src/config/theme';
+
+// Import API service and set navigation reference
+import { setNavigationRef } from './src/services/api';
 
 // Import screens
 import LandingScreen from './src/screens/LandingScreen';
@@ -38,8 +41,11 @@ import ProfileManagementScreen from './src/screens/ProfileManagementScreen';
 import EnhancedAdminDashboard from './src/screens/EnhancedAdminDashboard';
 import EnhancedPatientDashboard from './src/screens/EnhancedPatientDashboard';
 import DoctorQueueScreen from './src/screens/DoctorQueueScreen';
+import DoctorQueueManagementScreen from './src/screens/DoctorQueueManagementScreen';
+import PatientQueuePositionScreen from './src/screens/PatientQueuePositionScreen';
 import AdminDoctorProfileView from './src/screens/AdminDoctorProfileView';
 import PatientDoctorView from './src/screens/PatientDoctorView';
+import PatientHistoryScreen from './src/screens/PatientHistoryScreen';
 
 // Import services
 import authService from './src/services/authService';
@@ -49,6 +55,7 @@ const Stack = createStackNavigator();
 const App = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [initialRoute, setInitialRoute] = useState('Login');
+  const navigationRef = useRef<any>(null);
 
   useEffect(() => {
     initializeApp();
@@ -105,7 +112,13 @@ const App = () => {
   }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() => {
+        // Set navigation reference for API service
+        setNavigationRef(navigationRef.current);
+      }}
+    >
       <StatusBar 
         barStyle="light-content" 
         backgroundColor={theme.colors.primary} 
@@ -227,6 +240,16 @@ const App = () => {
             headerTintColor: theme.colors.white,
           }}
         />
+        <Stack.Screen 
+          name="PatientHistory" 
+          component={PatientHistoryScreen}
+          options={{ 
+            headerShown: true, 
+            title: 'Patient History',
+            headerStyle: { backgroundColor: theme.colors.primary },
+            headerTintColor: theme.colors.white,
+          }}
+        />
         
         {/* Enhanced Profile Management Screen */}
         <Stack.Screen 
@@ -247,6 +270,36 @@ const App = () => {
           options={{ 
             headerShown: true,
             title: 'Doctor Queue',
+            headerStyle: { backgroundColor: theme.colors.primary },
+            headerTintColor: theme.colors.white,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+
+        {/* Doctor Queue Management Screen */}
+        <Stack.Screen 
+          name="DoctorQueueManagement" 
+          component={DoctorQueueManagementScreen}
+          options={{ 
+            headerShown: true,
+            title: 'Queue Management',
+            headerStyle: { backgroundColor: theme.colors.primary },
+            headerTintColor: theme.colors.white,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+
+        {/* Patient Queue Position Screen */}
+        <Stack.Screen 
+          name="PatientQueuePosition" 
+          component={PatientQueuePositionScreen}
+          options={{ 
+            headerShown: true,
+            title: 'Queue Position',
             headerStyle: { backgroundColor: theme.colors.primary },
             headerTintColor: theme.colors.white,
             headerTitleStyle: {

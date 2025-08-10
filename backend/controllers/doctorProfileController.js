@@ -77,9 +77,14 @@ const createDoctorProfile = async (req, res) => {
       maxAppointmentsPerSlot: maxAppointmentsPerSlot || 1,
       slotDuration: slotDuration || 30,
       clinicAddress,
-      consultationMode: consultationMode || 'In-person',
+      consultationMode: 'In-person', // Force offline mode for the offline system
       bio: bio || ''
     });
+
+    // Log consultation mode conversion if needed
+    if (consultationMode && consultationMode !== 'In-person') {
+      console.log(`🔄 Converted consultation mode from '${consultationMode}' to 'In-person' for offline system`);
+    }
 
     await doctorProfile.save();
 
@@ -198,6 +203,13 @@ const updateDoctorProfile = async (req, res) => {
     // Prevent updating certain fields
     const protectedFields = ['userId', 'doctorId', 'email'];
     protectedFields.forEach(field => delete updates[field]);
+
+    // Convert consultation mode to offline-only system
+    if (updates.consultationMode) {
+      // Force all consultation modes to 'In-person' for offline system
+      updates.consultationMode = 'In-person';
+      console.log('🔄 Converted consultation mode to In-person for offline system');
+    }
 
     // Update profile
     Object.assign(profile, updates);

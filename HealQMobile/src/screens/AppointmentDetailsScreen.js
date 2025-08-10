@@ -30,6 +30,7 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
   const initializeScreen = async () => {
     try {
       const user = await authService.getCurrentUser();
+      console.log('🔍 User role from authService:', user?.role);
       setUserRole(user?.role);
       await fetchAppointmentDetails();
     } catch (error) {
@@ -43,7 +44,7 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
       const response = await api.getAppointmentDetails(appointmentId);
       
       if (response.success) {
-        setAppointment(response.data);
+        setAppointment(response.data.appointment);
       } else {
         Alert.alert('Error', 'Failed to fetch appointment details');
         navigation.goBack();
@@ -145,8 +146,129 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
     }
   };
 
+  // New appointment workflow handlers
+  const handleApproveAppointment = async () => {
+    try {
+      setActionLoading(true);
+      const response = await api.approveAppointment(appointmentId);
+      
+      if (response.success) {
+        Alert.alert('Success', 'Appointment approved successfully');
+        await fetchAppointmentDetails(); // Refresh data
+      } else {
+        Alert.alert('Error', response.message || 'Failed to approve appointment');
+      }
+    } catch (error) {
+      console.error('Error approving appointment:', error);
+      Alert.alert('Error', 'Failed to approve appointment');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleRejectAppointment = () => {
+    Alert.prompt(
+      'Reject Appointment',
+      'Please provide a reason for rejecting this appointment:',
+      async (reason) => {
+        if (reason) {
+          try {
+            setActionLoading(true);
+            const response = await api.rejectAppointment(appointmentId, reason);
+            
+            if (response.success) {
+              Alert.alert('Success', 'Appointment rejected');
+              await fetchAppointmentDetails();
+            } else {
+              Alert.alert('Error', response.message || 'Failed to reject appointment');
+            }
+          } catch (error) {
+            console.error('Error rejecting appointment:', error);
+            Alert.alert('Error', 'Failed to reject appointment');
+          } finally {
+            setActionLoading(false);
+          }
+        }
+      },
+      'plain-text',
+      '',
+      'default'
+    );
+  };
+
+  const handleMoveToQueue = async () => {
+    try {
+      setActionLoading(true);
+      const response = await api.moveToQueue(appointmentId);
+      
+      if (response.success) {
+        Alert.alert('Success', 'Appointment moved to queue');
+        await fetchAppointmentDetails();
+      } else {
+        Alert.alert('Error', response.message || 'Failed to move to queue');
+      }
+    } catch (error) {
+      console.error('Error moving to queue:', error);
+      Alert.alert('Error', 'Failed to move to queue');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleStartProcessing = async () => {
+    try {
+      setActionLoading(true);
+      const response = await api.startProcessing(appointmentId);
+      
+      if (response.success) {
+        Alert.alert('Success', 'Consultation started');
+        await fetchAppointmentDetails();
+      } else {
+        Alert.alert('Error', response.message || 'Failed to start consultation');
+      }
+    } catch (error) {
+      console.error('Error starting consultation:', error);
+      Alert.alert('Error', 'Failed to start consultation');
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleFinishAppointment = async () => {
+    Alert.alert(
+      'Complete Consultation',
+      'Are you sure you want to mark this consultation as completed?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Complete',
+          onPress: async () => {
+            try {
+              setActionLoading(true);
+              const response = await api.finishAppointment(appointmentId);
+              
+              if (response.success) {
+                Alert.alert('Success', 'Consultation completed. You can now add prescription.');
+                await fetchAppointmentDetails();
+              } else {
+                Alert.alert('Error', response.message || 'Failed to complete consultation');
+              }
+            } catch (error) {
+              console.error('Error completing consultation:', error);
+              Alert.alert('Error', 'Failed to complete consultation');
+            } finally {
+              setActionLoading(false);
+            }
+          }
+        }
+      ]
+    );
+  };
+
   const formatDate = (dateString) => {
+    if (!dateString) return 'Date not available';
     const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Invalid date';
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
       year: 'numeric',
@@ -156,6 +278,7 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
   };
 
   const getStatusColor = (status) => {
+    if (!status) return theme.colors.textSecondary;
     switch (status) {
       case 'confirmed':
         return theme.colors.success;
@@ -171,9 +294,13 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
   };
 
   const canCancel = () => {
-    if (!appointment) return false;
+    if (!appointment || !appointment.appointmentDate) return false;
     
     const appointmentDate = new Date(appointment.appointmentDate);
+    
+    // Check if the date is valid
+    if (isNaN(appointmentDate.getTime())) return false;
+    
     const now = new Date();
     const timeDiff = appointmentDate.getTime() - now.getTime();
     const hoursDiff = timeDiff / (1000 * 3600);
@@ -183,10 +310,14 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
   };
 
   const canStart = () => {
-    if (!appointment) return false;
+    if (!appointment || !appointment.appointmentDate || !appointment.appointmentTime) return false;
     
     const appointmentDateTime = new Date(`${appointment.appointmentDate}T${appointment.appointmentTime}`);
     const now = new Date();
+    
+    // Check if the date is valid
+    if (isNaN(appointmentDateTime.getTime())) return false;
+    
     const timeDiff = Math.abs(appointmentDateTime.getTime() - now.getTime());
     const minutesDiff = timeDiff / (1000 * 60);
     
@@ -223,7 +354,7 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
           <Text style={styles.statusTitle}>Appointment Status</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(appointment.status) }]}>
             <Text style={styles.statusText}>
-              {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+              {appointment.status ? appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1) : 'Unknown'}
             </Text>
           </View>
         </View>
@@ -240,17 +371,17 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
         
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Time:</Text>
-          <Text style={styles.infoValue}>{appointment.appointmentTime}</Text>
+          <Text style={styles.infoValue}>{appointment.appointmentTime || 'Time not set'}</Text>
         </View>
         
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Type:</Text>
-          <Text style={styles.infoValue}>{appointment.appointmentType}</Text>
+          <Text style={styles.infoValue}>{appointment.appointmentType || 'Type not specified'}</Text>
         </View>
         
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Communication:</Text>
-          <Text style={styles.infoValue}>{appointment.preferredCommunication}</Text>
+          <Text style={styles.infoValue}>{appointment.preferredCommunication || 'Not specified'}</Text>
         </View>
       </Card>
 
@@ -263,7 +394,10 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
         <View style={styles.infoRow}>
           <Text style={styles.infoLabel}>Name:</Text>
           <Text style={styles.infoValue}>
-            {userRole === 'patient' ? appointment.doctorName : appointment.patientName}
+            {userRole === 'patient' 
+              ? (appointment.doctorName || 'Doctor name not available') 
+              : (appointment.patientName || 'Patient name not available')
+            }
           </Text>
         </View>
         
@@ -308,44 +442,76 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
 
       {/* Action Buttons */}
       <Card style={styles.actionCard}>
-        {appointment.status === 'confirmed' && canStart() && (
-          <Button
-            title="Start Consultation"
-            onPress={handleStartCommunication}
-            style={styles.actionButton}
-          />
+        {/* Debug Info */}
+        {__DEV__ && (
+          <View style={{ padding: 10, backgroundColor: '#f0f0f0' }}>
+            <Text style={{ fontSize: 12 }}>Debug: userRole = "{userRole}"</Text>
+            <Text style={{ fontSize: 12 }}>Debug: appointment.status = "{appointment.status}"</Text>
+          </View>
         )}
-
-        {userRole === 'doctor' && appointment.status === 'pending' && (
+        
+        {/* Doctor Actions for Requested Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'requested' && (
           <View style={styles.doctorActions}>
             <Button
-              title="Confirm"
-              onPress={() => handleUpdateStatus('confirmed')}
+              title="Approve"
+              onPress={() => handleApproveAppointment()}
               disabled={actionLoading}
-              style={[styles.actionButton, styles.confirmButton]}
+              style={[styles.actionButton, styles.approveButton]}
             />
             <Button
               title="Reject"
-              onPress={() => handleUpdateStatus('cancelled')}
+              onPress={() => handleRejectAppointment()}
               disabled={actionLoading}
               style={[styles.actionButton, styles.rejectButton]}
             />
           </View>
         )}
 
-        {userRole === 'doctor' && appointment.status === 'confirmed' && (
+        {/* Doctor Actions for Approved Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'approved' && (
           <Button
-            title="Mark as Completed"
-            onPress={() => handleUpdateStatus('completed')}
+            title="Move to Queue"
+            onPress={() => handleMoveToQueue()}
+            disabled={actionLoading}
+            style={[styles.actionButton, styles.queueButton]}
+          />
+        )}
+
+        {/* Doctor Actions for Queued Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'in_queue' && (
+          <Button
+            title="Start Consultation"
+            onPress={() => handleStartProcessing()}
+            disabled={actionLoading}
+            style={[styles.actionButton, styles.startButton]}
+          />
+        )}
+
+        {/* Doctor Actions for Processing Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'processing' && (
+          <Button
+            title="Complete Consultation"
+            onPress={() => handleFinishAppointment()}
             disabled={actionLoading}
             style={[styles.actionButton, styles.completeButton]}
           />
         )}
 
-        {canCancel() && (
+        {/* Doctor Actions for Finished Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'finished' && !appointment.prescription && (
           <Button
-            title="Cancel Appointment"
-            onPress={handleCancelAppointment}
+            title="Add Prescription"
+            onPress={() => navigation.navigate('AddPrescription', { appointmentId: appointment._id })}
+            style={[styles.actionButton, styles.prescriptionButton]}
+          />
+        )}
+
+        {/* Patient Actions for Requested Appointments */}
+        {userRole === 'patient' && appointment.status === 'requested' && (
+          <Button
+            title="Cancel Request"
+            onPress={() => handleCancelAppointment()}
             disabled={actionLoading}
             style={[styles.actionButton, styles.cancelButton]}
           />
@@ -480,12 +646,25 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.success,
     flex: 1,
   },
+  approveButton: {
+    backgroundColor: theme.colors.success,
+    flex: 1,
+  },
   rejectButton: {
     backgroundColor: theme.colors.error,
     flex: 1,
   },
+  queueButton: {
+    backgroundColor: '#2196F3',
+  },
+  startButton: {
+    backgroundColor: '#9C27B0',
+  },
   completeButton: {
-    backgroundColor: theme.colors.primary,
+    backgroundColor: '#4CAF50',
+  },
+  prescriptionButton: {
+    backgroundColor: '#FF9800',
   },
   cancelButton: {
     backgroundColor: theme.colors.error,

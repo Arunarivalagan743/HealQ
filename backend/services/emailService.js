@@ -638,6 +638,186 @@ class EmailService {
     }
   }
 
+  async sendPrescriptionEmail(email, patientName, prescriptionData) {
+    const {
+      appointmentId,
+      doctorName,
+      appointmentDate,
+      diagnosis,
+      prescription,
+      labTests,
+      followUp,
+      treatmentDuration,
+      treatmentDescription,
+      doctorNotes
+    } = prescriptionData;
+
+    const formatDate = (date) => {
+      return new Date(date).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    };
+
+    const mailOptions = {
+      from: {
+        name: 'HealQ Medical System',
+        address: process.env.EMAIL_USER,
+      },
+      to: email,
+      subject: `Prescription & Treatment Details - Appointment ${appointmentId}`,
+      html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Medical Prescription</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 700px; margin: 0 auto; padding: 20px; background-color: #f9f9f9;">
+          
+          <!-- Header -->
+          <div style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%); padding: 30px; text-align: center; border-radius: 10px 10px 0 0; color: white;">
+            <h1 style="margin: 0; font-size: 28px;">🏥 HealQ Medical Prescription</h1>
+            <p style="margin: 10px 0 0 0; font-size: 16px; opacity: 0.9;">Official Medical Prescription & Treatment Plan</p>
+          </div>
+          
+          <!-- Main Content -->
+          <div style="background: white; padding: 40px; border-radius: 0 0 10px 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+            
+            <!-- Patient Info -->
+            <div style="border-left: 4px solid #4CAF50; padding-left: 20px; margin-bottom: 30px;">
+              <h2 style="color: #4CAF50; margin: 0 0 10px 0;">Patient Information</h2>
+              <p style="margin: 5px 0; font-size: 16px;"><strong>Name:</strong> ${patientName}</p>
+              <p style="margin: 5px 0; font-size: 16px;"><strong>Appointment ID:</strong> ${appointmentId}</p>
+              <p style="margin: 5px 0; font-size: 16px;"><strong>Date:</strong> ${formatDate(appointmentDate)}</p>
+              <p style="margin: 5px 0; font-size: 16px;"><strong>Doctor:</strong> Dr. ${doctorName}</p>
+            </div>
+
+            ${diagnosis ? `
+            <!-- Diagnosis -->
+            <div style="background: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 25px;">
+              <h3 style="color: #333; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #4CAF50; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">📋</span>
+                Diagnosis
+              </h3>
+              <p style="margin: 0; font-size: 16px; line-height: 1.6;">${diagnosis}</p>
+            </div>
+            ` : ''}
+
+            ${prescription && prescription.length > 0 ? `
+            <!-- Prescription -->
+            <div style="background: #fff3cd; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid #ffeaa7;">
+              <h3 style="color: #856404; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #f39c12; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">💊</span>
+                Prescribed Medications
+              </h3>
+              ${prescription.map((med, index) => `
+                <div style="background: white; border-radius: 6px; padding: 15px; margin-bottom: 10px; border-left: 3px solid #f39c12;">
+                  <p style="margin: 0 0 5px 0; font-weight: bold; color: #333;">${index + 1}. ${med.medicationName || 'Medication'}</p>
+                  ${med.dosage ? `<p style="margin: 0 0 3px 0; color: #666;"><strong>Dosage:</strong> ${med.dosage}</p>` : ''}
+                  ${med.frequency ? `<p style="margin: 0 0 3px 0; color: #666;"><strong>Frequency:</strong> ${med.frequency}</p>` : ''}
+                  ${med.duration ? `<p style="margin: 0 0 3px 0; color: #666;"><strong>Duration:</strong> ${med.duration}</p>` : ''}
+                  ${med.instructions ? `<p style="margin: 0; color: #666;"><strong>Instructions:</strong> ${med.instructions}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+
+            ${treatmentDuration ? `
+            <!-- Treatment Duration -->
+            <div style="background: #e1f5fe; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid #81d4fa;">
+              <h3 style="color: #0277bd; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #2196F3; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">⏱️</span>
+                Treatment Duration
+              </h3>
+              <p style="margin: 0; font-size: 16px;"><strong>${treatmentDuration} days</strong></p>
+              ${treatmentDescription ? `<p style="margin: 10px 0 0 0; color: #666;">${treatmentDescription}</p>` : ''}
+            </div>
+            ` : ''}
+
+            ${labTests && labTests.length > 0 ? `
+            <!-- Lab Tests -->
+            <div style="background: #f3e5f5; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid #ce93d8;">
+              <h3 style="color: #7b1fa2; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #9c27b0; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">🔬</span>
+                Recommended Lab Tests
+              </h3>
+              ${labTests.map((test, index) => `
+                <div style="background: white; border-radius: 6px; padding: 15px; margin-bottom: 10px; border-left: 3px solid #9c27b0;">
+                  <p style="margin: 0 0 5px 0; font-weight: bold; color: #333;">${index + 1}. ${test.testName || 'Lab Test'}</p>
+                  ${test.instructions ? `<p style="margin: 0; color: #666;"><strong>Instructions:</strong> ${test.instructions}</p>` : ''}
+                </div>
+              `).join('')}
+            </div>
+            ` : ''}
+
+            ${followUp && followUp.required ? `
+            <!-- Follow-up -->
+            <div style="background: #fff8e1; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid #ffcc02;">
+              <h3 style="color: #f57f17; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #ff9800; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">📅</span>
+                Follow-up Required
+              </h3>
+              ${followUp.afterDays ? `<p style="margin: 0 0 10px 0; font-size: 16px;"><strong>Schedule follow-up after:</strong> ${followUp.afterDays} days</p>` : ''}
+              ${followUp.instructions ? `<p style="margin: 0; color: #666;">${followUp.instructions}</p>` : ''}
+            </div>
+            ` : ''}
+
+            ${doctorNotes ? `
+            <!-- Doctor's Notes -->
+            <div style="background: #f1f8e9; border-radius: 8px; padding: 20px; margin-bottom: 25px; border: 1px solid #aed581;">
+              <h3 style="color: #558b2f; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #8bc34a; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">📝</span>
+                Doctor's Notes
+              </h3>
+              <p style="margin: 0; font-size: 16px; line-height: 1.6;">${doctorNotes}</p>
+            </div>
+            ` : ''}
+
+            <!-- Important Notice -->
+            <div style="background: #ffebee; border-radius: 8px; padding: 20px; border: 1px solid #ef5350;">
+              <h3 style="color: #c62828; margin: 0 0 15px 0; display: flex; align-items: center;">
+                <span style="background: #f44336; color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 14px;">⚠️</span>
+                Important Instructions
+              </h3>
+              <ul style="margin: 0; padding-left: 20px; color: #666;">
+                <li>Take medications exactly as prescribed</li>
+                <li>Complete the full course of treatment even if you feel better</li>
+                <li>Contact your doctor if you experience any side effects</li>
+                <li>Do not share medications with others</li>
+                <li>Keep this prescription for your records</li>
+              </ul>
+            </div>
+
+            <!-- Footer -->
+            <div style="text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+              <p style="margin: 0 0 10px 0; color: #666; font-size: 14px;">
+                This prescription was generated electronically by HealQ Medical System
+              </p>
+              <p style="margin: 0; color: #999; font-size: 12px;">
+                For any questions about this prescription, please contact your healthcare provider
+              </p>
+            </div>
+
+          </div>
+        </body>
+        </html>
+      `
+    };
+
+    try {
+      const result = await this.transporter.sendMail(mailOptions);
+      console.log('Prescription email sent successfully:', result.messageId);
+      return result;
+    } catch (error) {
+      console.error('Failed to send prescription email:', error);
+      throw error;
+    }
+  }
+
   async verifyConnection() {
     try {
       await this.transporter.verify();
