@@ -47,7 +47,7 @@ const getDoctorQueue = async (req, res) => {
     const queueAppointments = await Appointment.find({
       doctorId: doctorProfile._id,
       appointmentDate: { $gte: startOfDay, $lte: endOfDay },
-      status: { $in: ['requested', 'approved', 'in_queue', 'processing'] }
+      status: { $in: ['requested', 'queued', 'approved', 'in_queue', 'processing'] }
     })
     .sort({ queuePosition: 1 })
     .populate('patientId', 'name phoneNumber bloodGroup age')

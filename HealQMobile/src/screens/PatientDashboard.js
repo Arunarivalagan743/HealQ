@@ -11,9 +11,11 @@ import {
 } from 'react-native';
 import Card from '../components/Card';
 import Button from '../components/Button';
+import PrescriptionCard from '../components/PrescriptionCard';
 import authService from '../services/authService';
 import api from '../services/api';
 import theme from '../config/theme';
+import Icon, { HealQIcon } from '../components/IconProvider';
 
 const PatientDashboard = ({ navigation }) => {
   const [user, setUser] = useState(null);
@@ -22,6 +24,7 @@ const PatientDashboard = ({ navigation }) => {
   const [dashboardData, setDashboardData] = useState({
     upcomingAppointments: [],
     recentAppointments: [],
+    completedAppointmentsWithPrescriptions: [],
     profileStatus: 'incomplete',
   });
 
@@ -56,13 +59,38 @@ const PatientDashboard = ({ navigation }) => {
         
         const recent = appointments.filter(apt => {
           const aptDate = new Date(apt.appointmentDate);
-          return aptDate < now || apt.status === 'completed';
+          return aptDate < now || apt.status === 'completed' || apt.status === 'finished';
         }).slice(0, 3);
+        
+        // Debug prescription data
+        appointments.forEach(apt => {
+          if (apt.status === 'completed' || apt.status === 'finished') {
+            console.log(`Appointment ${apt._id} status: ${apt.status}`);
+            console.log(`Has medicalRecord: ${!!apt.medicalRecord}`);
+            if (apt.medicalRecord) {
+              console.log(`Has prescription: ${!!apt.medicalRecord.prescription}`);
+              console.log(`Prescription length: ${apt.medicalRecord.prescription?.length || 0}`);
+              console.log('Prescription data:', apt.medicalRecord.prescription);
+            }
+          }
+        });
+        
+        // Filter completed/finished appointments with medical records
+        // We don't need to check prescription array as appointments with diagnosis
+        // and other medical information should be shown even if medications list is empty
+        const withPrescriptions = appointments.filter(apt => 
+          (apt.status === 'completed' || apt.status === 'finished') && 
+          apt.medicalRecord && 
+          apt.medicalRecord.diagnosis // Just check if there's a diagnosis
+        );
+        
+        console.log(`Found ${withPrescriptions.length} appointments with prescriptions`);
 
         setDashboardData(prev => ({
           ...prev,
           upcomingAppointments: upcoming.slice(0, 3),
           recentAppointments: recent,
+          completedAppointmentsWithPrescriptions: withPrescriptions.slice(0, 5), // Show latest 5 prescriptions
         }));
       }
 
@@ -157,14 +185,21 @@ const PatientDashboard = ({ navigation }) => {
       }
     >
       <View style={styles.header}>
-        <Text style={styles.title}>🏥 HealQ Patient</Text>
+        <View style={styles.headerTitleContainer}>
+          <Icon type="FontAwesome5" name="hospital" size={24} color={theme.colors.primary} />
+          <Text style={styles.title}> HealQ Patient</Text>
+        </View>
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <Icon type="MaterialIcons" name="logout" size={18} color={theme.colors.error} />
           <Text style={styles.logoutText}>Logout</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.welcomeCard}>
-        <Text style={styles.welcomeTitle}>Welcome back, {user?.name}! 👋</Text>
+        <View style={styles.welcomeTitleContainer}>
+          <Text style={styles.welcomeTitle}>Welcome back, {user?.name}! </Text>
+          <HealQIcon iconName="dashboard" size={22} color={theme.colors.primary} />
+        </View>
         <Text style={styles.welcomeSubtitle}>Patient Dashboard</Text>
       </View>
 
@@ -172,50 +207,98 @@ const PatientDashboard = ({ navigation }) => {
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         
         <TouchableOpacity style={styles.actionCard} onPress={handleBookAppointment}>
-          <Text style={styles.actionIcon}>📅</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="appointment" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Book Appointment</Text>
             <Text style={styles.actionDescription}>Schedule your next visit</Text>
           </View>
-          <Text style={styles.actionArrow}>→</Text>
+          <Icon type="Feather" name="chevron-right" size={20} color={theme.colors.gray500} style={styles.actionArrow} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionCard} onPress={handleViewQueue}>
-          <Text style={styles.actionIcon}>🎫</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="clock" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>View Token Queue</Text>
             <Text style={styles.actionDescription}>Check your position in queue</Text>
           </View>
-          <Text style={styles.actionArrow}>→</Text>
+          <Icon type="Feather" name="chevron-right" size={20} color={theme.colors.gray500} style={styles.actionArrow} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionCard} onPress={handleMedicalRecords}>
-          <Text style={styles.actionIcon}>📋</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="medicalRecords" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Medical Records</Text>
             <Text style={styles.actionDescription}>Access your medical history</Text>
           </View>
-          <Text style={styles.actionArrow}>→</Text>
+          <Icon type="Feather" name="chevron-right" size={20} color={theme.colors.gray500} style={styles.actionArrow} />
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionCard} onPress={handleProfile}>
-          <Text style={styles.actionIcon}>👤</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="profile" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Profile Settings</Text>
             <Text style={styles.actionDescription}>Update your information</Text>
           </View>
-          <Text style={styles.actionArrow}>→</Text>
+          <Icon type="Feather" name="chevron-right" size={20} color={theme.colors.gray500} style={styles.actionArrow} />
         </TouchableOpacity>
       </View>
 
       <View style={styles.recentActivity}>
         <Text style={styles.sectionTitle}>Recent Activity</Text>
         
-        <View style={styles.activityCard}>
-          <Text style={styles.activityDate}>Coming Soon</Text>
-          <Text style={styles.activityTitle}>Your recent appointments and medical records will appear here</Text>
-        </View>
+        {dashboardData.recentAppointments.length > 0 ? (
+          dashboardData.recentAppointments.map((appointment) => (
+            <TouchableOpacity 
+              key={appointment._id}
+              style={styles.activityCard}
+              onPress={() => navigation.navigate('AppointmentDetails', { appointmentId: appointment._id })}
+            >
+              <Text style={styles.activityDate}>
+                {new Date(appointment.appointmentDate).toLocaleDateString()}
+              </Text>
+              <Text style={styles.activityTitle}>
+                Appointment with Dr. {appointment.doctorName}
+              </Text>
+            </TouchableOpacity>
+          ))
+        ) : (
+          <View style={styles.activityCard}>
+            <Text style={styles.activityDate}>No Recent Activity</Text>
+            <Text style={styles.activityTitle}>Your recent appointments will appear here</Text>
+          </View>
+        )}
       </View>
+      
+      {/* Prescriptions Section */}
+      {dashboardData.completedAppointmentsWithPrescriptions.length > 0 && (
+        <View style={styles.prescriptionsSection}>
+          <Text style={styles.sectionTitle}>My Prescriptions</Text>
+          
+          {dashboardData.completedAppointmentsWithPrescriptions.map((appointment) => (
+            <PrescriptionCard
+              key={appointment._id}
+              prescription={appointment.medicalRecord}
+              appointment={appointment}
+              onPress={() => navigation.navigate('ViewPrescription', { appointmentId: appointment._id })}
+            />
+          ))}
+          
+          <TouchableOpacity 
+            style={styles.viewAllButton}
+            onPress={() => navigation.navigate('AppointmentList', { initialFilter: 'completed' })}
+          >
+            <Text style={styles.viewAllText}>View All Prescriptions</Text>
+          </TouchableOpacity>
+        </View>
+      )}
 
       <View style={styles.footer}>
         <Text style={styles.footerText}>© 2025 HealQ - Clinic Token Management</Text>
@@ -356,6 +439,23 @@ const styles = StyleSheet.create({
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
     lineHeight: 20,
+  },
+  // Prescription Section Styles
+  prescriptionsSection: {
+    margin: theme.spacing.xl,
+    marginTop: 0,
+  },
+  viewAllButton: {
+    backgroundColor: theme.colors.primaryLight,
+    padding: theme.spacing.md,
+    borderRadius: theme.borderRadius.md,
+    alignItems: 'center',
+    marginTop: theme.spacing.md,
+  },
+  viewAllText: {
+    color: theme.colors.primary,
+    fontWeight: '600',
+    fontSize: 14,
   },
   footer: {
     padding: theme.spacing.xl,

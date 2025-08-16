@@ -498,11 +498,24 @@ const AppointmentDetailsScreen = ({ route, navigation }) => {
           />
         )}
 
-        {/* Doctor Actions for Finished Appointments */}
-        {(userRole === 'doctor' || userRole === 'Doctor') && appointment.status === 'finished' && !appointment.prescription && (
+        {/* Doctor Actions for Finished/Completed Appointments */}
+        {(userRole === 'doctor' || userRole === 'Doctor') && 
+          (appointment.status === 'completed' || appointment.status === 'finished') && (
           <Button
-            title="Add Prescription"
+            title={appointment.medicalRecord ? "Edit Prescription" : "Add Prescription"}
             onPress={() => navigation.navigate('AddPrescription', { appointmentId: appointment._id })}
+            style={[styles.actionButton, styles.prescriptionButton]}
+          />
+        )}
+        
+        {/* Patient View Prescription - Show even if prescription array is empty but medical record exists */}
+        {(userRole === 'patient' || userRole === 'Patient') && 
+          (appointment.status === 'completed' || appointment.status === 'finished') && 
+          appointment.medicalRecord && 
+          appointment.medicalRecord.diagnosis && (
+          <Button
+            title="View Prescription"
+            onPress={() => navigation.navigate('ViewPrescription', { appointmentId: appointment._id })}
             style={[styles.actionButton, styles.prescriptionButton]}
           />
         )}

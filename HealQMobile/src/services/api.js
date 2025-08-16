@@ -696,7 +696,20 @@ export const appointmentAPI = {
   getDoctorAppointments: async (filters = {}) => {
     try {
       console.log('getDoctorAppointments called with filters:', filters);
-      const params = new URLSearchParams(filters).toString();
+      
+      // Convert array values to comma-separated strings for URL parameters
+      const processedFilters = { ...filters };
+      
+      // Special handling for status array - ensure it's always a comma-separated string
+      if (Array.isArray(processedFilters.status)) {
+        processedFilters.status = processedFilters.status.join(',');
+        console.log('Status array converted to string:', processedFilters.status);
+      }
+      
+      // Add additional debug logging
+      console.log('Processed filters:', processedFilters);
+      
+      const params = new URLSearchParams(processedFilters).toString();
       const url = `/appointments/doctor?${params}`;
       console.log('Making API call to:', url);
       
@@ -809,10 +822,26 @@ export const appointmentAPI = {
   // Complete appointment (doctor only)
   completeAppointment: async (appointmentId, medicalRecord = {}) => {
     try {
-      const response = await api.put(`/appointments/complete/${appointmentId}`, { medicalRecord });
+      console.log('Completing appointment API call:', {
+        appointmentId, 
+        medicalRecord: medicalRecord || {}
+      });
+      
+      const response = await api.put(`/appointments/complete/${appointmentId}`, { 
+        medicalRecord: medicalRecord || {} 
+      });
+      
+      console.log('Complete appointment response:', response.data);
       return response.data;
     } catch (error) {
-      throw error.response?.data || error.message;
+      console.error('Error in completeAppointment API call:', error);
+      if (error.response) {
+        console.error('Server response:', error.response.data);
+      }
+      throw error.response?.data || { 
+        success: false, 
+        message: error.message || 'Failed to complete appointment' 
+      };
     }
   },
 

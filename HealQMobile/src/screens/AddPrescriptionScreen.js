@@ -55,7 +55,53 @@ const AddPrescriptionScreen = ({ navigation, route }) => {
       setLoading(true);
       const response = await api.getAppointmentDetails(appointmentId);
       if (response.success) {
-        setAppointment(response.data.appointment);
+        const appointmentData = response.data.appointment;
+        setAppointment(appointmentData);
+        
+        // If appointment has existing medical record with prescription, load it
+        if (appointmentData.medicalRecord) {
+          const medRecord = appointmentData.medicalRecord;
+          
+          setPrescription({
+            diagnosis: medRecord.diagnosis || '',
+            treatmentDuration: medRecord.treatmentDuration ? medRecord.treatmentDuration.toString() : '',
+            treatmentDescription: medRecord.treatmentDescription || '',
+            doctorNotes: medRecord.doctorNotes || '',
+            medications: medRecord.prescription && medRecord.prescription.length > 0 
+              ? medRecord.prescription.map(med => ({
+                  medicationName: med.medicationName || '',
+                  dosage: med.dosage || '',
+                  frequency: med.frequency || '',
+                  duration: med.duration || '',
+                  instructions: med.instructions || '',
+                }))
+              : [
+                {
+                  medicationName: '',
+                  dosage: '',
+                  frequency: '',
+                  duration: '',
+                  instructions: '',
+                }
+              ],
+            labTests: medRecord.labTests && medRecord.labTests.length > 0 
+              ? medRecord.labTests.map(test => ({
+                  testName: test.testName || '',
+                  instructions: test.instructions || '',
+                }))
+              : [
+                {
+                  testName: '',
+                  instructions: '',
+                }
+              ],
+            followUp: {
+              required: medRecord.followUp?.required || false,
+              afterDays: medRecord.followUp?.afterDays ? medRecord.followUp.afterDays.toString() : '',
+              instructions: medRecord.followUp?.instructions || '',
+            },
+          });
+        }
       } else {
         Alert.alert('Error', 'Failed to load appointment details');
       }
@@ -154,10 +200,12 @@ const AddPrescriptionScreen = ({ navigation, route }) => {
     try {
       // Filter out empty medications and lab tests
       const cleanedPrescription = {
-        ...prescription,
+        diagnosis: prescription.diagnosis,
         medications: prescription.medications.filter(med => med.medicationName.trim()),
         labTests: prescription.labTests.filter(test => test.testName.trim()),
+        doctorNotes: prescription.doctorNotes,
         treatmentDuration: prescription.treatmentDuration ? parseInt(prescription.treatmentDuration) : null,
+        treatmentDescription: prescription.treatmentDescription,
         followUp: {
           ...prescription.followUp,
           afterDays: prescription.followUp.afterDays ? parseInt(prescription.followUp.afterDays) : null,

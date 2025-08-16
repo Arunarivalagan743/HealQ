@@ -1,0 +1,487 @@
+import React, { useState, useEffect } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+  StatusBar,
+  Platform
+} from 'react-native';
+import Card from '../components/Card';
+import theme from '../config/theme';
+import api from '../services/api';
+
+const DoctorScheduleScreen = ({ navigation }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [weekDates, setWeekDates] = useState([]);
+  
+  // Helper functions for date formatting
+  const formatDateToString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    console.log(`Formatting date: ${date} to ${year}-${month}-${day}`);
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatDateDisplay = (date, format) => {
+    const options = { 
+      day: 'numeric',
+      month: 'short', 
+      year: format === 'full' ? 'numeric' : undefined,
+      weekday: format === 'full' ? 'short' : undefined
+    };
+    return date.toLocaleDateString('en-US', options);
+  };
+
+  useEffect(() => {
+    // Generate week dates
+    generateWeekDates();
+    // Load schedule for selected date
+    loadAppointments();
+  }, [selectedDate]);
+
+  const generateWeekDates = () => {
+    const today = new Date();
+    const dates = [];
+    
+    // Get the current week dates (3 days before and 3 days after today)
+    for (let i = -3; i <= 3; i++) {
+      const date = new Date();
+      date.setDate(today.getDate() + i);
+      dates.push(date);
+    }
+    
+    setWeekDates(dates);
+  };
+
+  const loadAppointments = async () => {
+    try {
+      setLoading(true);
+      const dateStr = formatDateToString(selectedDate);
+      
+      console.log('Loading appointments for date:', dateStr);
+      
+      const response = await api.getDoctorAppointments({ 
+        date: dateStr
+      });
+      
+      if (response.success) {
+        setAppointments(response.data.appointments || []);
+      } else {
+        console.error('Failed to load appointments:', response.message);
+      }
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      Alert.alert('Error', 'Failed to load appointments');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <StatusBar backgroundColor={theme.colors.primary} barStyle="light-content" />
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton} 
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>My Schedule</Text>
+        <View style={{ width: 50 }} />
+      </View>atform
+} from 'react-native';
+import Card from '../components/Card';
+import theme from '../config/theme';
+import api from '../services/api';
+
+const DoctorScheduleScreen = ({ navigation }) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [weekDates, setWeekDates] = useState([]);
+  
+  // Helper functions for date formatting
+  const formatDateToString = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  const formatDateDisplay = (date, format) => {
+    let options = {};
+    
+    if (format === 'full') {
+      options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+    } else if (format === 'day') {
+      options = { weekday: 'short' };
+    }
+    
+    return date.toLocaleDateString('en-US', options);
+  };
+  
+  const addDays = (date, days) => {
+    const result = new Date(date);
+    result.setDate(date.getDate() + days);
+    return result;
+  };
+
+  // Generate the dates for the week view
+  useEffect(() => {
+    const dates = [];
+    const today = new Date();
+    
+    // Start from current day and show next 7 days
+    for (let i = 0; i < 7; i++) {
+      const date = addDays(today, i);
+      dates.push(date);
+    }
+    
+    setWeekDates(dates);
+    setSelectedDate(today); // Default to today
+  }, []);
+  
+  // Load appointments when selected date changes
+  useEffect(() => {
+    if (selectedDate) {
+      loadAppointments();
+    }
+  }, [selectedDate]);
+  
+  const loadAppointments = async () => {
+    try {
+      setLoading(true);
+      const dateStr = formatDateToString(selectedDate);
+      
+      const response = await api.getDoctorAppointments({ date: dateStr });
+      
+      if (response.success) {
+        // Sort appointments by time
+        const sortedAppointments = (response.data.appointments || []).sort((a, b) => {
+          return a.timeSlot.start.localeCompare(b.timeSlot.start);
+        });
+        
+        setAppointments(sortedAppointments);
+      } else {
+        Alert.alert('Error', 'Failed to load appointments');
+      }
+    } catch (error) {
+      console.error('Error loading appointments:', error);
+      Alert.alert('Error', 'Failed to load appointments');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
+  
+  const handleAppointmentPress = (appointment) => {
+    navigation.navigate('AppointmentDetails', { 
+      appointmentId: appointment._id || appointment.appointmentId 
+    });
+  };
+  
+  const renderDateItem = ({ item }) => {
+    const isSelected = 
+      formatDateToString(selectedDate) === formatDateToString(item);
+    const dayName = formatDateDisplay(item, 'day');
+    const dayNumber = item.getDate().toString();
+    const isToday = formatDateToString(new Date()) === formatDateToString(item);
+    
+    return (
+      <TouchableOpacity
+        style={[
+          styles.dateItem,
+          isSelected && styles.selectedDateItem,
+          isToday && styles.todayDateItem
+        ]}
+        onPress={() => handleDateSelect(item)}
+      >
+        <Text 
+          style={[
+            styles.dayName,
+            isSelected && styles.selectedDateText,
+            isToday && styles.todayDateText
+          ]}
+        >
+          {dayName}
+        </Text>
+        <Text 
+          style={[
+            styles.dayNumber,
+            isSelected && styles.selectedDateText,
+            isToday && styles.todayDateText
+          ]}
+        >
+          {dayNumber}
+        </Text>
+      </TouchableOpacity>
+    );
+  };
+  
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'requested': return '#ff9800';
+      case 'approved': return '#2196f3';
+      case 'in_queue': return '#9c27b0';
+      case 'processing': return '#4caf50';
+      case 'finished': 
+      case 'completed': return '#008000';
+      case 'rejected': return '#f44336';
+      default: return '#757575';
+    }
+  };
+  
+  const renderAppointmentItem = ({ item }) => {
+    return (
+      <TouchableOpacity
+        style={styles.appointmentItem}
+        onPress={() => handleAppointmentPress(item)}
+      >
+        <View style={styles.timeContainer}>
+          <Text style={styles.timeText}>{item.timeSlot.start}</Text>
+          <Text style={styles.timeDivider}>-</Text>
+          <Text style={styles.timeText}>{item.timeSlot.end}</Text>
+        </View>
+        
+        <View style={styles.appointmentDetails}>
+          <Text style={styles.patientName}>{item.patientName}</Text>
+          <Text style={styles.reasonText} numberOfLines={1}>
+            {item.reasonForVisit || 'No reason specified'}
+          </Text>
+        </View>
+        
+        <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+          <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+  
+  return (
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <TouchableOpacity 
+          style={styles.backButton}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.backButtonText}>← Back</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>My Schedule</Text>
+        <View style={styles.placeholder} />
+      </View>
+      
+      <View style={styles.dateSelector}>
+        <FlatList
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          data={weekDates}
+          keyExtractor={(item) => format(item, 'yyyy-MM-dd')}
+          renderItem={renderDateItem}
+          contentContainerStyle={styles.dateList}
+        />
+      </View>
+      
+      <View style={styles.content}>
+        <Text style={styles.dateTitle}>
+          {formatDateDisplay(selectedDate, 'full')}
+        </Text>
+        
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color={theme.colors.primary} />
+          </View>
+        ) : appointments.length > 0 ? (
+          <FlatList
+            data={appointments}
+            keyExtractor={(item) => item._id}
+            renderItem={renderAppointmentItem}
+            contentContainerStyle={styles.appointmentList}
+          />
+        ) : (
+          <Card style={styles.emptyCard}>
+            <Text style={styles.emptyText}>No appointments scheduled for this day</Text>
+            <TouchableOpacity 
+              style={styles.addButton}
+              onPress={() => navigation.navigate('DoctorAppointments')}
+            >
+              <Text style={styles.addButtonText}>View All Appointments</Text>
+            </TouchableOpacity>
+          </Card>
+        )}
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: theme.colors.primary,
+    paddingTop: Platform.OS === 'ios' ? 50 : 20, // Add extra padding for status bar
+    zIndex: 10, // Ensure header is above other elements
+  },
+  backButton: {
+    padding: 8,
+    zIndex: 15, // Ensure back button stays above other elements
+  },
+  backButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  headerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: 'white',
+  },
+  placeholder: {
+    width: 50,
+  },
+  dateSelector: {
+    backgroundColor: 'white',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#e0e0e0',
+  },
+  dateList: {
+    paddingHorizontal: 16,
+  },
+  dateItem: {
+    width: 60,
+    height: 70,
+    borderRadius: 8,
+    backgroundColor: '#f0f0f0',
+    marginRight: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  selectedDateItem: {
+    backgroundColor: theme.colors.primary,
+  },
+  todayDateItem: {
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
+  },
+  dayName: {
+    fontSize: 14,
+    marginBottom: 4,
+  },
+  dayNumber: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  selectedDateText: {
+    color: 'white',
+  },
+  todayDateText: {
+    color: theme.colors.primary,
+  },
+  content: {
+    flex: 1,
+    padding: 16,
+  },
+  dateTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: 16,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  appointmentList: {
+    paddingBottom: 20,
+  },
+  appointmentItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: 'white',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  timeContainer: {
+    alignItems: 'center',
+    width: 70,
+  },
+  timeText: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  timeDivider: {
+    fontSize: 12,
+    color: theme.colors.textSecondary,
+  },
+  appointmentDetails: {
+    flex: 1,
+    marginLeft: 10,
+  },
+  patientName: {
+    fontSize: 16,
+    fontWeight: '500',
+  },
+  reasonText: {
+    fontSize: 14,
+    color: theme.colors.textSecondary,
+    marginTop: 2,
+  },
+  statusBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 4,
+    marginLeft: 10,
+  },
+  statusText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  emptyCard: {
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyText: {
+    fontSize: 16,
+    color: theme.colors.textSecondary,
+    marginBottom: 16,
+  },
+  addButton: {
+    backgroundColor: theme.colors.primaryLight,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderRadius: 8,
+  },
+  addButtonText: {
+    color: theme.colors.primary,
+    fontWeight: '500',
+  },
+});
+
+export default DoctorScheduleScreen;

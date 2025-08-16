@@ -12,6 +12,10 @@ import {
 import authService from '../services/authService';
 import api from '../services/api';
 import theme from '../config/theme';
+import Icon, { HealQIcon } from '../components/IconProvider';
+import DoctorPrescriptionCard from '../components/DoctorPrescriptionCard';
+import DoctorScheduleCard from '../components/DoctorScheduleCard';
+import PatientRecordsCard from '../components/PatientRecordsCard';
 
 const DoctorDashboard = ({ navigation }) => {
   const [user, setUser] = useState(null);
@@ -43,12 +47,28 @@ const DoctorDashboard = ({ navigation }) => {
   const loadAppointments = async () => {
     try {
       // Get today's date
-      const today = new Date().toISOString().split('T')[0];
+      const now = new Date();
+      const today = now.toISOString().split('T')[0];
+      console.log('Loading appointments for today:', today);
+      console.log('Current date object:', now);
       
       // Get all appointments for today
       const response = await api.getDoctorAppointments({ date: today });
+      console.log('Dashboard appointments response:', response);
+      
       if (response.success) {
         const todayAppointments = response.data.appointments;
+        console.log(`Today's appointments found: ${todayAppointments.length}`);
+        
+        if (todayAppointments.length > 0) {
+          console.log('First appointment:', {
+            id: todayAppointments[0]._id,
+            patient: todayAppointments[0].patientName,
+            status: todayAppointments[0].status,
+            time: todayAppointments[0].timeSlot
+          });
+        }
+        
         setAppointments(todayAppointments);
         
         // Calculate stats
@@ -57,7 +77,10 @@ const DoctorDashboard = ({ navigation }) => {
           pendingApprovals: todayAppointments.filter(apt => apt.status === 'requested').length,
           completedToday: todayAppointments.filter(apt => apt.status === 'finished').length
         };
+        console.log('Dashboard stats:', stats);
         setStats(stats);
+      } else {
+        console.error('Failed to load appointments:', response.message);
       }
     } catch (error) {
       console.error('Error loading appointments:', error);
@@ -66,9 +89,25 @@ const DoctorDashboard = ({ navigation }) => {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await loadUserData();
-    await loadAppointments();
-    setRefreshing(false);
+    console.log('Refreshing dashboard data...');
+    
+    try {
+      // Reload all data
+      await Promise.all([
+        loadUserData(),
+        loadAppointments(),
+      ]);
+      
+      // Force reload of child components by triggering state change
+      setRefreshing(false);
+      
+      // Show feedback to the user
+      console.log('Dashboard data refreshed successfully');
+    } catch (error) {
+      console.error('Error refreshing dashboard:', error);
+      Alert.alert('Refresh Error', 'Failed to refresh dashboard data.');
+      setRefreshing(false);
+    }
   };
 
   const handleLogout = async () => {
@@ -132,7 +171,10 @@ const DoctorDashboard = ({ navigation }) => {
       </View>
 
       <View style={styles.welcomeCard}>
-        <Text style={styles.welcomeTitle}>Welcome, Dr. {user?.name}! 👨‍⚕️</Text>
+        <View style={styles.welcomeTitleContainer}>
+          <Text style={styles.welcomeTitle}>Welcome, Dr. {user?.name}! </Text>
+          <HealQIcon iconName="doctor" size={24} color={theme.colors.primary} />
+        </View>
         <Text style={styles.welcomeSubtitle}>
           {user?.specialization} • Doctor Dashboard
         </Text>
@@ -153,6 +195,13 @@ const DoctorDashboard = ({ navigation }) => {
         </View>
       </View>
 
+      {/* Dashboard Cards */}
+      <View style={styles.dashboardCards}>
+        <DoctorPrescriptionCard navigation={navigation} />
+        <DoctorScheduleCard navigation={navigation} />
+        <PatientRecordsCard navigation={navigation} />
+      </View>
+
       <View style={styles.quickActions}>
         <Text style={styles.sectionTitle}>Quick Actions</Text>
         
@@ -160,7 +209,9 @@ const DoctorDashboard = ({ navigation }) => {
           style={styles.actionCard}
           onPress={() => navigation.navigate('DoctorQueueManagement')}
         >
-          <Text style={styles.actionIcon}>👥</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="users" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Patient Queue</Text>
             <Text style={styles.actionDescription}>View and manage patient queue</Text>
@@ -168,8 +219,13 @@ const DoctorDashboard = ({ navigation }) => {
           <Text style={styles.actionArrow}>→</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <Text style={styles.actionIcon}>📋</Text>
+        <TouchableOpacity 
+          style={styles.actionCard}
+          onPress={() => navigation.navigate('PatientRecords')}
+        >
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="medicalRecords" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Patient Records</Text>
             <Text style={styles.actionDescription}>Access patient medical records</Text>
@@ -177,8 +233,13 @@ const DoctorDashboard = ({ navigation }) => {
           <Text style={styles.actionArrow}>→</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <Text style={styles.actionIcon}>📅</Text>
+        <TouchableOpacity 
+          style={styles.actionCard}
+          onPress={() => navigation.navigate('DoctorSchedule')}
+        >
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="appointment" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>My Schedule</Text>
             <Text style={styles.actionDescription}>View appointments and availability</Text>
@@ -186,8 +247,13 @@ const DoctorDashboard = ({ navigation }) => {
           <Text style={styles.actionArrow}>→</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.actionCard}>
-          <Text style={styles.actionIcon}>💊</Text>
+        <TouchableOpacity 
+          style={styles.actionCard}
+          onPress={() => navigation.navigate('DoctorPrescriptions')}
+        >
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="prescription" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Prescriptions</Text>
             <Text style={styles.actionDescription}>Create and manage prescriptions</Text>
@@ -196,7 +262,9 @@ const DoctorDashboard = ({ navigation }) => {
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.actionCard} onPress={handleProfile}>
-          <Text style={styles.actionIcon}>👤</Text>
+          <View style={styles.actionIconContainer}>
+            <HealQIcon iconName="profile" size={24} color={theme.colors.primary} />
+          </View>
           <View style={styles.actionContent}>
             <Text style={styles.actionTitle}>Profile Settings</Text>
             <Text style={styles.actionDescription}>Update your information</Text>
@@ -209,11 +277,9 @@ const DoctorDashboard = ({ navigation }) => {
         <Text style={styles.sectionTitle}>Today's Appointments</Text>
         
         {appointments.length > 0 ? (
-          <FlatList
-            data={appointments.slice(0, 5)} // Show only first 5
-            keyExtractor={(item) => item._id}
-            renderItem={({ item }) => (
-              <View style={styles.appointmentCard}>
+          <View>
+            {appointments.slice(0, 5).map((item) => (
+              <View key={item._id} style={styles.appointmentCard}>
                 <View style={styles.appointmentHeader}>
                   <Text style={styles.patientName}>{item.patientName}</Text>
                   <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
@@ -236,9 +302,8 @@ const DoctorDashboard = ({ navigation }) => {
                   </View>
                 )}
               </View>
-            )}
-            scrollEnabled={false}
-          />
+            ))}
+          </View>
         ) : (
           <View style={styles.activityCard}>
             <Text style={styles.activityDate}>No appointments for today</Text>
@@ -302,6 +367,20 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontWeight: '600',
     fontSize: 14,
+  },
+  welcomeTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  actionIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0, 100, 170, 0.1)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: theme.spacing.md,
   },
   welcomeCard: {
     backgroundColor: theme.colors.surface,
@@ -395,6 +474,11 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: 'bold',
     marginLeft: theme.spacing.sm,
+  },
+  dashboardCards: {
+    margin: theme.spacing.xl,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
   },
   recentActivity: {
     margin: theme.spacing.xl,

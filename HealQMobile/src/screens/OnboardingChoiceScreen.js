@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import theme from '../config/theme';
+import Icon, { HealQIcon } from '../components/IconProvider';
 
 const { width } = Dimensions.get('window');
 
@@ -39,7 +40,10 @@ const OnboardingChoiceScreen = () => {
         {/* Header with Back Button */}
         <View style={styles.header}>
           <View style={styles.placeholder} />
-          <Text style={styles.logo}>🩺 HealQ</Text>
+          <View style={styles.logoContainer}>
+            <Icon type="MaterialCommunityIcons" name="hospital-building" size={28} color="#2C3E50" />
+            <Text style={styles.logo}>HealQ</Text>
+          </View>
           <View style={styles.placeholder} />
         </View>
         
@@ -51,7 +55,7 @@ const OnboardingChoiceScreen = () => {
           <TouchableOpacity style={styles.optionCard} onPress={handleNewUser}>
             <View style={styles.cardHeader}>
               <View style={[styles.iconContainer, { backgroundColor: '#E3F2FD' }]}>
-                <Text style={styles.cardIcon}>👋</Text>
+                <Icon type="MaterialCommunityIcons" name="account-plus" size={26} color="#4A90E2" />
               </View>
               <View style={styles.badgeContainer}>
                 <Text style={styles.badge}>NEW</Text>
@@ -62,13 +66,22 @@ const OnboardingChoiceScreen = () => {
               First time here? Submit a request to join our clinic as a patient or doctor. Our admin team will review and approve your application.
             </Text>
             <View style={styles.featuresList}>
-              <Text style={styles.featureItem}>✓ Submit join request</Text>
-              <Text style={styles.featureItem}>✓ Admin review process</Text>
-              <Text style={styles.featureItem}>✓ Email notifications</Text>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>Submit join request</Text>
+              </View>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>Admin review process</Text>
+              </View>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>Email notifications</Text>
+              </View>
             </View>
             <View style={styles.cardAction}>
               <Text style={styles.actionText}>Submit Request</Text>
-              <Text style={styles.actionArrow}>→</Text>
+              <Icon type="Feather" name="arrow-right" size={18} color="#4A90E2" style={styles.actionArrow} />
             </View>
           </TouchableOpacity>
 
@@ -76,7 +89,7 @@ const OnboardingChoiceScreen = () => {
           <TouchableOpacity style={styles.optionCard} onPress={handleExistingUser}>
             <View style={styles.cardHeader}>
               <View style={[styles.iconContainer, { backgroundColor: '#E8F5E8' }]}>
-                <Text style={styles.cardIcon}>🔍</Text>
+                <Icon type="MaterialCommunityIcons" name="shield-check" size={26} color="#28A745" />
               </View>
             </View>
             <Text style={styles.cardTitle}>I'm Already Approved</Text>
@@ -84,13 +97,22 @@ const OnboardingChoiceScreen = () => {
               Already have an approved profile with us? Verify your email address to complete registration and start using the app.
             </Text>
             <View style={styles.featuresList}>
-              <Text style={styles.featureItem}>✓ Email verification</Text>
-              <Text style={styles.featureItem}>✓ OTP confirmation</Text>
-              <Text style={styles.featureItem}>✓ Quick registration</Text>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>Email verification</Text>
+              </View>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>OTP confirmation</Text>
+              </View>
+              <View style={styles.featureItemContainer}>
+                <Icon type="Feather" name="check" size={14} color="#28A745" style={styles.featureCheck} />
+                <Text style={styles.featureItem}>Quick registration</Text>
+              </View>
             </View>
             <View style={styles.cardAction}>
               <Text style={styles.actionText}>Verify Email</Text>
-              <Text style={styles.actionArrow}>→</Text>
+              <Icon type="Feather" name="arrow-right" size={18} color="#4A90E2" style={styles.actionArrow} />
             </View>
           </TouchableOpacity>
 
@@ -105,7 +127,7 @@ const OnboardingChoiceScreen = () => {
           <TouchableOpacity style={styles.loginCard} onPress={handleDirectLogin}>
             <View style={styles.loginContent}>
               <View style={[styles.iconContainer, { backgroundColor: '#FFF3E0' }]}>
-                <Text style={styles.cardIcon}>🔐</Text>
+                <Icon type="MaterialIcons" name="login" size={26} color="#FF6B35" />
               </View>
               <View style={styles.loginText}>
                 <Text style={styles.loginTitle}>Already Have an Account?</Text>
@@ -113,7 +135,7 @@ const OnboardingChoiceScreen = () => {
                   Sign in with your existing credentials
                 </Text>
               </View>
-              <Text style={styles.loginArrow}>→</Text>
+              <Icon type="Feather" name="arrow-right" size={18} color="#FF6B35" style={styles.loginArrow} />
             </View>
           </TouchableOpacity>
         </View>
@@ -121,7 +143,7 @@ const OnboardingChoiceScreen = () => {
         {/* Bottom Info */}
         <View style={styles.bottomInfo}>
           <View style={styles.infoCard}>
-            <Text style={styles.infoIcon}>💡</Text>
+            <Icon type="MaterialIcons" name="help-outline" size={24} color="#856404" style={styles.infoIcon} />
             <Text style={styles.infoText}>
               <Text style={styles.infoTextBold}>Need Help?</Text>
               {'\n'}Contact our clinic directly if you have questions about the registration process.
@@ -137,7 +159,10 @@ const OnboardingChoiceScreen = () => {
           style={styles.bottomBackButton}
           activeOpacity={0.7}
         >
-          <Text style={styles.bottomBackButtonText}>← Go Back</Text>
+          <View style={styles.bottomBackButtonContent}>
+            <Icon type="Feather" name="arrow-left" size={18} color="#FFFFFF" />
+            <Text style={styles.bottomBackButtonText}>Go Back</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -163,12 +188,18 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#E9ECEF',
   },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   logo: {
     fontSize: 28,
     fontWeight: 'bold',
     color: '#2C3E50',
     fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
     letterSpacing: 0.5,
+    marginLeft: 8,
   },
   placeholder: {
     width: 60,
@@ -254,10 +285,17 @@ const styles = StyleSheet.create({
   featuresList: {
     marginBottom: 20,
   },
+  featureItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 5,
+  },
+  featureCheck: {
+    marginRight: 5,
+  },
   featureItem: {
     fontSize: 13,
     color: '#28A745',
-    marginBottom: 5,
     fontWeight: '500',
   },
   cardAction: {
@@ -339,7 +377,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   infoIcon: {
-    fontSize: 20,
     marginRight: 10,
     marginTop: 2,
   },
@@ -376,10 +413,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  bottomBackButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   bottomBackButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+    marginLeft: 8,
   },
 });
 

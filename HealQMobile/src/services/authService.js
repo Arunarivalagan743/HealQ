@@ -24,7 +24,8 @@ class AuthService {
   // Initialize Firebase Auth listener
   initialize() {
     return new Promise((resolve) => {
-      const unsubscribe = auth().onAuthStateChanged((user) => {
+      // Use onAuthStateChanged correctly - it doesn't need parentheses after calling it
+      const unsubscribe = auth().onAuthStateChanged(user => {
         this.currentUser = user;
         if (!this.isInitialized) {
           this.isInitialized = true;

@@ -1,6 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, ActivityIndicator, View } from 'react-native';
 import theme from '../config/theme';
+import Icon from './IconProvider';
 
 const Button = ({ 
   title, 
@@ -118,10 +119,18 @@ const Button = ({
           size="small" 
         />
       ) : (
-        <>
-          {icon && <Text style={[styles.icon, getTextStyle()]}>{icon}</Text>}
+        <View style={styles.contentContainer}>
+          {icon && (
+            <View style={styles.iconContainer}>
+              {typeof icon === 'string' ? (
+                <Text style={[styles.icon, getTextStyle()]}>{icon}</Text>
+              ) : (
+                icon
+              )}
+            </View>
+          )}
           <Text style={getTextStyle()}>{title}</Text>
-        </>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -218,6 +227,14 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
   },
   
+  contentContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    marginRight: theme.spacing.sm,
+  },
   icon: {
     marginRight: theme.spacing.sm,
     fontSize: 16,

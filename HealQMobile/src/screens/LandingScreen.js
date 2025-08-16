@@ -8,9 +8,11 @@ import {
   TouchableOpacity,
   Image,
   SafeAreaView,
+  Platform,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import theme from '../config/theme';
+import Icon, { HealQIcon } from '../components/IconProvider';
 
 const { width, height } = Dimensions.get('window');
 
@@ -27,7 +29,8 @@ const LandingScreen = () => {
       title: 'Welcome to HealQ',
       subtitle: 'Smart Healthcare Management',
       description: 'Your comprehensive clinic management solution for patients, doctors, and administrators.',
-      icon: '🏥',
+      iconType: 'MaterialCommunityIcons',
+      iconName: 'hospital-building',
       color: '#4A90E2',
     },
     {
@@ -35,7 +38,8 @@ const LandingScreen = () => {
       title: 'Digital Health Records',
       subtitle: 'Secure & Accessible',
       description: 'Access your medical records, prescriptions, and appointment history anytime, anywhere.',
-      icon: '📋',
+      iconType: 'MaterialCommunityIcons',
+      iconName: 'file-document-outline',
       color: '#28A745',
     },
     {
@@ -43,7 +47,8 @@ const LandingScreen = () => {
       title: 'Appointment Management',
       subtitle: 'Book with Ease',
       description: 'Schedule appointments, manage queues, and get real-time updates on your clinic visits.',
-      icon: '📅',
+      iconType: 'MaterialCommunityIcons',
+      iconName: 'calendar-clock',
       color: '#FF6B35',
     },
   ];
@@ -98,7 +103,10 @@ const LandingScreen = () => {
       {/* Header */}
       <View style={styles.header}>
         <View style={styles.logoContainer}>
-          <Text style={styles.logo}>🩺 HealQ</Text>
+          <View style={styles.logoIconContainer}>
+            <Icon type="MaterialCommunityIcons" name="hospital-building" size={24} color={theme.colors.primary} />
+            <Text style={styles.logo}>HealQ</Text>
+          </View>
           <Text style={styles.logoSubtext}>Clinic Management System</Text>
         </View>
         <TouchableOpacity onPress={skipToEnd} style={styles.skipButton}>
@@ -137,7 +145,13 @@ const LandingScreen = () => {
       >
         {/* Icon */}
         <View style={[styles.iconContainer, { backgroundColor: currentStepData.color + '20' }]}>
-          <Text style={styles.stepIcon}>{currentStepData.icon}</Text>
+          <Icon 
+            type={currentStepData.iconType} 
+            name={currentStepData.iconName} 
+            size={60} 
+            color={currentStepData.color} 
+            style={styles.stepIcon} 
+          />
         </View>
 
         {/* Text Content */}
@@ -152,20 +166,20 @@ const LandingScreen = () => {
         {/* Features Grid */}
         <View style={styles.featuresGrid}>
           <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>👩‍⚕️</Text>
-            <Text style={styles.featureText}>Expert Doctors</Text>
+            <Icon type="FontAwesome5" name="user-md" size={28} color={currentStepData.color} style={styles.featureIcon} />
+            <Text style={[styles.featureText, {color: currentStepData.color}]}>Expert Doctors</Text>
           </View>
           <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>🔒</Text>
-            <Text style={styles.featureText}>Secure Data</Text>
+            <Icon type="Feather" name="shield" size={28} color={currentStepData.color} style={styles.featureIcon} />
+            <Text style={[styles.featureText, {color: currentStepData.color}]}>Secure Data</Text>
           </View>
           <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>⚡</Text>
-            <Text style={styles.featureText}>Fast Service</Text>
+            <Icon type="MaterialCommunityIcons" name="flash" size={28} color={currentStepData.color} style={styles.featureIcon} />
+            <Text style={[styles.featureText, {color: currentStepData.color}]}>Fast Service</Text>
           </View>
           <View style={styles.featureItem}>
-            <Text style={styles.featureIcon}>📱</Text>
-            <Text style={styles.featureText}>Mobile Access</Text>
+            <Icon type="Feather" name="smartphone" size={28} color={currentStepData.color} style={styles.featureIcon} />
+            <Text style={[styles.featureText, {color: currentStepData.color}]}>Mobile Access</Text>
           </View>
         </View>
       </Animated.View>
@@ -179,9 +193,11 @@ const LandingScreen = () => {
           <Text style={styles.nextButtonText}>
             {currentStep === steps.length - 1 ? 'Get Started' : 'Next'}
           </Text>
-          <Text style={styles.nextButtonIcon}>
-            {currentStep === steps.length - 1 ? '🚀' : '→'}
-          </Text>
+          {currentStep === steps.length - 1 ? (
+            <Icon type="Feather" name="arrow-right-circle" size={20} color="#FFFFFF" style={styles.nextButtonIcon} />
+          ) : (
+            <Icon type="Feather" name="arrow-right" size={20} color="#FFFFFF" style={styles.nextButtonIcon} />
+          )}
         </TouchableOpacity>
 
         <Text style={styles.stepCounter}>
@@ -208,15 +224,23 @@ const styles = StyleSheet.create({
   logoContainer: {
     flex: 1,
   },
+  logoIconContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   logo: {
     ...theme.typography.h2,
     color: theme.colors.primary,
     fontWeight: '800',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-condensed-medium',
+    marginLeft: 8,
+    letterSpacing: 1.2,
   },
   logoSubtext: {
     ...theme.typography.caption,
     color: theme.colors.textMuted,
     marginTop: theme.spacing.xs,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
   },
   skipButton: {
     paddingHorizontal: theme.spacing.lg,
@@ -228,6 +252,8 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     ...theme.typography.body2,
     fontWeight: '600',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif',
+    letterSpacing: 0.3,
   },
   progressContainer: {
     flexDirection: 'row',
@@ -258,7 +284,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.large,
   },
   stepIcon: {
-    fontSize: 60,
+    // Icon styling is handled by the Icon component
   },
   textContainer: {
     alignItems: 'center',
@@ -269,6 +295,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: theme.spacing.sm,
     fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-condensed-medium',
+    letterSpacing: 0.8,
+    textShadowColor: 'rgba(0, 0, 0, 0.05)',
+    textShadowOffset: {width: 0, height: 1},
+    textShadowRadius: 2,
   },
   stepSubtitle: {
     ...theme.typography.h4,
@@ -276,6 +307,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
     fontWeight: '500',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-medium',
+    letterSpacing: 0.3,
   },
   stepDescription: {
     ...theme.typography.body1,
@@ -283,6 +316,8 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: theme.spacing.md,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    letterSpacing: 0.2,
   },
   featuresGrid: {
     flexDirection: 'row',
@@ -296,16 +331,15 @@ const styles = StyleSheet.create({
     marginVertical: theme.spacing.md,
   },
   featureIcon: {
-    fontSize: 28,
     marginBottom: theme.spacing.xs,
   },
   featureText: {
     ...theme.typography.caption,
-    color: theme.colors.textSecondary,
     textAlign: 'center',
     fontWeight: '600',
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 0.8,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
   },
   bottomContainer: {
     paddingHorizontal: theme.spacing.xxxl,
@@ -327,15 +361,18 @@ const styles = StyleSheet.create({
     ...theme.typography.button,
     marginRight: theme.spacing.sm,
     fontSize: 18,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
+    letterSpacing: 0.5,
   },
   nextButtonIcon: {
-    fontSize: 18,
     color: theme.colors.white,
   },
   stepCounter: {
     ...theme.typography.body2,
     color: theme.colors.textLight,
     fontWeight: '500',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    letterSpacing: 0.5,
   },
 });
 

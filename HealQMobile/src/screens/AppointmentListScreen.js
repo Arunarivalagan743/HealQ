@@ -473,12 +473,35 @@ const AppointmentListScreen = ({ navigation }) => {
           </TouchableOpacity>
         )}
 
-        {userRole === 'doctor' && item.status === 'completed' && (
+        {userRole === 'doctor' && (item.status === 'completed' || item.status === 'finished') && (
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+              style={styles.prescriptionButton}
+              onPress={() => navigation.navigate('AddPrescription', { appointmentId: item._id })}
+            >
+              <Text style={styles.prescriptionButtonText}>
+                {item.medicalRecord ? "Edit Prescription" : "Add Prescription"}
+              </Text>
+            </TouchableOpacity>
+            
+            {item.medicalRecord && (
+              <TouchableOpacity
+                style={styles.viewPrescriptionButton}
+                onPress={() => navigation.navigate('ViewPrescription', { appointmentId: item._id })}
+              >
+                <Text style={styles.prescriptionButtonText}>View Prescription</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+        
+        {userRole === 'patient' && (item.status === 'completed' || item.status === 'finished') && 
+          item.medicalRecord && item.medicalRecord.prescription && item.medicalRecord.prescription.length > 0 && (
           <TouchableOpacity
-            style={styles.prescriptionButton}
-            onPress={() => navigation.navigate('AddPrescription', { appointmentId: item._id })}
+            style={styles.viewPrescriptionButton}
+            onPress={() => navigation.navigate('ViewPrescription', { appointmentId: item._id })}
           >
-            <Text style={styles.prescriptionButtonText}>Add Prescription</Text>
+            <Text style={styles.prescriptionButtonText}>View Prescription</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -756,7 +779,22 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontWeight: '600',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: theme.spacing.xs,
+  },
   prescriptionButton: {
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
+    backgroundColor: '#9C27B0',
+    borderRadius: theme.borderRadius.sm,
+    flex: 1,
+    marginRight: 5,
+  },
+  viewPrescriptionButton: {
+    flex: 1,
+    marginLeft: 5,
     paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     backgroundColor: '#FF9800',

@@ -58,9 +58,24 @@ const AppointmentBookingScreen = ({ route, navigation }) => {
         // Handle different possible response structures
         if (response.data.available) {
           const slots = response.data.slots || [];
-          const timeSlots = slots
+          let timeSlots = slots
             .filter(slot => slot.available)
             .map(slot => slot.start);
+          
+          // Filter out past time slots if it's today
+          const today = new Date();
+          if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+            const currentHour = new Date().getHours();
+            const currentMinute = new Date().getMinutes();
+            
+            timeSlots = timeSlots.filter(slot => {
+              const [hour, minute] = slot.split(':').map(Number);
+              // Keep slot only if it's in the future
+              return (hour > currentHour || (hour === currentHour && minute > currentMinute));
+            });
+            console.log('After filtering past slots for today:', timeSlots);
+          }
+          
           setAvailableSlots(timeSlots);
         } else {
           // If no slots available or doctor not available on this date
@@ -77,7 +92,24 @@ const AppointmentBookingScreen = ({ route, navigation }) => {
         '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
         '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
       ];
-      setAvailableSlots(defaultSlots);
+      
+      // Filter out past time slots if it's today
+      const today = new Date();
+      if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+        const currentHour = new Date().getHours();
+        const currentMinute = new Date().getMinutes();
+        
+        const filteredSlots = defaultSlots.filter(slot => {
+          const [timeStart] = slot.split(':');
+          const hour = parseInt(timeStart);
+          // Simple check: only show future hours for default slots
+          return hour > currentHour;
+        });
+        
+        setAvailableSlots(filteredSlots);
+      } else {
+        setAvailableSlots(defaultSlots);
+      }
     } finally {
       setLoading(false);
     }

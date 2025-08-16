@@ -12,6 +12,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 // Import theme
 import theme from './src/config/theme';
+// Import icon utilities
+import { initializeIcons } from './src/utils/iconUtils';
 
 // Import API service and set navigation reference
 import { setNavigationRef } from './src/services/api';
@@ -28,6 +30,8 @@ import PatientDashboard from './src/screens/PatientDashboard';
 import DoctorDashboard from './src/screens/DoctorDashboard';
 import AdminDashboard from './src/screens/AdminDashboard';
 import UserRequestsScreen from './src/screens/UserRequestsScreen';
+import AddPrescriptionScreen from './src/screens/AddPrescriptionScreen';
+import ViewPrescriptionScreen from './src/screens/ViewPrescriptionScreen';
 
 // Profile and Booking Screens
 import PatientProfileScreen from './src/screens/PatientProfileScreen';
@@ -46,6 +50,9 @@ import PatientQueuePositionScreen from './src/screens/PatientQueuePositionScreen
 import AdminDoctorProfileView from './src/screens/AdminDoctorProfileView';
 import PatientDoctorView from './src/screens/PatientDoctorView';
 import PatientHistoryScreen from './src/screens/PatientHistoryScreen';
+import DoctorScheduleScreen from './src/screens/DoctorScheduleScreen';
+import DoctorPrescriptionsScreen from './src/screens/DoctorPrescriptionsScreen';
+import PatientRecordsScreen from './src/screens/PatientRecordsScreen';
 
 // Import services
 import authService from './src/services/authService';
@@ -63,6 +70,9 @@ const App = () => {
 
   const initializeApp = async () => {
     try {
+      // Initialize Vector Icons
+      await initializeIcons();
+      
       // Initialize Firebase
       await authService.initialize();
 
@@ -292,6 +302,33 @@ const App = () => {
             },
           }}
         />
+        
+        {/* Doctor Schedule Screen */}
+        <Stack.Screen 
+          name="DoctorSchedule" 
+          component={DoctorScheduleScreen}
+          options={{ 
+            headerShown: false
+          }}
+        />
+        
+        {/* Doctor Prescriptions Screen */}
+        <Stack.Screen 
+          name="DoctorPrescriptions" 
+          component={DoctorPrescriptionsScreen}
+          options={{ 
+            headerShown: false
+          }}
+        />
+        
+        {/* Patient Records Screen */}
+        <Stack.Screen 
+          name="PatientRecords" 
+          component={PatientRecordsScreen}
+          options={{ 
+            headerShown: false
+          }}
+        />
 
         {/* Patient Queue Position Screen */}
         <Stack.Screen 
@@ -330,6 +367,34 @@ const App = () => {
           options={{ 
             headerShown: true,
             title: 'Doctor Details',
+            headerStyle: { backgroundColor: theme.colors.primary },
+            headerTintColor: theme.colors.white,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        
+        {/* Prescription Screens */}
+        <Stack.Screen 
+          name="AddPrescription" 
+          component={AddPrescriptionScreen}
+          options={{ 
+            headerShown: true,
+            title: 'Add Prescription',
+            headerStyle: { backgroundColor: theme.colors.primary },
+            headerTintColor: theme.colors.white,
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }}
+        />
+        <Stack.Screen 
+          name="ViewPrescription" 
+          component={ViewPrescriptionScreen}
+          options={{ 
+            headerShown: true,
+            title: 'Prescription Details',
             headerStyle: { backgroundColor: theme.colors.primary },
             headerTintColor: theme.colors.white,
             headerTitleStyle: {

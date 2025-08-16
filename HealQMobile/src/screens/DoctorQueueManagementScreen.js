@@ -48,9 +48,30 @@ const DoctorQueueManagementScreen = ({ navigation, route }) => {
 
   const loadQueueData = async () => {
     try {
+      console.log('Loading queue data for doctorId:', doctorId);
       const response = await queueAPI.getDoctorQueue(doctorId);
+      console.log('Queue API response:', response);
+      
       if (response.success) {
         setQueueData(response.data);
+        console.log('Queue data loaded successfully. Patient count:', 
+          response.data.queue ? response.data.queue.length : 0);
+        
+        // Debug appointment statuses
+        if (response.data.queue && response.data.queue.length > 0) {
+          response.data.queue.forEach((item, index) => {
+            console.log(`Queue item #${index + 1}:`, {
+              id: item.id || item._id,
+              patientName: item.patientName,
+              status: item.status,
+              queueStatus: item.queueStatus
+            });
+          });
+        } else {
+          console.log('No patients found in the queue');
+        }
+      } else {
+        console.log('Failed to load queue data:', response.message);
       }
     } catch (error) {
       console.error('Error loading queue data:', error);
@@ -92,78 +113,163 @@ const DoctorQueueManagementScreen = ({ navigation, route }) => {
 
   const handleMarkCompleted = async (appointmentId) => {
     try {
-      const response = await apiService.completeAppointment(appointmentId);
+      console.log('Marking appointment as completed with ID:', appointmentId);
+      
+      // Send empty medical record to complete the appointment
+      const response = await apiService.completeAppointment(appointmentId, { medicalRecord: {} });
+      console.log('Complete appointment API response:', response);
+      
       if (response.success) {
-        Alert.alert('Success', 'Patient marked as completed');
-        loadQueueData();
+        Alert.alert(
+          'Success', 
+          'Patient visit has been marked as completed',
+          [
+            { 
+              text: 'OK',
+              onPress: () => {
+                console.log('Refreshing queue data after completion');
+                loadQueueData();
+              }
+            }
+          ]
+        );
       } else {
+        console.error('Complete API returned error:', response.message);
         Alert.alert('Error', response.message || 'Failed to mark patient as completed');
       }
     } catch (error) {
       console.error('Error marking patient as completed:', error);
-      Alert.alert('Error', 'Failed to mark patient as completed');
+      
+      let errorMessage = 'Failed to mark patient as completed. Please try again.';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      // Show the error message in the UI
+      Alert.alert('Error', errorMessage);
     }
   };
 
   const handleApproveAppointment = async (appointmentId) => {
     try {
+      console.log('Approving appointment with ID:', appointmentId);
+      
       const response = await apiService.approveAppointment(appointmentId);
+      console.log('Approval API response:', response);
+      
       if (response.success) {
-        Alert.alert('Success', 'Appointment approved successfully');
-        loadQueueData();
+        Alert.alert(
+          'Success', 
+          'Appointment approved successfully. Patient added to waiting queue.',
+          [
+            { 
+              text: 'OK',
+              onPress: () => {
+                console.log('Refreshing queue data after approval');
+                loadQueueData();
+              }
+            }
+          ]
+        );
       } else {
-        Alert.alert('Error', response.message || 'Failed to approve appointment');
+        console.error('Approval API returned error:', response.message);
+        
+        // Provide specific error messages based on the error
+        let errorMessage = response.message || 'Failed to approve appointment';
+        
+        if (errorMessage.includes('time slot that has already passed')) {
+          errorMessage = 'Cannot approve this appointment because the time slot has already passed.';
+        } else if (errorMessage.includes('no longer available')) {
+          errorMessage = 'This time slot is already taken by another approved appointment.';
+        }
+        
+        Alert.alert('Error', errorMessage);
       }
     } catch (error) {
       console.error('Error approving appointment:', error);
-      Alert.alert('Error', 'Failed to approve appointment');
+      
+      let errorMessage = 'Failed to approve appointment. Please try again.';
+      
+      if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      Alert.alert('Error', errorMessage);
     }
   };
 
   const renderQueueItem = ({ item }) => {
     // Debug log to understand the data structure
     console.log('Queue item data:', {
-      id: item.id,
+      id: item.id || item._id,
       status: item.status,
       queueStatus: item.queueStatus,
       patientName: item.patientName
     });
 
+    // Handle both uppercase and lowercase queue status
+    const normalizedQueueStatus = item.queueStatus?.toLowerCase() || 'waiting';
+
     const getStatusColor = (status) => {
-      switch (status) {
-        case 'Waiting': return theme.colors.warning;
-        case 'Called': return theme.colors.info;
-        case 'In-Progress': return theme.colors.primary;
-        case 'Completed': return theme.colors.success;
+      if (!status) return theme.colors.textSecondary;
+      
+      switch (status.toLowerCase()) {
+        case 'waiting': return theme.colors.warning;
+        case 'called': return theme.colors.info;
+        case 'in_progress': 
+        case 'in-progress': return theme.colors.primary;
+        case 'completed': return theme.colors.success;
         default: return theme.colors.textSecondary;
       }
     };
 
     const getStatusIcon = (status) => {
-      switch (status) {
-        case 'Waiting': return '⏳';
-        case 'Called': return '📢';
-        case 'In-Progress': return '👨‍⚕️';
-        case 'Completed': return '✅';
+      if (!status) return '❓';
+      
+      switch (status.toLowerCase()) {
+        case 'waiting': return '⏳';
+        case 'called': return '📢';
+        case 'in_progress':
+        case 'in-progress': return '👨‍⚕️';
+        case 'completed': return '✅';
         default: return '❓';
+      }
+    };
+
+    // Format the displayed status text for better readability
+    const getDisplayStatus = (status) => {
+      if (!status) return 'Waiting';
+      
+      switch (status.toLowerCase()) {
+        case 'waiting': return 'Waiting';
+        case 'called': return 'Called';
+        case 'in_progress': return 'In Progress';
+        case 'in-progress': return 'In Progress';
+        case 'completed': return 'Completed';
+        default: return status;
       }
     };
 
     return (
       <View style={styles.queueItem}>
         <View style={styles.queueHeader}>
-          <Text style={styles.tokenNumber}>#{item.queueToken}</Text>
+          <Text style={styles.tokenNumber}>#{item.queueToken || '??'}</Text>
           <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.queueStatus) }]}>
             <Text style={styles.statusText}>
-              {getStatusIcon(item.queueStatus)} {item.queueStatus}
+              {getStatusIcon(item.queueStatus)} {getDisplayStatus(item.queueStatus)}
             </Text>
           </View>
         </View>
         
         <Text style={styles.patientName}>{item.patientName}</Text>
-        <Text style={styles.patientInfo}>📞 {item.patientPhone}</Text>
-        <Text style={styles.patientInfo}>🕒 {item.timeSlot.start} - {item.timeSlot.end}</Text>
-        <Text style={styles.reasonText}>📋 {item.reasonForVisit}</Text>
+        <Text style={styles.patientInfo}>📞 {item.patientPhone || 'No phone'}</Text>
+        <Text style={styles.patientInfo}>
+          🕒 {item.timeSlot?.start || '??:??'} - {item.timeSlot?.end || '??:??'}
+        </Text>
+        <Text style={styles.reasonText}>
+          📋 {item.reasonForVisit || 'No reason specified'}
+        </Text>
         
         {item.symptoms && item.symptoms.length > 0 && (
           <Text style={styles.symptomsText}>
@@ -171,36 +277,42 @@ const DoctorQueueManagementScreen = ({ navigation, route }) => {
           </Text>
         )}
         
-        {/* Show approve button for queued appointments */}
-        {item.status === 'queued' && (
-          <View style={styles.actionButtons}>
+        {/* Show appropriate action buttons based on appointment status */}
+        <View style={styles.actionButtons}>
+          {/* Estimated wait time */}
+          {(normalizedQueueStatus === 'waiting') && (
+            <Text style={styles.waitTimeText}>
+              ⏱️ Est. wait: {item.estimatedWaitTime || 0} minutes
+            </Text>
+          )}
+          
+          {/* Approve button for queued appointments */}
+          {item.status === 'queued' && (
             <TouchableOpacity 
               style={[styles.completeButton, { backgroundColor: theme.colors.secondary }]}
-              onPress={() => handleApproveAppointment(item.id)}
+              onPress={() => handleApproveAppointment(item.id || item._id)}
             >
               <Text style={styles.completeButtonText}>Approve Appointment</Text>
             </TouchableOpacity>
-          </View>
-        )}
-
-        {/* Show completion button for appointments that can be completed */}
-        {(item.queueStatus === 'Waiting' || item.queueStatus === 'waiting' || 
-          item.queueStatus === 'In-Progress' || item.queueStatus === 'Called' ||
-          item.status === 'approved' || item.status === 'processing') && (
-          <View style={styles.actionButtons}>
-            {item.queueStatus === 'Waiting' || item.queueStatus === 'waiting' ? (
-              <Text style={styles.waitTimeText}>
-                ⏱️ Est. wait: {item.estimatedWaitTime || 0} minutes
-              </Text>
-            ) : null}
-            <TouchableOpacity 
-              style={styles.completeButton}
-              onPress={() => handleMarkCompleted(item.id)}
-            >
-              <Text style={styles.completeButtonText}>Mark as Completed</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          )}
+          
+          {/* Mark as completed button */}
+          {/* Show for all statuses to allow force-completing if needed */}
+          <TouchableOpacity 
+            style={[
+              styles.completeButton, 
+              // Different color based on if it's the primary action
+              item.status !== 'queued' ? 
+                { backgroundColor: theme.colors.success } : 
+                { backgroundColor: theme.colors.primary, marginTop: 8 }
+            ]}
+            onPress={() => handleMarkCompleted(item.id || item._id)}
+          >
+            <Text style={styles.completeButtonText}>
+              {item.status === 'queued' ? 'Approve & Complete' : 'Mark as Completed'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
@@ -224,6 +336,14 @@ const DoctorQueueManagementScreen = ({ navigation, route }) => {
       </View>
     );
   }
+  
+  // Debug what we're displaying
+  console.log('Queue data to display:', {
+    date: queueData.date,
+    doctorName: queueData.doctor?.name,
+    stats: queueData.stats,
+    queueLength: queueData.queue?.length || 0
+  });
 
   return (
     <View style={styles.container}>
@@ -271,16 +391,27 @@ const DoctorQueueManagementScreen = ({ navigation, route }) => {
 
       {/* Queue List */}
       <FlatList
-        data={queueData.queue}
+        data={queueData.queue || []}
         renderItem={renderQueueItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id || item._id || `appointment-${item.appointmentId}`}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <Text style={styles.emptyText}>🏥 No patients in queue</Text>
-            <Text style={styles.emptySubText}>Patients will appear here when they book appointments</Text>
+            <Text style={styles.emptySubText}>
+              {queueData.stats?.totalPatients > 0 
+                ? "Pull down to refresh if you don't see appointments" 
+                : "Patients will appear here when they book appointments"
+              }
+            </Text>
+            <TouchableOpacity 
+              style={styles.refreshButton} 
+              onPress={onRefresh}
+            >
+              <Text style={styles.refreshButtonText}>Refresh Queue</Text>
+            </TouchableOpacity>
           </View>
         }
         contentContainerStyle={styles.listContainer}
@@ -470,6 +601,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  refreshButton: {
+    backgroundColor: theme.colors.primary,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+    marginTop: theme.spacing.md,
+  },
+  refreshButtonText: {
+    color: 'white',
+    fontWeight: '600',
+    fontSize: 16,
   },
 });
 

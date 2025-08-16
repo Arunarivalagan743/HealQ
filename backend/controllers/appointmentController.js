@@ -105,6 +105,28 @@ const bookAppointment = async (req, res) => {
         message: 'Appointment date must be today or in the future.'
       });
     }
+    
+    // If the appointment is for today, check if the time slot has already passed
+    if (appointmentDateTime.getTime() === today.getTime()) {
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      const [hours, minutes] = finalTimeSlot.start.split(':').map(Number);
+      
+      console.log('Time slot validation for today:', {
+        timeSlot: finalTimeSlot.start,
+        currentTime: `${currentHour}:${currentMinute}`,
+        slotHours: hours,
+        slotMinutes: minutes,
+        isPast: (hours < currentHour || (hours === currentHour && minutes <= currentMinute))
+      });
+      
+      if (hours < currentHour || (hours === currentHour && minutes <= currentMinute)) {
+        return res.status(400).json({
+          success: false,
+          message: 'Cannot book a time slot that has already passed. Please select a future time slot.'
+        });
+      }
+    }
 
     // Check if doctor is available on the requested day
     const dayName = appointmentDateTime.toLocaleDateString('en-US', { weekday: 'long' });
@@ -367,13 +389,38 @@ const getDoctorAppointments = async (req, res) => {
     };
 
     if (status) {
-      filter.status = status;
+      // Handle status as comma-separated string
+      if (typeof status === 'string' && status.includes(',')) {
+        filter.status = { $in: status.split(',') };
+        console.log('Status filter converted to array:', filter.status);
+      } else {
+        filter.status = status;
+      }
+      console.log('Final status filter:', filter.status);
     }
 
     if (date) {
+      console.log('Filtering by date:', date);
+      // Create a new Date object to avoid modifying the original date variable
       const selectedDate = new Date(date);
-      const startOfDay = new Date(selectedDate.setHours(0, 0, 0, 0));
-      const endOfDay = new Date(selectedDate.setHours(23, 59, 59, 999));
+      
+      // Fix: Normalize the date string to YYYY-MM-DD format to avoid timezone issues
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const dateString = `${year}-${month}-${day}`;
+      
+      console.log('Normalized date string:', dateString);
+      
+      // Create UTC-aligned start/end of day to ensure proper date matching
+      const startOfDay = new Date(dateString + 'T00:00:00.000Z');
+      const endOfDay = new Date(dateString + 'T23:59:59.999Z');
+      
+      console.log('Date range filter:', { 
+        startOfDay: startOfDay.toISOString(), 
+        endOfDay: endOfDay.toISOString() 
+      });
+      
       filter.appointmentDate = { $gte: startOfDay, $lte: endOfDay };
     }
 
@@ -907,13 +954,40 @@ const approveAppointment = async (req, res) => {
     }
 
     // Check if appointment is in correct status for approval
-    if (!['queued', 'requested'].includes(appointment.status)) {
+    console.log(`Current appointment status: ${appointment.status}`);
+    
+    // Accept any status except those that are clearly invalid for approval
+    const invalidStatuses = ['approved', 'rejected', 'cancelled', 'completed', 'finished'];
+    
+    if (invalidStatuses.includes(appointment.status)) {
       return res.status(400).json({
         success: false,
         message: `Cannot approve appointment with status: ${appointment.status}`
       });
     }
 
+    // Check if the time slot has already passed
+    const appointmentStartTime = appointment.timeSlot.start;
+    const [hours, minutes] = appointmentStartTime.split(':').map(Number);
+    
+    const appointmentDateTime = new Date(appointment.appointmentDate);
+    appointmentDateTime.setHours(hours, minutes, 0, 0);
+    
+    const now = new Date();
+    
+    console.log('Time validation:', {
+      appointmentTime: appointmentDateTime.toISOString(),
+      currentTime: now.toISOString(),
+      isPast: appointmentDateTime < now
+    });
+    
+    if (appointmentDateTime < now) {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot approve an appointment for a time slot that has already passed.'
+      });
+    }
+    
     // Check for time slot conflicts before approving
     const conflicts = await Appointment.find({
       doctorId: appointment.doctorId,
@@ -931,15 +1005,47 @@ const approveAppointment = async (req, res) => {
     }
 
     // Update appointment status to approved (this blocks the time slot)
+    console.log(`Updating appointment status from ${appointment.status} to 'approved'`);
     appointment.status = 'approved';
-    if (appointment.queueStatus) {
+    
+    // Set queueStatus to 'waiting' (lowercase matches the schema enum)
+    if (!appointment.queueStatus) {
+      appointment.queueStatus = 'waiting';
+    } else {
+      console.log(`Current queueStatus is ${appointment.queueStatus}, updating to 'waiting'`);
       appointment.queueStatus = 'waiting';
     }
+    
+    // Assign queue token if not already assigned
+    if (!appointment.queueToken) {
+      // Generate a simple token based on current date
+      const today = new Date();
+      const tokenDate = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+      appointment.queueToken = Math.floor(Math.random() * 100) + 1; // Simple number from 1-100
+      console.log(`Assigned queue token: ${appointment.queueToken}`);
+    }
+    
     if (notes) {
       appointment.notes = appointment.notes ? `${appointment.notes}\n\nDoctor Notes: ${notes}` : `Doctor Notes: ${notes}`;
     }
 
-    await appointment.save();
+    console.log('Saving appointment with updated status:', {
+      id: appointment._id,
+      status: appointment.status,
+      queueStatus: appointment.queueStatus,
+      queueToken: appointment.queueToken
+    });
+    
+    try {
+      await appointment.save();
+      console.log('Appointment saved successfully with new status:', appointment.status);
+    } catch (saveError) {
+      console.error('Error saving appointment:', saveError);
+      return res.status(500).json({
+        success: false,
+        message: 'Error updating appointment status'
+      });
+    }
 
     // Send notification to patient
     try {
@@ -1231,30 +1337,81 @@ const completeAppointment = async (req, res) => {
       });
     }
 
-    // Check if appointment can be completed
-    if (!['approved', 'processing'].includes(appointment.status)) {
+    // Allow completing appointments in queued status as well (auto-approve and complete)
+    console.log(`Current appointment status: ${appointment.status}`);
+    
+    // For queued appointments, approve them first
+    if (appointment.status === 'queued') {
+      console.log('Auto-approving appointment before completing');
+      appointment.status = 'approved';
+      // Generate a queue token if needed
+      if (!appointment.queueToken) {
+        appointment.queueToken = Math.floor(Math.random() * 100) + 1;
+      }
+    }
+    
+    // Additional validation - make sure statuses are valid
+    if (!['approved', 'processing', 'queued'].includes(appointment.status)) {
       return res.status(400).json({
         success: false,
         message: `Cannot complete appointment with status: ${appointment.status}`
       });
     }
 
-    // Update appointment status to completed
-    appointment.status = 'completed';
-    if (appointment.queueStatus) {
-      appointment.queueStatus = 'completed';
+    try {
+      // Update appointment status to completed
+      appointment.status = 'completed';
+      
+      // Make sure queueStatus is valid based on enum
+      if (appointment.queueStatus) {
+        console.log(`Current queueStatus is ${appointment.queueStatus}, updating to 'completed'`);
+        appointment.queueStatus = 'completed';
+      }
+      
+      appointment.completedAt = new Date();
+      console.log('Setting appointment as completed:', {
+        id: appointment._id,
+        status: appointment.status,
+        queueStatus: appointment.queueStatus,
+        completedAt: appointment.completedAt
+      });
+    } catch (err) {
+      console.error('Error updating appointment properties:', err);
+      return res.status(400).json({
+        success: false,
+        message: `Error updating appointment: ${err.message}`
+      });
     }
-    appointment.completedAt = new Date();
 
     // Add medical record if provided
     if (medicalRecord) {
-      appointment.medicalRecord = {
-        ...appointment.medicalRecord.toObject(),
-        ...medicalRecord
-      };
+      try {
+        // Check if appointment.medicalRecord exists before calling toObject()
+        const existingRecord = appointment.medicalRecord ? 
+          appointment.medicalRecord.toObject() : {};
+          
+        appointment.medicalRecord = {
+          ...existingRecord,
+          ...medicalRecord
+        };
+      } catch (err) {
+        console.error('Error updating medical record:', err);
+        // If there's an error with medical record, set it directly
+        appointment.medicalRecord = medicalRecord;
+      }
     }
 
-    await appointment.save();
+    // Save the appointment with exception handling
+    try {
+      await appointment.save();
+      console.log('Appointment saved successfully');
+    } catch (saveError) {
+      console.error('Error saving appointment:', saveError);
+      return res.status(500).json({
+        success: false,
+        message: `Failed to save appointment: ${saveError.message}`
+      });
+    }
 
     // Update patient statistics
     try {
@@ -1368,7 +1525,7 @@ const addPrescription = async (req, res) => {
     const { appointmentId } = req.params;
     const { 
       diagnosis, 
-      prescription, 
+      medications, // From frontend as medications
       labTests, 
       followUp, 
       doctorNotes,
@@ -1399,24 +1556,38 @@ const addPrescription = async (req, res) => {
       });
     }
 
-    // Check if appointment is finished
-    if (appointment.status !== 'finished') {
+    // Check if appointment is finished or completed
+    if (appointment.status !== 'finished' && appointment.status !== 'completed') {
       return res.status(400).json({
         success: false,
-        message: 'Prescription can only be added to finished appointments'
+        message: 'Prescription can only be added to finished or completed appointments'
       });
     }
 
-    // Add medical record
+    // Add or update medical record
+    // First, check if medical record exists and preserve the prescriptionSentToPatient status if present
+    const existingPrescriptionSent = appointment.medicalRecord ? 
+      appointment.medicalRecord.prescriptionSentToPatient : false;
+    
+    // Debug incoming data
+    console.log('Adding/updating prescription data:', {
+      appointmentId: appointmentId,
+      diagnosis: diagnosis,
+      medicationsFromFrontend: medications,
+      labTests: labTests,
+      existingPrescriptionSent: existingPrescriptionSent,
+      appointmentStatus: appointment.status
+    });
+    
     appointment.medicalRecord = {
       diagnosis: diagnosis || '',
-      prescription: prescription || [],
+      prescription: medications || [], // Map medications to prescription in the DB
       labTests: labTests || [],
       followUp: followUp || { required: false },
       doctorNotes: doctorNotes || '',
       treatmentDuration: treatmentDuration || null,
       treatmentDescription: treatmentDescription || '',
-      prescriptionSentToPatient: false
+      prescriptionSentToPatient: existingPrescriptionSent // Preserve existing status
     };
 
     await appointment.save();

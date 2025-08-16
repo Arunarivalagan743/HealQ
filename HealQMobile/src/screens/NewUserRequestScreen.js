@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { onboardingAPI } from '../services/api';
+import Icon, { HealQIcon } from '../components/IconProvider';
 
 const NewUserRequestScreen = () => {
   const navigation = useNavigation();
@@ -193,7 +194,10 @@ const NewUserRequestScreen = () => {
 
           {/* Form Content */}
           <View style={styles.formContainer}>
-            <Text style={styles.formTitle}>👋 Welcome to HealQ!</Text>
+            <View style={styles.formTitleContainer}>
+              <Icon type="MaterialCommunityIcons" name="hospital-building" size={26} color="#2C3E50" />
+              <Text style={styles.formTitle}>Welcome to HealQ!</Text>
+            </View>
             <Text style={styles.formSubtitle}>
               Please fill out the form below to request access to our clinic management system.
             </Text>
@@ -281,7 +285,7 @@ const NewUserRequestScreen = () => {
                   onPress={() => handleRoleSelect('Doctor')}
                   disabled={loading}
                 >
-                  <Text style={styles.roleIcon}>👩‍⚕️</Text>
+                  <Icon type="FontAwesome5" name="user-md" size={30} color={formData.role === 'Doctor' ? '#4A90E2' : '#6C757D'} />
                   <Text style={[
                     styles.roleTitle,
                     formData.role === 'Doctor' && styles.roleTextSelected,
@@ -304,7 +308,7 @@ const NewUserRequestScreen = () => {
                   onPress={() => handleRoleSelect('Patient')}
                   disabled={loading}
                 >
-                  <Text style={styles.roleIcon}>👤</Text>
+                  <Icon type="FontAwesome5" name="user-injured" size={30} color={formData.role === 'Patient' ? '#4A90E2' : '#6C757D'} />
                   <Text style={[
                     styles.roleTitle,
                     formData.role === 'Patient' && styles.roleTextSelected,
@@ -330,14 +334,24 @@ const NewUserRequestScreen = () => {
               onPress={handleSubmitRequest}
               disabled={loading}
             >
-              <Text style={styles.submitButtonText}>
-                {loading ? '⏳ Submitting...' : '🚀 Submit Request'}
-              </Text>
+              <View style={styles.submitButtonContent}>
+                {loading ? (
+                  <>
+                    <Icon type="Feather" name="loader" size={20} color="#FFFFFF" style={styles.submitButtonIcon} />
+                    <Text style={styles.submitButtonText}>Submitting...</Text>
+                  </>
+                ) : (
+                  <>
+                    <Icon type="Feather" name="send" size={20} color="#FFFFFF" style={styles.submitButtonIcon} />
+                    <Text style={styles.submitButtonText}>Submit Request</Text>
+                  </>
+                )}
+              </View>
             </TouchableOpacity>
 
             {/* Info Note */}
             <View style={styles.infoNote}>
-              <Text style={styles.infoIcon}>ℹ️</Text>
+              <Icon type="Feather" name="info" size={18} color="#1565C0" style={styles.infoIcon} />
               <Text style={styles.infoText}>
                 Your request will be reviewed by our admin team. You'll receive an email notification with the decision within 1-2 business days.
               </Text>
@@ -351,7 +365,10 @@ const NewUserRequestScreen = () => {
             onPress={() => navigation.goBack()} 
             style={styles.bottomBackButton}
           >
-            <Text style={styles.bottomBackButtonText}>← Go Back</Text>
+            <View style={styles.bottomBackButtonContent}>
+              <Icon type="Feather" name="arrow-left" size={18} color="#FFFFFF" />
+              <Text style={styles.bottomBackButtonText}>Go Back</Text>
+            </View>
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -420,11 +437,17 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
+  formTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 8,
+  },
   formTitle: {
     fontSize: 24,
     fontWeight: 'bold',
     color: '#2C3E50',
-    marginBottom: 8,
+    marginLeft: 8,
     textAlign: 'center',
   },
   formSubtitle: {
@@ -490,7 +513,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F6FF',
   },
   roleIcon: {
-    fontSize: 30,
     marginBottom: 8,
   },
   roleTitle: {
@@ -525,6 +547,14 @@ const styles = StyleSheet.create({
     elevation: 0,
     shadowOpacity: 0,
   },
+  submitButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  submitButtonIcon: {
+    marginRight: 8,
+  },
   submitButtonText: {
     color: '#FFFFFF',
     fontSize: 18,
@@ -540,7 +570,6 @@ const styles = StyleSheet.create({
     borderLeftColor: '#4A90E2',
   },
   infoIcon: {
-    fontSize: 16,
     marginRight: 10,
   },
   infoText: {
@@ -573,10 +602,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  bottomBackButtonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   bottomBackButtonText: {
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',
+    marginLeft: 8,
   },
 });
 

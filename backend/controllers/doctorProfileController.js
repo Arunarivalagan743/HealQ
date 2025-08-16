@@ -382,6 +382,36 @@ const getDoctorAvailability = async (req, res) => {
     // Get available slots
     const availableSlots = doctor.getAvailableSlots();
 
+    // Filter out past time slots if the date is today
+    const now = new Date();
+    const today = new Date().setHours(0, 0, 0, 0);
+    const requestedDateStart = requestedDate.setHours(0, 0, 0, 0);
+    
+    let filteredSlots = availableSlots;
+    
+    if (requestedDateStart === today) {
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      
+      console.log(`Filtering past slots for today. Current time: ${currentHour}:${currentMinute}`);
+      
+      filteredSlots = availableSlots.map(slot => {
+        // Parse time from slot.start (format: "HH:MM")
+        const [hours, minutes] = slot.start.split(':').map(Number);
+        
+        // Check if this time slot is in the past
+        const isPast = (hours < currentHour || (hours === currentHour && minutes <= currentMinute));
+        
+        return {
+          ...slot,
+          available: slot.available && !isPast,
+          isPast: isPast
+        };
+      });
+      
+      console.log(`Original slots: ${availableSlots.length}, Filtered slots: ${filteredSlots.filter(s => s.available).length}`);
+    }
+
     // TODO: Check against existing appointments to mark slots as booked
     // This would require importing the Appointment model and checking conflicts
 
@@ -391,7 +421,7 @@ const getDoctorAvailability = async (req, res) => {
         available: true,
         date: date,
         dayName: dayName,
-        slots: availableSlots,
+        slots: filteredSlots,
         workingHours: doctor.workingHours,
         slotDuration: doctor.slotDuration
       }

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import authService from '../services/authService';
 import theme from '../config/theme';
+import Icon, { HealQIcon } from '../components/IconProvider';
 
 const LoginScreen = ({ navigation }) => {
   const [formData, setFormData] = useState({
@@ -109,7 +110,10 @@ const LoginScreen = ({ navigation }) => {
     >
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.header}>
-          <Text style={styles.title}>🏥 HealQ</Text>
+          <View style={styles.titleContainer}>
+            <Icon type="MaterialCommunityIcons" name="hospital-building" size={32} color={theme.colors.primary} />
+            <Text style={styles.title}>HealQ</Text>
+          </View>
           <Text style={styles.subtitle}>Welcome Back</Text>
           <Text style={styles.description}>Sign in to your account</Text>
         </View>
@@ -117,28 +121,36 @@ const LoginScreen = ({ navigation }) => {
         <View style={styles.form}>
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Email Address</Text>
-            <TextInput
-              style={[styles.input, errors.email && styles.inputError]}
-              placeholder="Enter your email"
-              value={formData.email}
-              onChangeText={(text) => updateFormData('email', text)}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              autoCorrect={false}
-            />
+            <View style={[styles.inputWrapper, errors.email && styles.inputWrapperError]}>
+              <Icon type="MaterialIcons" name="email" size={20} color={theme.colors.primary} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your email"
+                value={formData.email}
+                onChangeText={(text) => updateFormData('email', text)}
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholderTextColor={theme.colors.gray400}
+              />
+            </View>
             {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={styles.label}>Password</Text>
-            <TextInput
-              style={[styles.input, errors.password && styles.inputError]}
-              placeholder="Enter your password"
-              value={formData.password}
-              onChangeText={(text) => updateFormData('password', text)}
-              secureTextEntry
-              autoCapitalize="none"
-            />
+            <View style={[styles.inputWrapper, errors.password && styles.inputWrapperError]}>
+              <Icon type="Feather" name="lock" size={20} color={theme.colors.primary} style={styles.inputIcon} />
+              <TextInput
+                style={styles.input}
+                placeholder="Enter your password"
+                value={formData.password}
+                onChangeText={(text) => updateFormData('password', text)}
+                secureTextEntry
+                autoCapitalize="none"
+                placeholderTextColor={theme.colors.gray400}
+              />
+            </View>
             {errors.password && <Text style={styles.errorText}>{errors.password}</Text>}
           </View>
 
@@ -151,9 +163,12 @@ const LoginScreen = ({ navigation }) => {
             onPress={handleLogin}
             disabled={loading}
           >
-            <Text style={styles.buttonText}>
-              {loading ? 'Signing In...' : 'Sign In'}
-            </Text>
+            <View style={styles.buttonContent}>
+              <Icon type="MaterialIcons" name="login" size={22} color="#fff" style={styles.buttonIcon} />
+              <Text style={styles.buttonText}>
+                {loading ? 'Signing In...' : 'Sign In'}
+              </Text>
+            </View>
           </TouchableOpacity>
 
           <View style={styles.footer}>
@@ -165,7 +180,10 @@ const LoginScreen = ({ navigation }) => {
         </View>
 
         <View style={styles.info}>
-          <Text style={styles.infoTitle}>🔐 Secure Login</Text>
+          <View style={styles.infoTitleContainer}>
+            <Icon type="MaterialCommunityIcons" name="shield-check" size={20} color={theme.colors.info} />
+            <Text style={styles.infoTitle}>Secure Login</Text>
+          </View>
           <Text style={styles.infoText}>
             Only pre-authorized emails can register and login to HealQ.
           </Text>
@@ -192,21 +210,33 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: theme.spacing.huge,
   },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: theme.spacing.sm,
+  },
   title: {
     ...theme.typography.h1,
     color: theme.colors.primary,
-    marginBottom: theme.spacing.sm,
     fontWeight: '800',
+    marginLeft: 10,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-condensed',
+    letterSpacing: 1,
   },
   subtitle: {
     ...theme.typography.h2,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
+    letterSpacing: 0.5,
   },
   description: {
     ...theme.typography.subtitle,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    letterSpacing: 0.3,
   },
   form: {
     backgroundColor: theme.colors.surface,
@@ -220,21 +250,39 @@ const styles = StyleSheet.create({
   inputContainer: {
     marginBottom: theme.spacing.xl,
   },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.border,
+    borderRadius: theme.borderRadius.md,
+    backgroundColor: theme.colors.inputBackground || '#F8F9FA',
+    paddingHorizontal: theme.spacing.md,
+    height: 56,
+  },
+  inputWrapperError: {
+    borderColor: theme.colors.error,
+    borderWidth: 1.5,
+  },
+  inputIcon: {
+    marginRight: theme.spacing.md,
+  },
   label: {
     ...theme.typography.body1,
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    letterSpacing: 0.3,
   },
   input: {
-    ...theme.components.input,
+    flex: 1,
+    height: '100%',
     ...theme.typography.body1,
     color: theme.colors.text,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
   },
-  inputError: {
-    borderColor: theme.colors.error,
-    borderWidth: 2,
-  },
+  // inputError style now merged into inputWrapperError
   forgotPassword: {
     alignSelf: 'flex-end',
     marginBottom: theme.spacing.xl,
@@ -243,18 +291,38 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     ...theme.typography.body2,
     fontWeight: '600',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    letterSpacing: 0.2,
   },
   button: {
     ...theme.components.button.primary,
     alignItems: 'center',
     marginBottom: theme.spacing.xl,
+    elevation: 4,
+    shadowColor: theme.colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
   buttonDisabled: {
     backgroundColor: theme.colors.gray300,
+    shadowOpacity: 0.1,
   },
   buttonText: {
     ...theme.typography.button,
     color: theme.colors.primaryText,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-medium',
+    letterSpacing: 0.8,
+    fontSize: 16,
+    fontWeight: '600',
   },
   footer: {
     flexDirection: 'row',
@@ -264,17 +332,21 @@ const styles = StyleSheet.create({
   footerText: {
     ...theme.typography.body1,
     color: theme.colors.textSecondary,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
   },
   linkText: {
     ...theme.typography.body1,
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    letterSpacing: 0.2,
   },
   errorText: {
     color: theme.colors.error,
     ...theme.typography.body2,
     marginTop: theme.spacing.xs,
     fontWeight: '500',
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
   },
   info: {
     backgroundColor: theme.colors.accent,
@@ -284,17 +356,24 @@ const styles = StyleSheet.create({
     borderLeftColor: theme.colors.info,
     ...theme.shadows.small,
   },
+  infoTitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: theme.spacing.sm,
+  },
   infoTitle: {
     ...theme.typography.body1,
     fontWeight: '600',
     color: theme.colors.text,
-    marginBottom: theme.spacing.sm,
+    marginLeft: theme.spacing.xs,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-medium',
   },
   infoText: {
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
     lineHeight: 20,
     marginBottom: theme.spacing.xs,
+    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-light',
   },
 });
 
