@@ -677,12 +677,14 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     textAlign: 'center',
     marginBottom: 10,
+    fontFamily: 'sans-serif',
   },
   subtitle: {
     fontSize: 16,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'sans-serif',
   },
   card: {
     marginBottom: 20,
@@ -696,6 +698,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: 15,
+    fontFamily: 'sans-serif',
   },
   label: {
     fontSize: 16,
@@ -703,17 +706,20 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: 8,
     marginTop: 10,
+    fontFamily: 'sans-serif',
   },
   preFilledText: {
     fontSize: 14,
     color: theme.colors.text,
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   helperText: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 10,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   optionsContainer: {
     flexDirection: 'row',
@@ -742,9 +748,11 @@ const styles = StyleSheet.create({
   optionText: {
     color: theme.colors.text,
     fontSize: 14,
+    fontFamily: 'sans-serif',
   },
   selectedOptionText: {
     color: theme.colors.white,
+    fontFamily: 'sans-serif',
   },
   photoContainer: {
     alignItems: 'center',
@@ -770,6 +778,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontSize: 12,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   medicalSection: {
     marginBottom: 15,
@@ -786,6 +795,7 @@ const styles = StyleSheet.create({
   removeText: {
     color: theme.colors.error,
     fontSize: 12,
+    fontFamily: 'sans-serif',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -814,6 +824,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
 });
 

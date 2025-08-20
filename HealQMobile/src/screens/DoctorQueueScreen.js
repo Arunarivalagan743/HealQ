@@ -234,6 +234,7 @@ const styles = {
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sans,
   },
   header: {
     flexDirection: 'row',
@@ -248,12 +249,14 @@ const styles = {
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   },
   headerTitle: {
     flex: 1,
     color: theme.colors.white,
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   doctorCard: {
     backgroundColor: theme.colors.white,
@@ -273,15 +276,18 @@ const styles = {
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   doctorSpecialty: {
     fontSize: 16,
     color: theme.colors.primary,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   queueDate: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sansLight,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -305,11 +311,13 @@ const styles = {
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   statLabel: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   callButton: {
     backgroundColor: theme.colors.primary,
@@ -330,6 +338,7 @@ const styles = {
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   queueList: {
     paddingHorizontal: theme.spacing.lg,
@@ -360,10 +369,12 @@ const styles = {
     color: theme.colors.white,
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   tokenLabel: {
     color: theme.colors.white,
     fontSize: 10,
+    fontFamily: theme.fontFamily.sansLight,
   },
   patientInfo: {
     flex: 1,
@@ -374,21 +385,25 @@ const styles = {
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   patientPhone: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   reason: {
     fontSize: 14,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   timeSlot: {
     fontSize: 12,
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   },
   statusContainer: {
     alignItems: 'center',
@@ -404,10 +419,12 @@ const styles = {
     color: theme.colors.white,
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   },
   waitTime: {
     fontSize: 11,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sansLight,
   },
   completeButton: {
     backgroundColor: theme.colors.success,
@@ -419,6 +436,7 @@ const styles = {
     color: theme.colors.white,
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   },
   emptyContainer: {
     flex: 1,
@@ -429,6 +447,7 @@ const styles = {
   emptyText: {
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sans,
   },
 };
 

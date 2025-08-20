@@ -113,10 +113,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   date: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   doctorInfo: {
     marginBottom: 12,
@@ -124,11 +126,13 @@ const styles = StyleSheet.create({
   doctorName: {
     fontSize: 15,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   specialty: {
     fontSize: 13,
     color: theme.colors.textSecondary,
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   section: {
     marginTop: 10,
@@ -138,10 +142,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 4,
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   sectionContent: {
     fontSize: 13,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   medicationList: {
     marginTop: 2,
@@ -150,18 +156,21 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: theme.colors.textSecondary,
     marginVertical: 2,
+    fontFamily: 'sans-serif',
   },
   moreText: {
     fontSize: 12,
     color: theme.colors.primary,
     marginTop: 4,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   emptyText: {
     fontSize: 13,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   viewButton: {
     marginTop: 12,
@@ -174,6 +183,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 13,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
 });
 

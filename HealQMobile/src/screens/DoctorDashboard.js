@@ -367,6 +367,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontWeight: '600',
     fontSize: 14,
+    fontFamily: 'sans-serif',
   },
   welcomeTitleContainer: {
     flexDirection: 'row',

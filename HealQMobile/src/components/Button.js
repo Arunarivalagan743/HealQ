@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
   text: {
     ...theme.typography.button,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   primaryText: {
     color: theme.colors.white,
@@ -238,6 +239,7 @@ const styles = StyleSheet.create({
   icon: {
     marginRight: theme.spacing.sm,
     fontSize: 16,
+    fontFamily: 'sans-serif',
   },
 });
 

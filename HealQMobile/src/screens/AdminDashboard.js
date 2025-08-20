@@ -371,6 +371,7 @@ const styles = StyleSheet.create({
   loadingText: {
     ...theme.typography.h4,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   header: {
     flexDirection: 'row',

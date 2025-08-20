@@ -249,11 +249,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: theme.fontFamily.sans,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   placeholder: {
     width: 50,
@@ -287,10 +289,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   dateMonth: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sansLight,
   },
   selectedDateText: {
     color: 'white',
@@ -298,6 +302,7 @@ const styles = StyleSheet.create({
   selectedDateTitle: {
     fontSize: 18,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sansMedium,
     padding: 16,
     backgroundColor: 'white',
     borderBottomWidth: 1,
@@ -311,6 +316,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sans,
   },
   appointmentList: {
     padding: 16,
@@ -336,6 +342,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     flex: 1,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -346,16 +353,19 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   },
   appointmentTime: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: 8,
+    fontFamily: theme.fontFamily.sans,
   },
   reasonText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
+    fontFamily: theme.fontFamily.sansLight,
   },
   emptyCard: {
     padding: 20,
@@ -367,6 +377,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.textSecondary,
     marginBottom: 16,
+    fontFamily: theme.fontFamily.sans,
   },
   addAppointmentButton: {
     backgroundColor: theme.colors.primaryLight,
@@ -377,6 +388,7 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: theme.fontFamily.sans,
   }
 });
 

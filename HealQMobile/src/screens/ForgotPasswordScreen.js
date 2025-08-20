@@ -376,6 +376,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   stepTitle: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 20,
     fontWeight: '600',
     color: '#333',
@@ -383,6 +384,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   stepDescription: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: '#6c757d',
     textAlign: 'center',
@@ -393,12 +395,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
     marginBottom: 8,
   },
   input: {
+    fontFamily: theme.fontFamily.sans,
     borderWidth: 1,
     borderColor: '#e0e6ed',
     borderRadius: 8,
@@ -407,6 +411,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   otpInput: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 24,
     fontWeight: 'bold',
     letterSpacing: 8,
@@ -425,6 +430,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#adb5bd',
   },
   buttonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: '#ffffff',
     fontSize: 18,
     fontWeight: '600',
@@ -434,6 +440,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   secondaryButtonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: '#667eea',
     fontSize: 16,
     fontWeight: '500',
@@ -443,10 +450,12 @@ const styles = StyleSheet.create({
     padding: 12,
   },
   backButtonText: {
+    fontFamily: theme.fontFamily.sans,
     color: '#6c757d',
     fontSize: 16,
   },
   errorText: {
+    fontFamily: theme.fontFamily.sans,
     color: '#dc3545',
     fontSize: 14,
     marginTop: 4,

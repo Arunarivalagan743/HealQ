@@ -263,6 +263,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   errorContainer: {
     flex: 1,
@@ -275,6 +276,7 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'sans-serif',
   },
   scrollContainer: {
     padding: 15,
@@ -296,16 +298,19 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   doctorSpecialty: {
     fontSize: 18,
     color: theme.colors.primary,
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   doctorId: {
     fontSize: 14,
     color: theme.colors.success,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   ratingContainer: {
     alignItems: 'flex-end',
@@ -315,11 +320,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   reviewCount: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   verifiedBadge: {
     backgroundColor: theme.colors.success,
@@ -332,6 +339,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 12,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   card: {
     marginBottom: 15,
@@ -342,6 +350,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: 15,
+    fontFamily: 'sans-serif',
   },
   infoRow: {
     flexDirection: 'row',
@@ -355,17 +364,20 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontWeight: '600',
     flex: 1,
+    fontFamily: 'sans-serif',
   },
   value: {
     fontSize: 14,
     color: theme.colors.text,
     flex: 2,
     textAlign: 'right',
+    fontFamily: 'sans-serif',
   },
   bioText: {
     fontSize: 14,
     color: theme.colors.text,
     lineHeight: 22,
+    fontFamily: 'sans-serif',
   },
   bookButton: {
     marginBottom: 10,
@@ -382,6 +394,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
 });
 

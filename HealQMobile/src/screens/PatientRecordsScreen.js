@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   headerTitle: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 18,
     fontWeight: 'bold',
     color: 'white',
@@ -232,6 +233,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e0e0e0',
   },
   searchInput: {
+    fontFamily: theme.fontFamily.sans,
     backgroundColor: '#f5f5f5',
     borderRadius: 8,
     padding: 10,
@@ -243,6 +245,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
+    fontFamily: theme.fontFamily.sans,
     marginTop: 10,
     color: theme.colors.textSecondary,
   },
@@ -269,6 +272,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   initialText: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.primary,
@@ -277,11 +281,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   patientName: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 18,
     fontWeight: '600',
     marginBottom: 4,
   },
   patientContact: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: theme.colors.textSecondary,
   },
@@ -299,11 +305,13 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   appointmentLabel: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginRight: 4,
   },
   appointmentValue: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 14,
     fontWeight: '500',
     marginRight: 12,
@@ -315,6 +323,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   viewButtonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.primary,
     fontWeight: '500',
     fontSize: 14,
@@ -325,6 +334,7 @@ const styles = StyleSheet.create({
     padding: 30,
   },
   emptyText: {
+    fontFamily: theme.fontFamily.sans,
     color: theme.colors.textSecondary,
     fontSize: 16,
     textAlign: 'center',

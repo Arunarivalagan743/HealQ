@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { onboardingAPI } from '../services/api';
+import theme from '../config/theme';
 
 const ExistingUserVerificationScreen = () => {
   const navigation = useNavigation();
@@ -289,6 +290,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   placeholder: {
     width: 50,
@@ -305,6 +307,7 @@ const styles = StyleSheet.create({
     color: '#6C757D',
     marginBottom: 8,
     fontWeight: '500',
+    fontFamily: theme.fontFamily.sans,
   },
   progressBar: {
     height: 4,
@@ -344,6 +347,7 @@ const styles = StyleSheet.create({
     color: '#2C3E50',
     marginBottom: 8,
     textAlign: 'center',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   stepDescription: {
     fontSize: 14,
@@ -351,6 +355,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 20,
     paddingHorizontal: 20,
+    fontFamily: theme.fontFamily.sans,
   },
   inputGroup: {
     width: '100%',
@@ -362,6 +367,7 @@ const styles = StyleSheet.create({
     color: '#495057',
     marginBottom: 8,
     textAlign: 'center',
+    fontFamily: theme.fontFamily.sans,
   },
   input: {
     borderWidth: 1,
@@ -372,6 +378,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     color: '#495057',
     textAlign: 'center',
+    fontFamily: theme.fontFamily.sans,
   },
   otpInput: {
     borderWidth: 2,
@@ -384,6 +391,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
     letterSpacing: 8,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   userInfoCard: {
     backgroundColor: '#E8F5E8',

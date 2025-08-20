@@ -495,6 +495,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   title: {
     fontSize: 24,
@@ -502,6 +503,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.lg,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   appointmentCard: {
     marginBottom: theme.spacing.md,
@@ -517,6 +519,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -529,20 +532,24 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentDate: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentTime: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   reasonForVisit: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   textArea: {
     textAlignVertical: 'top',
@@ -557,6 +564,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   medicationCard: {
     backgroundColor: '#F9F9F9',
@@ -576,6 +584,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   removeButton: {
     paddingHorizontal: theme.spacing.sm,
@@ -587,6 +596,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   testCard: {
     backgroundColor: '#F0F8FF',
@@ -606,6 +616,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   checkboxContainer: {
     marginBottom: theme.spacing.md,
@@ -618,6 +629,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.text,
     marginLeft: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   submitButton: {
     marginBottom: theme.spacing.xl * 2, // Extra space for back button

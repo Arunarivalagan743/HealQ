@@ -320,6 +320,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: 16,
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   errorContainer: {
     flex: 1,
@@ -332,6 +333,7 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'sans-serif',
   },
   scrollContainer: {
     padding: 15,
@@ -353,21 +355,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   doctorSpecialty: {
     fontSize: 18,
     color: theme.colors.primary,
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   doctorId: {
     fontSize: 14,
     color: theme.colors.success,
     fontWeight: 'bold',
     marginBottom: 3,
+    fontFamily: 'sans-serif',
   },
   doctorEmail: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   statusContainer: {
     marginLeft: 15,
@@ -382,6 +388,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   card: {
     marginBottom: 15,
@@ -392,6 +399,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: 15,
+    fontFamily: 'sans-serif',
   },
   infoRow: {
     flexDirection: 'row',
@@ -405,12 +413,14 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     fontWeight: '600',
     flex: 1,
+    fontFamily: 'sans-serif',
   },
   value: {
     fontSize: 14,
     color: theme.colors.text,
     flex: 2,
     textAlign: 'right',
+    fontFamily: 'sans-serif',
   },
   statsContainer: {
     flexDirection: 'row',
@@ -426,11 +436,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   statLabel: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   appointmentItem: {
     borderBottomWidth: 1,
@@ -442,16 +454,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   appointmentStatus: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   appointmentPatient: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   actionButtons: {
     gap: 10,

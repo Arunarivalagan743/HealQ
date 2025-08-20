@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: '#2C3E50',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
+    fontFamily: 'sans-serif',
     letterSpacing: 0.5,
     marginLeft: 8,
   },
@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     color: '#495057',
     textAlign: 'center',
     fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
+    fontFamily: 'sans-serif',
     paddingHorizontal: 20,
     paddingTop: 30,
     paddingBottom: 30,
@@ -264,14 +264,14 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 11,
     fontWeight: 'bold',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
+    fontFamily: 'sans-serif',
   },
   cardTitle: {
     fontSize: 22,
     fontWeight: 'bold',
     color: '#2C3E50',
     marginBottom: 12,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'Roboto',
+    fontFamily: 'sans-serif',
     letterSpacing: 0.2,
   },
   cardDescription: {
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     color: '#6C757D',
     lineHeight: 22,
     marginBottom: 18,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'Roboto',
+    fontFamily: 'sans-serif',
     fontWeight: '400',
   },
   featuresList: {
@@ -297,6 +297,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#28A745',
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   cardAction: {
     flexDirection: 'row',
@@ -310,6 +311,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#4A90E2',
+    fontFamily: 'sans-serif',
   },
   actionArrow: {
     fontSize: 18,
@@ -331,6 +333,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#ADB5BD',
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   loginCard: {
     backgroundColor: '#FFFFFF',
@@ -353,10 +356,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2C3E50',
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   loginDescription: {
     fontSize: 12,
     color: '#6C757D',
+    fontFamily: 'sans-serif',
   },
   loginArrow: {
     fontSize: 18,
@@ -385,9 +390,11 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#856404',
     lineHeight: 18,
+    fontFamily: 'sans-serif',
   },
   infoTextBold: {
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   bottomButtonContainer: {
     backgroundColor: '#FFFFFF',
@@ -423,6 +430,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
+    fontFamily: 'sans-serif',
   },
 });
 

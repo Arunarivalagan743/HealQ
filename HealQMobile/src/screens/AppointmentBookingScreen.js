@@ -356,10 +356,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   doctorSpecialty: {
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   formCard: {
     marginBottom: theme.spacing.md,
@@ -369,6 +371,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   inputGroup: {
     marginBottom: theme.spacing.md,
@@ -378,6 +381,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   dateButton: {
     backgroundColor: theme.colors.surface,
@@ -389,6 +393,7 @@ const styles = StyleSheet.create({
   dateButtonText: {
     fontSize: 16,
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   slotsContainer: {
     flexDirection: 'row',
@@ -412,10 +417,12 @@ const styles = StyleSheet.create({
   timeSlotText: {
     fontSize: 14,
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   selectedTimeSlotText: {
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   noSlotsText: {
     fontSize: 14,
@@ -423,6 +430,7 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     textAlign: 'center',
     padding: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   pickerContainer: {
     backgroundColor: theme.colors.surface,

@@ -289,6 +289,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
+    fontFamily: theme.fontFamily.sans,
     marginTop: theme.spacing.md,
     color: theme.colors.textSecondary,
   },
@@ -299,6 +300,7 @@ const styles = StyleSheet.create({
     padding: theme.spacing.xl,
   },
   errorText: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 16,
     color: theme.colors.error,
     textAlign: 'center',
@@ -311,6 +313,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.medium,
   },
   retryButtonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.white,
     fontWeight: 'bold',
   },
@@ -320,11 +323,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.white,
   },
   subtitle: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 16,
     color: theme.colors.white,
     opacity: 0.9,
@@ -343,11 +348,13 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   tokenLabel: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 16,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
   },
   tokenNumber: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 48,
     fontWeight: 'bold',
     color: theme.colors.primary,
@@ -358,6 +365,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.medium,
   },
   statusText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: 'bold',
@@ -372,6 +380,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   statusMessage: {
+    fontFamily: theme.fontFamily.sansLight,
     fontSize: 16,
     color: theme.colors.text,
     textAlign: 'center',
@@ -391,11 +400,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   infoLabel: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
   },
   infoValue: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 20,
     fontWeight: 'bold',
     color: theme.colors.primary,
@@ -409,6 +420,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   sectionTitle: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.text,
@@ -418,17 +430,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   doctorName: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 20,
     fontWeight: 'bold',
     color: theme.colors.primary,
     marginBottom: theme.spacing.xs,
   },
   doctorSpecialty: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 16,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
   },
   clinicAddress: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: theme.colors.text,
     textAlign: 'center',
@@ -452,11 +467,13 @@ const styles = StyleSheet.create({
     borderBottomColor: theme.colors.border,
   },
   appointmentLabel: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: theme.colors.textSecondary,
     fontWeight: '500',
   },
   appointmentValue: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 14,
     color: theme.colors.text,
     fontWeight: 'bold',
@@ -473,6 +490,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
   },
   instructionText: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 14,
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
@@ -487,6 +505,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   refreshButtonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: 'bold',
@@ -501,6 +520,7 @@ const styles = StyleSheet.create({
     ...theme.shadows.small,
   },
   completeButtonText: {
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: 'bold',

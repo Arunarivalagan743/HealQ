@@ -399,6 +399,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#2C3E50',
+    fontFamily: 'sans-serif',
   },
   placeholder: {
     width: 50,
@@ -415,6 +416,7 @@ const styles = StyleSheet.create({
     color: '#6C757D',
     marginBottom: 8,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   progressBar: {
     height: 4,
@@ -449,6 +451,7 @@ const styles = StyleSheet.create({
     color: '#2C3E50',
     marginLeft: 8,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   formSubtitle: {
     fontSize: 14,
@@ -456,6 +459,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 30,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   section: {
     marginBottom: 25,
@@ -465,11 +469,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2C3E50',
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   sectionSubtitle: {
     fontSize: 12,
     color: '#6C757D',
     marginBottom: 15,
+    fontFamily: 'sans-serif',
   },
   inputGroup: {
     marginBottom: 15,
@@ -479,6 +485,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#495057',
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   input: {
     borderWidth: 1,
@@ -488,6 +495,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#FFFFFF',
     color: '#495057',
+    fontFamily: 'sans-serif',
   },
   textArea: {
     height: 80,
@@ -520,12 +528,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#2C3E50',
     marginBottom: 5,
+    fontFamily: 'sans-serif',
   },
   roleDescription: {
     fontSize: 11,
     color: '#6C757D',
     textAlign: 'center',
     lineHeight: 16,
+    fontFamily: 'sans-serif',
   },
   roleTextSelected: {
     color: '#4A90E2',
@@ -559,6 +569,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   infoNote: {
     flexDirection: 'row',
@@ -577,6 +588,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#1565C0',
     lineHeight: 18,
+    fontFamily: 'sans-serif',
   },
   bottomButtonContainer: {
     backgroundColor: '#FFFFFF',
@@ -612,6 +624,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     marginLeft: 8,
+    fontFamily: 'sans-serif',
   },
 });
 

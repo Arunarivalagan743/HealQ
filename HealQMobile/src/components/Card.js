@@ -149,10 +149,12 @@ const styles = StyleSheet.create({
     ...theme.typography.h4,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   subtitle: {
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   content: {
     flex: 1,

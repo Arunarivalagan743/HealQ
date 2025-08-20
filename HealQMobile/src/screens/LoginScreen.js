@@ -221,21 +221,21 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '800',
     marginLeft: 10,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-condensed',
+    fontFamily: 'sans-serif',
     letterSpacing: 1,
   },
   subtitle: {
     ...theme.typography.h2,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
+    fontFamily: 'sans-serif',
     letterSpacing: 0.5,
   },
   description: {
     ...theme.typography.subtitle,
     color: theme.colors.textSecondary,
     textAlign: 'center',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    fontFamily: 'sans-serif',
     letterSpacing: 0.3,
   },
   form: {
@@ -272,7 +272,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.3,
   },
   input: {
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     height: '100%',
     ...theme.typography.body1,
     color: theme.colors.text,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
+    fontFamily: theme.fontFamily.sans,
   },
   // inputError style now merged into inputWrapperError
   forgotPassword: {
@@ -291,7 +291,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     ...theme.typography.body2,
     fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.2,
   },
   button: {
@@ -319,7 +319,7 @@ const styles = StyleSheet.create({
   buttonText: {
     ...theme.typography.button,
     color: theme.colors.primaryText,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.8,
     fontSize: 16,
     fontWeight: '600',
@@ -332,13 +332,13 @@ const styles = StyleSheet.create({
   footerText: {
     ...theme.typography.body1,
     color: theme.colors.textSecondary,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
+    fontFamily: theme.fontFamily.sans,
   },
   linkText: {
     ...theme.typography.body1,
     color: theme.colors.primary,
     fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.2,
   },
   errorText: {
@@ -346,7 +346,7 @@ const styles = StyleSheet.create({
     ...theme.typography.body2,
     marginTop: theme.spacing.xs,
     fontWeight: '500',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif',
+    fontFamily: theme.fontFamily.sans,
   },
   info: {
     backgroundColor: theme.colors.accent,
@@ -366,14 +366,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginLeft: theme.spacing.xs,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   infoText: {
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
     lineHeight: 20,
     marginBottom: theme.spacing.xs,
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Text' : 'sans-serif-light',
+    fontFamily: theme.fontFamily.sansLight,
   },
 });
 

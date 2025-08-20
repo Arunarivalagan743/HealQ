@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   header: {
     flexDirection: 'row',
@@ -408,6 +409,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   filterToggle: {
     backgroundColor: theme.colors.surface,
@@ -421,6 +423,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 14,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   filtersCard: {
     margin: 20,
@@ -436,11 +439,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   clearFiltersText: {
     color: theme.colors.error,
     fontSize: 14,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   filterLabel: {
     fontSize: 16,
@@ -448,6 +453,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: 8,
     marginTop: 10,
+    fontFamily: 'sans-serif',
   },
   horizontalScroll: {
     marginBottom: 15,
@@ -468,9 +474,11 @@ const styles = StyleSheet.create({
   filterOptionText: {
     color: theme.colors.text,
     fontSize: 14,
+    fontFamily: 'sans-serif',
   },
   selectedFilterOptionText: {
     color: theme.colors.white,
+    fontFamily: 'sans-serif',
   },
   feeRangeContainer: {
     flexDirection: 'row',
@@ -493,6 +501,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.textSecondary,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   listContainer: {
     paddingHorizontal: 20,
@@ -525,6 +534,7 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: 'bold',
     color: theme.colors.white,
+    fontFamily: 'sans-serif',
   },
   doctorInfo: {
     flex: 1,
@@ -534,17 +544,20 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: 4,
+    fontFamily: 'sans-serif',
   },
   doctorSpecialization: {
     fontSize: 16,
     color: theme.colors.primary,
     fontWeight: '600',
     marginBottom: 4,
+    fontFamily: 'sans-serif',
   },
   doctorExperience: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: 8,
+    fontFamily: 'sans-serif',
   },
   feeContainer: {
     flexDirection: 'row',
@@ -555,10 +568,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.success,
     marginRight: 8,
+    fontFamily: 'sans-serif',
   },
   feeLabel: {
     fontSize: 12,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   verificationBadge: {
     alignItems: 'flex-end',
@@ -573,6 +588,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   doctorDetails: {
     marginBottom: 15,
@@ -583,11 +599,13 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginTop: 8,
     marginBottom: 2,
+    fontFamily: 'sans-serif',
   },
   detailText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   actionButtons: {
     flexDirection: 'row',
@@ -608,6 +626,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   bookButton: {
     backgroundColor: theme.colors.primary,
@@ -616,6 +635,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   emptyContainer: {
     alignItems: 'center',
@@ -626,6 +646,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: 20,
+    fontFamily: 'sans-serif',
   },
   clearFiltersButton: {
     backgroundColor: theme.colors.surface,
@@ -639,6 +660,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 14,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   bottomButtonContainer: {
     position: 'absolute',
@@ -660,6 +682,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
 });
 

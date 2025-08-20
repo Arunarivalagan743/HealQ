@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
     marginBottom: 15,
+    fontFamily: 'sans-serif',
   },
   content: {
     minHeight: 100,
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   patientDetails: {
     flex: 1,
@@ -178,17 +180,20 @@ const styles = StyleSheet.create({
   patientName: {
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   lastVisit: {
     fontSize: 13,
     color: theme.colors.textSecondary,
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   reasonText: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: 2,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   viewRecordButton: {
     backgroundColor: theme.colors.primaryLight,
@@ -200,6 +205,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 12,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   emptyState: {
     alignItems: 'center',
@@ -208,6 +214,7 @@ const styles = StyleSheet.create({
   },
   emptyText: {
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   viewAllButton: {
     marginTop: 15,
@@ -219,6 +226,7 @@ const styles = StyleSheet.create({
   viewAllButtonText: {
     color: theme.colors.primary,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
 });
 

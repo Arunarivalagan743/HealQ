@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     ...theme.typography.h2,
     color: theme.colors.primary,
     fontWeight: '800',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-condensed-medium',
+    fontFamily: 'sans-serif',
     marginLeft: 8,
     letterSpacing: 1.2,
   },
@@ -240,7 +240,7 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textMuted,
     marginTop: theme.spacing.xs,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    fontFamily: 'sans-serif',
   },
   skipButton: {
     paddingHorizontal: theme.spacing.lg,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     ...theme.typography.body2,
     fontWeight: '600',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif',
+    fontFamily: theme.fontFamily.sans,
     letterSpacing: 0.3,
   },
   progressContainer: {
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: theme.spacing.sm,
     fontWeight: '700',
-    fontFamily: Platform.OS === 'ios' ? 'SF Pro Display' : 'sans-serif-condensed-medium',
+    fontFamily: theme.fontFamily.sansCondensedMedium,
     letterSpacing: 0.8,
     textShadowColor: 'rgba(0, 0, 0, 0.05)',
     textShadowOffset: {width: 0, height: 1},
@@ -307,7 +307,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
     fontWeight: '500',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.3,
   },
   stepDescription: {
@@ -316,7 +316,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 24,
     paddingHorizontal: theme.spacing.md,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    fontFamily: theme.fontFamily.sansLight,
     letterSpacing: 0.2,
   },
   featuresGrid: {
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     textTransform: 'uppercase',
     letterSpacing: 0.8,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   bottomContainer: {
     paddingHorizontal: theme.spacing.xxxl,
@@ -361,7 +361,7 @@ const styles = StyleSheet.create({
     ...theme.typography.button,
     marginRight: theme.spacing.sm,
     fontSize: 18,
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica Neue' : 'sans-serif-medium',
+    fontFamily: theme.fontFamily.sansMedium,
     letterSpacing: 0.5,
   },
   nextButtonIcon: {
@@ -371,7 +371,7 @@ const styles = StyleSheet.create({
     ...theme.typography.body2,
     color: theme.colors.textLight,
     fontWeight: '500',
-    fontFamily: Platform.OS === 'ios' ? 'Helvetica' : 'sans-serif-light',
+    fontFamily: theme.fontFamily.sansLight,
     letterSpacing: 0.5,
   },
 });

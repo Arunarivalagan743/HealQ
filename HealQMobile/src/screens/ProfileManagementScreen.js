@@ -393,6 +393,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   loadingText: {
+    fontFamily: theme.fontFamily.sans,
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
@@ -404,6 +405,7 @@ const styles = StyleSheet.create({
     margin: theme.spacing.md,
   },
   sectionTitle: {
+    fontFamily: theme.fontFamily.sans,
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.text,
@@ -428,6 +430,7 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
   },
   switchLabel: {
+    fontFamily: theme.fontFamily.sansMedium,
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.text,

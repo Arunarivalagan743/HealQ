@@ -57,24 +57,37 @@ const borderRadius = {
   round: 50,
 };
 
+// Font families
+const fontFamily = {
+  sans: 'sans-serif',
+  sansLight: 'sans-serif',
+  sansMedium: 'sans-serif',
+  sansCondensed: 'sans-serif',
+  sansCondensedMedium: 'sans-serif',
+};
+
 const typography = {
   // Headers
   h1: {
+    fontFamily: fontFamily.sans,
     fontSize: 32,
     fontWeight: '700',
     lineHeight: 40,
   },
   h2: {
+    fontFamily: fontFamily.sans,
     fontSize: 24,
     fontWeight: '600',
     lineHeight: 32,
   },
   h3: {
+    fontFamily: fontFamily.sans,
     fontSize: 20,
     fontWeight: '600',
     lineHeight: 28,
   },
   h4: {
+    fontFamily: fontFamily.sans,
     fontSize: 18,
     fontWeight: '600',
     lineHeight: 24,
@@ -82,11 +95,13 @@ const typography = {
   
   // Body text
   body1: {
+    fontFamily: fontFamily.sans,
     fontSize: 16,
     fontWeight: '400',
     lineHeight: 24,
   },
   body2: {
+    fontFamily: fontFamily.sans,
     fontSize: 14,
     fontWeight: '400',
     lineHeight: 20,
@@ -94,16 +109,19 @@ const typography = {
   
   // Special text
   caption: {
+    fontFamily: fontFamily.sans,
     fontSize: 12,
     fontWeight: '400',
     lineHeight: 16,
   },
   button: {
+    fontFamily: fontFamily.sans,
     fontSize: 16,
     fontWeight: '600',
     lineHeight: 20,
   },
   subtitle: {
+    fontFamily: fontFamily.sans,
     fontSize: 16,
     fontWeight: '500',
     lineHeight: 24,
@@ -182,6 +200,7 @@ const theme = {
   colors,
   spacing,
   borderRadius,
+  fontFamily,
   typography,
   shadows,
   components,

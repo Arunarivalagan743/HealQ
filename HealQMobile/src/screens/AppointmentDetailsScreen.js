@@ -558,6 +558,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   errorContainer: {
     flex: 1,
@@ -571,6 +572,7 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
     marginBottom: theme.spacing.lg,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   errorButton: {
     minWidth: 120,
@@ -587,6 +589,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   statusBadge: {
     paddingHorizontal: theme.spacing.md,
@@ -597,6 +600,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   infoCard: {
     marginBottom: theme.spacing.md,
@@ -606,6 +610,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   infoRow: {
     flexDirection: 'row',
@@ -618,22 +623,26 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     width: 120,
     flexShrink: 0,
+    fontFamily: 'sans-serif',
   },
   infoValue: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     flex: 1,
+    fontFamily: 'sans-serif',
   },
   symptomsText: {
     fontSize: 14,
     color: theme.colors.text,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   notesText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     lineHeight: 20,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   prescriptionText: {
     fontSize: 14,
@@ -644,6 +653,7 @@ const styles = StyleSheet.create({
     borderRadius: theme.borderRadius.md,
     borderLeftWidth: 4,
     borderLeftColor: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   actionCard: {
     marginBottom: theme.spacing.xl,

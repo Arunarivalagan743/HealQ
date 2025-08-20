@@ -369,6 +369,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   filtersContainer: {
     backgroundColor: theme.colors.white,
@@ -391,6 +392,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   picker: {
     backgroundColor: theme.colors.surface,
@@ -405,6 +407,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.textSecondary,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   listContainer: {
     padding: theme.spacing.md,
@@ -427,21 +430,25 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   doctorSpecialty: {
     fontSize: 14,
     color: theme.colors.primary,
     fontWeight: '600',
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   clinicName: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   location: {
     fontSize: 12,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   ratingContainer: {
     alignItems: 'flex-end',
@@ -451,11 +458,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   reviewCount: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   verifiedBadge: {
     backgroundColor: theme.colors.success,
@@ -467,22 +476,26 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   experience: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   education: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   bio: {
     fontSize: 14,
     color: theme.colors.text,
     lineHeight: 20,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   availabilityContainer: {
     flexDirection: 'row',
@@ -497,16 +510,19 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginRight: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   nextAvailable: {
     fontSize: 14,
     color: theme.colors.success,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   noAvailability: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   actionContainer: {
     flexDirection: 'row',
@@ -536,12 +552,14 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   emptySubtext: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
+    fontFamily: 'sans-serif',
   },
   clearFiltersButton: {
     minWidth: 150,

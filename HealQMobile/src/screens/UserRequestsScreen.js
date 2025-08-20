@@ -300,6 +300,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e9ecef',
   },
   title: {
+    fontFamily: 'sans-serif',
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
@@ -318,6 +319,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f9fa',
   },
   loadingText: {
+    fontFamily: 'sans-serif',
     marginTop: 10,
     fontSize: 16,
     color: '#666',
@@ -327,12 +329,14 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
   emptyStateText: {
+    fontFamily: 'sans-serif',
     fontSize: 24,
     fontWeight: 'bold',
     color: '#666',
     marginBottom: 10,
   },
   emptyStateSubtext: {
+    fontFamily: 'sans-serif',
     fontSize: 16,
     color: '#999',
   },
@@ -340,6 +344,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   sectionTitle: {
+    fontFamily: 'sans-serif',
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
@@ -367,12 +372,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userName: {
+    fontFamily: 'sans-serif',
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
     marginBottom: 5,
   },
   userRole: {
+    fontFamily: 'sans-serif',
     fontSize: 14,
     color: '#667eea',
     fontWeight: '600',
@@ -384,6 +391,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   statusText: {
+    fontFamily: 'sans-serif',
     fontSize: 12,
     fontWeight: 'bold',
     color: '#fff',
@@ -394,12 +402,14 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   detailLabel: {
+    fontFamily: 'sans-serif',
     fontSize: 14,
     fontWeight: '600',
     color: '#666',
     width: 120,
   },
   detailValue: {
+    fontFamily: 'sans-serif',
     fontSize: 14,
     color: '#333',
     flex: 1,
@@ -422,6 +432,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#dc3545',
   },
   actionButtonText: {
+    fontFamily: 'sans-serif',
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 14,
@@ -451,6 +462,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   bottomBackButtonText: {
+    fontFamily: 'sans-serif',
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '600',

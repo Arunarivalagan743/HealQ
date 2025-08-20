@@ -507,6 +507,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   header: {
     flexDirection: 'row',
@@ -524,12 +525,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.white,
     opacity: 0.9,
+    fontFamily: 'sans-serif',
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.white,
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   logoutButton: {
     paddingHorizontal: theme.spacing.lg,
@@ -544,6 +547,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   tabContainer: {
     flexDirection: 'row',
@@ -565,10 +569,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   activeTabText: {
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   content: {
     flex: 1,
@@ -584,6 +590,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   statsGrid: {
     flexDirection: 'row',
@@ -603,11 +610,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   statLabel: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   quickActionsCard: {
     marginBottom: theme.spacing.md,
@@ -637,12 +646,14 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   actionSubtext: {
     fontSize: 10,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginTop: 2,
+    fontFamily: 'sans-serif',
   },
   badge: {
     position: 'absolute',
@@ -659,6 +670,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 12,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   listItem: {
     margin: theme.spacing.md,
@@ -678,11 +690,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   listItemDetail: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   listItemActions: {
     marginLeft: theme.spacing.md,
@@ -696,6 +710,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   listItemFooter: {
     flexDirection: 'row',
@@ -715,6 +730,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   verifyButton: {
     paddingHorizontal: theme.spacing.md,
@@ -726,6 +742,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   unverifyButton: {
     paddingHorizontal: theme.spacing.md,
@@ -737,6 +754,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   statusButton: {
     paddingHorizontal: theme.spacing.md,
@@ -747,6 +765,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   emptyState: {
     alignItems: 'center',
@@ -757,6 +776,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   requestsContainer: {
     padding: theme.spacing.md,

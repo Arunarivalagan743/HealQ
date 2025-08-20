@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   
   inputContainer: {
@@ -237,6 +238,7 @@ const styles = StyleSheet.create({
     paddingVertical: theme.spacing.md,
     paddingHorizontal: theme.spacing.lg,
     minHeight: 20,
+    fontFamily: 'sans-serif',
   },
   
   smallInput: {
@@ -265,6 +267,7 @@ const styles = StyleSheet.create({
   icon: {
     fontSize: 20,
     color: theme.colors.textMuted,
+    fontFamily: 'sans-serif',
   },
   
   helperText: {
@@ -272,6 +275,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textMuted,
     marginTop: theme.spacing.xs,
     paddingLeft: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   
   errorLabel: {

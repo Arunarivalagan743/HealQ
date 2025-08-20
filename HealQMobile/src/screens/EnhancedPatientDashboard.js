@@ -364,6 +364,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   scrollView: {
     flex: 1,
@@ -384,12 +385,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: theme.colors.white,
     opacity: 0.9,
+    fontFamily: 'sans-serif',
   },
   userName: {
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.white,
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   logoutButton: {
     paddingHorizontal: theme.spacing.lg,
@@ -404,6 +407,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   quickActionsCard: {
     margin: theme.spacing.md,
@@ -413,6 +417,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   actionGrid: {
     flexDirection: 'row',
@@ -438,6 +443,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   alertCard: {
     margin: theme.spacing.md,
@@ -458,12 +464,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#856404',
+    fontFamily: 'sans-serif',
   },
   alertText: {
     fontSize: 14,
     color: '#856404',
     marginBottom: theme.spacing.md,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   alertButton: {
     backgroundColor: theme.colors.warning,
@@ -481,6 +489,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   appointmentItem: {
     flexDirection: 'row',
@@ -498,22 +507,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentDate: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentType: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   queueTokenText: {
     fontSize: 12,
     color: theme.colors.primary,
     fontWeight: 'bold',
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentActions: {
     flexDirection: 'column',
@@ -530,6 +543,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: theme.colors.white,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   statusBadge: {
     paddingHorizontal: theme.spacing.sm,
@@ -540,6 +554,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   emptyState: {
     alignItems: 'center',
@@ -550,6 +565,7 @@ const styles = StyleSheet.create({
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.md,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   emptyButton: {
     minWidth: 150,
@@ -566,10 +582,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   recentDate: {
     fontSize: 12,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
 });
 

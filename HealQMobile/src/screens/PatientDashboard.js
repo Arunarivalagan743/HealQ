@@ -321,6 +321,7 @@ const styles = StyleSheet.create({
   loadingText: {
     ...theme.typography.h4,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   header: {
     flexDirection: 'row',
@@ -335,6 +336,7 @@ const styles = StyleSheet.create({
     ...theme.typography.h2,
     color: theme.colors.white,
     fontWeight: '700',
+    fontFamily: 'sans-serif',
   },
   logoutButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -348,6 +350,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontWeight: '600',
     fontSize: 14,
+    fontFamily: 'sans-serif',
   },
   welcomeCard: {
     backgroundColor: theme.colors.surface,
@@ -362,10 +365,12 @@ const styles = StyleSheet.create({
     ...theme.typography.h3,
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   welcomeSubtitle: {
     ...theme.typography.subtitle,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   quickActions: {
     margin: theme.spacing.xl,
@@ -376,6 +381,7 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.lg,
     paddingLeft: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   actionCard: {
     backgroundColor: theme.colors.surface,
@@ -402,10 +408,12 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   actionDescription: {
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   actionArrow: {
     fontSize: 20,
@@ -434,11 +442,13 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.xs,
     textTransform: 'uppercase',
     letterSpacing: 0.5,
+    fontFamily: 'sans-serif',
   },
   activityTitle: {
     ...theme.typography.body2,
     color: theme.colors.textSecondary,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   // Prescription Section Styles
   prescriptionsSection: {
@@ -456,6 +466,7 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontWeight: '600',
     fontSize: 14,
+    fontFamily: 'sans-serif',
   },
   footer: {
     padding: theme.spacing.xl,
@@ -466,6 +477,7 @@ const styles = StyleSheet.create({
     ...theme.typography.caption,
     color: theme.colors.textLight,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
 });
 

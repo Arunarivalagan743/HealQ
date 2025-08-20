@@ -294,12 +294,14 @@ const styles = StyleSheet.create({
   },
   title: {
     ...theme.typography.h1,
+    fontFamily: theme.fontFamily.sans,
     color: theme.colors.primary,
     marginBottom: theme.spacing.sm,
     fontWeight: '800',
   },
   subtitle: {
     ...theme.typography.subtitle,
+    fontFamily: theme.fontFamily.sans,
     color: theme.colors.textSecondary,
     textAlign: 'center',
   },
@@ -316,6 +318,7 @@ const styles = StyleSheet.create({
   },
   label: {
     ...theme.typography.body1,
+    fontFamily: theme.fontFamily.sansMedium,
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
@@ -323,6 +326,7 @@ const styles = StyleSheet.create({
   input: {
     ...theme.components.input,
     ...theme.typography.body1,
+    fontFamily: theme.fontFamily.sans,
     color: theme.colors.text,
   },
   inputError: {
@@ -332,18 +336,21 @@ const styles = StyleSheet.create({
   errorText: {
     color: theme.colors.error,
     ...theme.typography.body2,
+    fontFamily: theme.fontFamily.sans,
     marginTop: theme.spacing.xs,
     fontWeight: '500',
   },
   infoText: {
     color: theme.colors.info,
     ...theme.typography.body2,
+    fontFamily: theme.fontFamily.sansLight,
     marginTop: theme.spacing.xs,
     fontStyle: 'italic',
   },
   successText: {
     color: theme.colors.success,
     ...theme.typography.body2,
+    fontFamily: theme.fontFamily.sansMedium,
     marginTop: theme.spacing.xs,
     fontWeight: '600',
   },
@@ -357,6 +364,7 @@ const styles = StyleSheet.create({
   },
   registerButtonText: {
     ...theme.typography.button,
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.primaryText,
   },
   loginContainer: {
@@ -366,10 +374,12 @@ const styles = StyleSheet.create({
   },
   loginText: {
     ...theme.typography.body1,
+    fontFamily: theme.fontFamily.sans,
     color: theme.colors.textSecondary,
   },
   loginLink: {
     ...theme.typography.body1,
+    fontFamily: theme.fontFamily.sansMedium,
     color: theme.colors.primary,
     fontWeight: '600',
   },

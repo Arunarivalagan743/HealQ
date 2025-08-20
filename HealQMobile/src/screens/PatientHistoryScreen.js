@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   patientInfoCard: {
     marginBottom: theme.spacing.md,
@@ -260,6 +261,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   patientDetails: {
     gap: theme.spacing.xs,
@@ -267,6 +269,7 @@ const styles = StyleSheet.create({
   patientDetail: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   summaryCard: {
     marginBottom: theme.spacing.md,
@@ -276,6 +279,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   summaryGrid: {
     flexDirection: 'row',
@@ -289,17 +293,20 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   summaryLabel: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   lastVisit: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   historySection: {
     flex: 1,
@@ -309,6 +316,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.md,
+    fontFamily: 'sans-serif',
   },
   appointmentCard: {
     marginBottom: theme.spacing.md,
@@ -326,16 +334,19 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: theme.colors.text,
+    fontFamily: 'sans-serif',
   },
   appointmentTime: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentType: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   statusBadge: {
     paddingHorizontal: theme.spacing.sm,
@@ -347,6 +358,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 12,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   symptomsContainer: {
     marginBottom: theme.spacing.sm,
@@ -356,10 +368,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   symptomsText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   prescriptionContainer: {
     marginBottom: theme.spacing.sm,
@@ -369,10 +383,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   prescriptionText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   detailsButton: {
     backgroundColor: theme.colors.primary,
@@ -385,6 +401,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 14,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   emptyCard: {
     alignItems: 'center',
@@ -395,11 +412,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
+    fontFamily: 'sans-serif',
   },
   emptySubtext: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   footerLoader: {
     paddingVertical: theme.spacing.md,

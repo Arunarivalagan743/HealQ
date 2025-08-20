@@ -61,10 +61,12 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontSize: 16,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    fontFamily: 'sans-serif',
   },
   placeholder: {
     width: 50,

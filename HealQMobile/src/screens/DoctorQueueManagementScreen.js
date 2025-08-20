@@ -433,6 +433,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: theme.spacing.md,
     color: theme.colors.textSecondary,
+    fontFamily: theme.fontFamily.sans,
   },
   errorContainer: {
     flex: 1,
@@ -445,6 +446,7 @@ const styles = StyleSheet.create({
     color: theme.colors.error,
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
+    fontFamily: theme.fontFamily.sans,
   },
   retryButton: {
     backgroundColor: theme.colors.primary,
@@ -455,6 +457,7 @@ const styles = StyleSheet.create({
   retryButtonText: {
     color: theme.colors.white,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   header: {
     backgroundColor: theme.colors.primary,
@@ -465,17 +468,20 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: theme.colors.white,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   specialization: {
     fontSize: 16,
     color: theme.colors.white,
     opacity: 0.9,
+    fontFamily: theme.fontFamily.sans,
   },
   dateText: {
     fontSize: 14,
     color: theme.colors.white,
     opacity: 0.8,
     marginTop: theme.spacing.sm,
+    fontFamily: theme.fontFamily.sansLight,
   },
   statsContainer: {
     flexDirection: 'row',
@@ -492,11 +498,13 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   statLabel: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     marginTop: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sansLight,
   },
   callNextButton: {
     backgroundColor: theme.colors.success,
@@ -512,6 +520,7 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 16,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sansMedium,
   },
   listContainer: {
     padding: theme.spacing.md,
@@ -535,6 +544,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   statusBadge: {
     paddingHorizontal: theme.spacing.sm,
@@ -545,33 +555,39 @@ const styles = StyleSheet.create({
     color: theme.colors.white,
     fontSize: 12,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sans,
   },
   patientName: {
     fontSize: 18,
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sansMedium,
   },
   patientInfo: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   reasonText: {
     fontSize: 14,
     color: theme.colors.text,
     marginTop: theme.spacing.sm,
+    fontFamily: theme.fontFamily.sans,
   },
   symptomsText: {
     fontSize: 14,
     color: theme.colors.warning,
     marginTop: theme.spacing.xs,
+    fontFamily: theme.fontFamily.sans,
   },
   waitTimeText: {
     fontSize: 12,
     color: theme.colors.info,
     marginTop: theme.spacing.sm,
     fontStyle: 'italic',
+    fontFamily: theme.fontFamily.sansLight,
   },
   actionButtons: {
     marginTop: theme.spacing.sm,
@@ -587,6 +603,7 @@ const styles = StyleSheet.create({
   completeButtonText: {
     color: theme.colors.white,
     fontWeight: 'bold',
+    fontFamily: theme.fontFamily.sans,
   },
   emptyContainer: {
     alignItems: 'center',
@@ -596,12 +613,14 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.sm,
+    fontFamily: theme.fontFamily.sans,
   },
   emptySubText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.md,
+    fontFamily: theme.fontFamily.sansLight,
   },
   refreshButton: {
     backgroundColor: theme.colors.primary,
@@ -614,6 +633,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: '600',
     fontSize: 16,
+    fontFamily: theme.fontFamily.sans,
   },
 });
 

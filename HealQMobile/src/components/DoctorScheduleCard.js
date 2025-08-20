@@ -229,6 +229,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
     marginBottom: 10,
+    fontFamily: 'sans-serif',
   },
   dateNavigation: {
     flexDirection: 'row',
@@ -240,10 +241,12 @@ const styles = StyleSheet.create({
     color: theme.colors.primary,
     fontSize: 14,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   dateText: {
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   timeline: {
     marginTop: 5,
@@ -271,24 +274,29 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     flex: 1,
+    fontFamily: 'sans-serif',
   },
   statusText: {
     fontSize: 14,
     fontWeight: '500',
     marginHorizontal: 10,
+    fontFamily: 'sans-serif',
   },
   patientName: {
     fontSize: 14,
     flex: 1,
     textAlign: 'right',
+    fontFamily: 'sans-serif',
   },
   pastText: {
     color: '#888888',
+    fontFamily: 'sans-serif',
   },
   emptyText: {
     textAlign: 'center',
     marginVertical: 20,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   viewAllButton: {
     marginTop: 15,
@@ -300,6 +308,7 @@ const styles = StyleSheet.create({
   viewAllButtonText: {
     color: theme.colors.primary,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
 });
 

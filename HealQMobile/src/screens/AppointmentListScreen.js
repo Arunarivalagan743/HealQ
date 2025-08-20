@@ -570,6 +570,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.md,
     fontSize: 16,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   filterContainer: {
     flexDirection: 'row',
@@ -595,10 +596,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.text,
     fontWeight: '500',
+    fontFamily: 'sans-serif',
   },
   activeFilterButtonText: {
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   listContainer: {
     padding: theme.spacing.md,
@@ -621,22 +624,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentDate: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   tokenNumber: {
     fontSize: 14,
     color: '#FF9800',
     fontWeight: '600',
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   appointmentType: {
     fontSize: 12,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   statusBadge: {
     paddingHorizontal: theme.spacing.sm,
@@ -648,6 +655,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   symptomsContainer: {
     marginBottom: theme.spacing.sm,
@@ -660,11 +668,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: theme.colors.text,
     marginBottom: theme.spacing.xs,
+    fontFamily: 'sans-serif',
   },
   symptomsText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     lineHeight: 20,
+    fontFamily: 'sans-serif',
   },
   actionContainer: {
     flexDirection: 'row',
@@ -685,6 +695,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   historyButton: {
     paddingHorizontal: theme.spacing.md,
@@ -697,6 +708,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   cancelButton: {
     paddingHorizontal: theme.spacing.md,
@@ -708,6 +720,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   doctorActions: {
     flexDirection: 'row',
@@ -723,6 +736,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   rejectButton: {
     paddingHorizontal: theme.spacing.md,
@@ -734,6 +748,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   queueButton: {
     paddingHorizontal: theme.spacing.md,
@@ -745,6 +760,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   startButton: {
     paddingHorizontal: theme.spacing.md,
@@ -756,6 +772,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   finishButton: {
     paddingHorizontal: theme.spacing.md,
@@ -767,6 +784,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   completeButton: {
     paddingHorizontal: theme.spacing.md,
@@ -778,6 +796,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -804,6 +823,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: theme.colors.white,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   emptyContainer: {
     flex: 1,
@@ -817,12 +837,14 @@ const styles = StyleSheet.create({
     color: theme.colors.text,
     marginBottom: theme.spacing.sm,
     textAlign: 'center',
+    fontFamily: 'sans-serif',
   },
   emptySubtext: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     textAlign: 'center',
     marginBottom: theme.spacing.lg,
+    fontFamily: 'sans-serif',
   },
   findDoctorButton: {
     minWidth: 150,

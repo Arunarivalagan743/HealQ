@@ -290,10 +290,12 @@ const styles = StyleSheet.create({
   tabText: {
     fontSize: 14,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   activeTabText: {
     color: theme.colors.primary,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   loadingContainer: {
     flex: 1,
@@ -303,6 +305,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 10,
     color: theme.colors.textSecondary,
+    fontFamily: 'sans-serif',
   },
   listContainer: {
     padding: 16,
@@ -329,10 +332,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   appointmentDate: {
     fontSize: 14,
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   prescriptionContent: {
     padding: 12,
@@ -340,9 +345,11 @@ const styles = StyleSheet.create({
   reasonText: {
     fontSize: 14,
     marginBottom: 8,
+    fontFamily: 'sans-serif',
   },
   reasonLabel: {
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   diagnosisContainer: {
     marginTop: 6,
@@ -353,14 +360,17 @@ const styles = StyleSheet.create({
   diagnosisText: {
     fontSize: 14,
     marginBottom: 4,
+    fontFamily: 'sans-serif',
   },
   diagnosisLabel: {
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
   medicationsLabel: {
     fontSize: 14,
     color: theme.colors.textSecondary,
     fontStyle: 'italic',
+    fontFamily: 'sans-serif',
   },
   actionContainer: {
     padding: 12,
@@ -383,6 +393,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
     color: theme.colors.primary,
+    fontFamily: 'sans-serif',
   },
   emptyCard: {
     padding: 20,
@@ -392,6 +403,7 @@ const styles = StyleSheet.create({
   emptyText: {
     color: theme.colors.textSecondary,
     fontSize: 16,
+    fontFamily: 'sans-serif',
   },
 });
 

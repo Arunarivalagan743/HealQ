@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
   bottomBackButtonText: {
     fontSize: 16,
     fontWeight: '600',
+    fontFamily: 'sans-serif',
   },
 });
 
