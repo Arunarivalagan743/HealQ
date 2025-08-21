@@ -1,99 +1,221 @@
-# HealQMobile
+# 🏥 HealQ - Mobile Clinic Management System
 
-This is the HealQ mobile application built with [**React Native**](https://reactnative.dev), bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+HealQ is a comprehensive mobile-based clinic token management system built with React Native, designed to streamline patient appointments, manage doctor availability, and maintain secure medical records through role-based access control.
 
-# Getting Started
+## 📱 Application Overview
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+HealQ is a full-featured healthcare management platform that connects patients with doctors, streamlines appointment booking, and facilitates secure medical record management. The application is built using React Native CLI for the mobile interface and is supported by a robust Node.js/Express backend with MongoDB database.
 
-## Step 1: Start Metro
+## 🚀 Key Features
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### 🔐 Authentication & Security
+- Firebase Authentication integration
+- JWT token-based authorization
+- Role-based access control (Patient, Doctor, Admin)
+- Pre-authorized email registration system
+- OTP-based password recovery
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### 👤 Patient Features
+- Seamless registration and login
+- Intuitive appointment booking
+- Real-time token queue status
+- Access to medical records and prescriptions
+- Comprehensive profile management
+- Doctor search and selection
 
-```sh
-# Using npm
-npm start
+### 👨‍⚕️ Doctor Features
+- Specialized doctor profiles
+- Patient queue management
+- Access to patient medical histories
+- Appointment scheduling and management
+- Prescription creation and tracking
+- Availability management
 
-# OR using Yarn
-yarn start
+### 👑 Admin Features
+- User management (approve/reject registrations)
+- System analytics and monitoring
+- Doctor specialization management
+- Comprehensive reporting tools
+
+### 📊 Queue Management
+- Real-time queue position updates
+- Estimated wait time calculations
+- Priority-based scheduling
+- Offline appointment capability
+
+## 🛠️ Technology Stack
+
+### Mobile Application (React Native)
+- **Framework**: React Native 0.80.2
+- **Navigation**: React Navigation 7.x
+- **State Management**: Context API
+- **Authentication**: Firebase Auth
+- **UI Components**: React Native Paper
+- **Data Fetching**: Axios
+- **Local Storage**: AsyncStorage
+- **Date Handling**: date-fns
+
+### Backend Server (Node.js)
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js 4.18+
+- **Authentication**: Firebase Admin SDK, JWT
+- **Database**: MongoDB with Mongoose
+- **Email Service**: Nodemailer
+- **Security**: Helmet.js, Express Rate Limit, CORS protection
+- **Validation**: Express Validator
+- **Scheduling**: node-cron
+
+## 📦 Project Structure
+
+```
+HealQ/
+├── HealQMobile/ (React Native App)
+│   ├── android/ (Android specific files)
+│   ├── ios/ (iOS specific files)
+│   ├── src/
+│   │   ├── components/ (Reusable UI components)
+│   │   ├── config/ (App configuration)
+│   │   ├── screens/ (App screens/pages)
+│   │   ├── services/ (API and business logic)
+│   │   └── utils/ (Helper functions)
+│   ├── App.tsx (Main application component)
+│   └── index.js (Entry point)
+│
+├── backend/ (Node.js Server)
+    ├── config/ (Server configuration)
+    ├── controllers/ (Request handlers)
+    ├── middleware/ (Express middleware)
+    ├── models/ (Database models)
+    ├── routes/ (API routes)
+    ├── services/ (Business logic)
+    └── server.js (Server entry point)
 ```
 
-## Step 2: Build and run your app
+## 🚀 Getting Started
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Prerequisites
+- Node.js 18 or newer
+- React Native CLI
+- MongoDB
+- Firebase project
 
-### Android
+### Installation
 
-```sh
-# Using npm
-npm run android
+#### Mobile App Setup
+1. Navigate to the HealQMobile directory:
+   ```
+   cd HealQMobile
+   ```
 
-# OR using Yarn
-yarn android
-```
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-### iOS
+3. For iOS, install Pods:
+   ```
+   cd ios && pod install && cd ..
+   ```
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+4. Start the Metro server:
+   ```
+   npm start
+   ```
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+5. Run on Android:
+   ```
+   npm run android
+   ```
 
-```sh
-bundle install
-```
+6. Run on iOS:
+   ```
+   npm run ios
+   ```
 
-Then, and every time you update your native dependencies, run:
+#### Backend Setup
+1. Navigate to the backend directory:
+   ```
+   cd backend
+   ```
 
-```sh
-bundle exec pod install
-```
+2. Install dependencies:
+   ```
+   npm install
+   ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+3. Create a `.env` file with the following variables:
+   ```
+   PORT=5000
+   MONGODB_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   EMAIL_USER=your_email
+   EMAIL_PASS=your_email_password
+   FIREBASE_SERVICE_ACCOUNT=path_to_firebase_credentials
+   ```
 
-```sh
-# Using npm
-npm run ios
+4. Initialize the database:
+   ```
+   npm run init-db
+   ```
 
-# OR using Yarn
-yarn ios
-```
+5. Start the server:
+   ```
+   npm run dev
+   ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## 📋 Usage Workflows
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+### Patient Journey
+1. Registration with pre-approved email
+2. Profile completion
+3. Doctor search and selection
+4. Appointment booking
+5. Queue position tracking
+6. Appointment attendance
+7. Prescription and record viewing
 
-## Step 3: Modify your app
+### Doctor Journey
+1. Secure login
+2. Profile management
+3. Appointment schedule viewing
+4. Patient queue management
+5. Patient record access
+6. Prescription creation
 
-Now that you have successfully run the app, let's make changes!
+### Admin Journey
+1. User approval
+2. System monitoring
+3. Doctor profile verification
+4. Queue management oversight
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## 🔒 Security Features
+- Pre-approved email registration only
+- Firebase Admin SDK for server-side validation
+- Rate limiting to prevent brute-force attacks
+- Input validation and sanitization
+- CORS protection and security headers
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+## 🌐 Offline Functionality
+- Local data caching
+- Appointment scheduling during network outages
+- Sync upon reconnection
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## 📚 Additional Resources
 
-## Congratulations! :tada:
+For more information about specific features, please refer to the documentation files:
+- User Approval Workflow: [USER_APPROVAL_FLOW_FIXED.md](./USER_APPROVAL_FLOW_FIXED.md)
+- Appointment Workflow: [APPOINTMENT_WORKFLOW_IMPLEMENTATION.md](./APPOINTMENT_WORKFLOW_IMPLEMENTATION.md)
+- Offline Appointment System: [OFFLINE_APPOINTMENT_SYSTEM.md](./OFFLINE_APPOINTMENT_SYSTEM.md)
+- Time Slot Improvements: [TIME_SLOT_IMPROVEMENTS.md](./TIME_SLOT_IMPROVEMENTS.md)
 
-You've successfully run and modified your React Native App. :partying_face:
+## 📝 License
 
-### Now what?
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## 👥 Contributors
 
-# Troubleshooting
+- Arunarivalagan743 - Developer and Project Owner
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+---
 
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Built with ❤️ for better healthcare management.
